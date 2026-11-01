@@ -153,10 +153,10 @@ const UI = (() => {
   let tokOk = { tok: "", at: 0 };
   async function checkToken(token) {
     if (!token || (tokOk.tok === token && Date.now() - tokOk.at < 10 * 60e3)) return;
-    let r; try { r = await fetch("https://api.github.com/repos/weilong-lab/btc-records", { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" }, cache: "no-store" }); }
+    let r; try { r = await fetch("https://api.github.com/repos/logitlong/btc-records", { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" }, cache: "no-store" }); }
     catch (e) { return; }   // 断网之类，交给后面的同步自己报错
     if (r.status === 401) throw new Error("令牌无效或已过期，请重新生成");
-    if (r.status === 403 || r.status === 404) throw new Error("这个令牌打不开私有仓库 btc-records：要在 weilong-lab 账号下生成细粒度令牌，只勾 btc-records，Contents 选 Read and write");
+    if (r.status === 403 || r.status === 404) throw new Error("这个令牌打不开私有仓库 btc-records：要在 logitlong 账号下生成细粒度令牌，只勾 btc-records，Contents 选 Read and write");
     if (r.ok) tokOk = { tok: token, at: Date.now() };
   }
   return { onSync, markSwitched, checkToken, NAMES, isDark, onTheme, buzz };

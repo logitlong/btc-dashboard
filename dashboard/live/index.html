@@ -8,7 +8,7 @@
 <meta name="dashboard-release" content="2026-10-22-market-colors-v6">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <script>try{var t=localStorage.getItem("btc_theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="ui.css?v=20261030b">
+<link rel="stylesheet" href="ui.css?v=20261102a">
 <style>
 .fee-cols{display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:16px}.fee-cols>.plv+ .plv{border-left:1px solid var(--line);padding-left:16px}
 /* 布局：手机优先的单列卡片流，宽屏两列；顶部价格条吸顶 */
@@ -738,8 +738,8 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
   </section>
 </div>
 
-<script src="ui.js?v=20261030b"></script>
-<script src="review-core.js?v=20261028a"></script>
+<script src="ui.js?v=20261102a"></script>
+<script src="review-core.js?v=20261102a"></script>
 <script src="weights.js"></script>
 <script src="context.js"></script>
 <script src="model.js"></script>
@@ -1956,7 +1956,7 @@ function tzInit() {
 
 // ---------------- 云端记录：喊单和交易日志存在私有 GitHub 仓库，任何设备填一次令牌就能读写 ----------------
 // 本机浏览器只留一份缓存（断网时也能用），每分钟和改动后 3 秒与云端合并：按 id 合并，同一条取最后修改（u）的，删除的留墓碑
-const REC_REPO = params.get("records") || "weilong-lab/btc-records", TKEY = "btc_gh_token";
+const REC_REPO = params.get("records") || "logitlong/btc-records", TKEY = "btc_gh_token";
 const CLOUD = { token: (() => { try { return localStorage.getItem(TKEY) || ""; } catch (e) { return ""; } })(), sha: {}, busy: false, timer: 0, last: 0, err: "" };
 const b64e = s => btoa(String.fromCharCode(...new TextEncoder().encode(s)));
 const b64d = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g, "")), ch => ch.charCodeAt(0)));
@@ -2735,7 +2735,7 @@ function renderRulesDoc() {
       "模型自动记单：「此刻结论」每出现一次参考信号（规则 A 或 B）就记一条「模型·此刻结论」，同一规则同方向 60 分钟内只记一次；后台监控程序在跑时浏览器关着也会记，并在买入和该卖时发 Mac 通知。",
       "持有期间盯盘面：急动（5 或 15 分钟走 1 个 ATR 以上）、离止损不到 0.3 个 ATR、15 分钟内进入美股开盘或数据公布时段、红色新闻警报，都会提醒。回测里这些时候马上卖都没有比按计划拿着更好（平均差 0.05%–0.27%），所以提醒只说明发生了什么、该检查什么，卖出仍按计划。",
       "盈亏按价格百分比算，没扣手续费和资金费，也没乘杠杆。",
-      "存储：点「连接云端」并填一次 GitHub 令牌后，喊单记录和交易日志存在私有仓库 weilong-lab/btc-records（只有你能看），每分钟和每次改动后自动同步，换设备填同一个令牌就能读到；浏览器里只留一份缓存，断网时先存本机、恢复后自动补传。后台监控程序配置了 RECORDS_REPO 后，浏览器关着也会对人工喊单发 Mac 提醒。",
+      "存储：点「连接云端」并填一次 GitHub 令牌后，喊单记录和交易日志存在私有仓库 logitlong/btc-records（只有你能看），每分钟和每次改动后自动同步，换设备填同一个令牌就能读到；浏览器里只留一份缓存，断网时先存本机、恢复后自动补传。后台监控程序配置了 RECORDS_REPO 后，浏览器关着也会对人工喊单发 Mac 提醒。",
       "时间：右上角可切换东京时间 / 北京时间，页面上所有时间同步切换（各设备分别保存）。",
     ]),
   ].join("");

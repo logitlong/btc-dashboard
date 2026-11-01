@@ -7,7 +7,7 @@
 <title>BTC 模拟盘</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <script>try{var t=localStorage.getItem("btc_theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="ui.css?v=20261030b">
+<link rel="stylesheet" href="ui.css?v=20261102a">
 <style>
 /* 模拟合约交易：布局参照常见的 U 本位合约下单界面（K 线 · 订单簿 · 下单 · 仓位），颜色和面板一致 */
 :root{
@@ -410,8 +410,8 @@ table.t{border-collapse:collapse;width:100%;font-size:12px}
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@5.1.0/dist/lightweight-charts.standalone.production.js"></script>
-<script src="review-core.js?v=20261028a"></script>
-<script src="ui.js?v=20261030b"></script>
+<script src="review-core.js?v=20261102a"></script>
+<script src="ui.js?v=20261102a"></script>
 <script>
 "use strict";
 const $ = id => document.getElementById(id);
@@ -1645,7 +1645,7 @@ $("chartTog").onclick = () => { const f = $("chartbox").classList.toggle("fold")
 MOB.addEventListener("change", () => { dirty = true; buildChart(); });
 
 // ---------------- 云端：存在私有仓库 btc-records 的 sim.json（和作战面板用同一个令牌） ----------------
-const REC_REPO = "weilong-lab/btc-records", TKEY = "btc_gh_token";
+const REC_REPO = "logitlong/btc-records", TKEY = "btc_gh_token";
 const CLOUD = { token: lsGet(TKEY) || "", sha: null, pushedU: 0, timer: 0, err: "", ro: false, busy: false };
 const b64e = s => btoa(String.fromCharCode(...new TextEncoder().encode(s)));
 const b64d = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g, "")), c => c.charCodeAt(0)));

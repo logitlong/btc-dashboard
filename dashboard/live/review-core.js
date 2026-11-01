@@ -1,7 +1,7 @@
 /* 复盘共用：下单 / 平仓那一刻的盘面快照、开单理由核对、自动标签、总结文字、平仓后走势。模拟盘和复盘页面都用这一份 */
 "use strict";
 const RV = (() => {
-  const FAPI = "https://fapi.binance.com", REC_REPO = "weilong-lab/btc-records", DATA_REPO = "weilong-lab/btc-dashboard";
+  const FAPI = "https://fapi.binance.com", REC_REPO = "logitlong/btc-records", DATA_REPO = "logitlong/btc-dashboard";
   const jget = u => fetch(u, { cache: "no-store" }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
 
   // ---------------- 选项（定下来以后别常改，否则前后统计接不上） ----------------

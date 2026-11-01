@@ -4,7 +4,7 @@
 每次推送都生成一个没有父提交的新提交并强制覆盖 data 分支，所以分支永远只有一个提交，仓库不会越变越大。
 
 环境变量：
-  GITHUB_REPO    例如 weilong-lab/btc-dashboard
+  GITHUB_REPO    例如 logitlong/btc-dashboard
   GITHUB_TOKEN   细粒度令牌，只授权这个仓库的 Contents: Read and write
   PUBLISH_EVERY  推送间隔秒数，默认 120
 """

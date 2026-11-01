@@ -101,9 +101,9 @@ python3 monitor.py --once --no-push   # 测试：跑一轮，不推送
 
 ## 推送设置（环境变量，都是可选）
 
-数据发布到 GitHub（面板读取）：`GITHUB_REPO=weilong-lab/btc-dashboard`、`GITHUB_TOKEN=细粒度令牌`、`PUBLISH_EVERY=120`。
+数据发布到 GitHub（面板读取）：`GITHUB_REPO=logitlong/btc-dashboard`、`GITHUB_TOKEN=细粒度令牌`、`PUBLISH_EVERY=120`。
 
-人工喊单的后台提醒：`RECORDS_REPO=weilong-lab/btc-records`（私有记录仓库，面板「连接云端」后喊单和交易日志存在这里）。设置后每分钟读一次喊单，持有中的单碰到止损 / 止盈、到时间或盘面突变时发 Mac 通知（`MAC_NOTIFY=0` 关闭）。令牌要同时能读写这两个仓库。
+人工喊单的后台提醒：`RECORDS_REPO=logitlong/btc-records`（私有记录仓库，面板「连接云端」后喊单和交易日志存在这里）。设置后每分钟读一次喊单，持有中的单碰到止损 / 止盈、到时间或盘面突变时发 Mac 通知（`MAC_NOTIFY=0` 关闭）。令牌要同时能读写这两个仓库。
 
 
 ```bash

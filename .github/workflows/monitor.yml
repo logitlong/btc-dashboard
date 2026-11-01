@@ -78,7 +78,7 @@ jobs:
           GITHUB_REPO: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SAVE_STATE: "1"
-          RECORDS_REPO: weilong-lab/btc-records
+          RECORDS_REPO: logitlong/btc-records
           RECORDS_TOKEN: ${{ secrets.RECORDS_TOKEN }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           COINALYZE_API_KEY: ${{ secrets.COINALYZE_API_KEY }}

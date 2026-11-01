@@ -10,7 +10,7 @@ BTCUSDT 永续合约的实时信息面板：方向判断、参考信号、模拟
 | `monitor/` | 后台程序：新闻抓取与利多利空标注、盘面异常、经济日历、模拟盘、推送提醒，并把结果推到 `data` 分支 | Muse 服务器 |
 | `backtest/` | 回测与模型训练代码，结论见 `backtest/README.md` | 本机 |
 | `rules_spec.json` | 统一规则参数，回测、模拟盘、面板共用 | — |
-| 私有仓库 `weilong-lab/btc-records` | 喊单记录、交易日志（面板「连接云端」后读写） | GitHub（私有） |
+| 私有仓库 `logitlong/btc-records` | 喊单记录、交易日志（面板「连接云端」后读写） | GitHub（私有） |
 
 ## 数据流
 
