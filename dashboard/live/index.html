@@ -396,10 +396,10 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
         <div class="bt-stats" id="btStats"></div>
       </div>
       <div class="bt-main">
-        <div class="bt-pane"><p>15 分钟 K 线 + 爆仓热力图 <small>估算 · 颜色越浓，预计爆仓的仓位越多</small></p><canvas id="btHeat" role="img" aria-label="15 分钟 K 线和估算爆仓热力图"></canvas></div>
+        <div class="bt-pane"><p>15 分钟 K 线 + 爆仓热力图 <small>估算 · 颜色越浓，预计爆仓的仓位越多</small></p><canvas id="btHeat" role="img" aria-label="15 分钟 K 线和估算爆仓热力图"></canvas><p class="bt-ex" id="btHeatS"></p></div>
         <div class="bt-pane"><p id="btLiqT">实际爆仓</p><canvas id="btLiq" role="img" aria-label="每 15 分钟实际爆仓金额"></canvas><p class="bt-ex" id="btEx"></p></div>
         <div class="bt-foot">
-          <div><span>当前资金费率</span><b class="num" id="btFund">—</b><small id="btFundN"></small></div>
+          <div><span>下期预测资金费率</span><b class="num" id="btFund">—</b><small id="btFundN"></small></div>
           <div><span>盘面状态</span><b id="btState">—</b><small id="btStateN"></small></div>
         </div>
       </div>
@@ -3152,6 +3152,16 @@ function btCanvas(el) {
   return { c, w, h };
 }
 const BT_RIGHT = w => w < 520 ? 82 : 104;   // 右边留给价格刻度和当前爆仓量
+// 找出现价上下最密集的 3 个价位，金额含相邻两格；同时算出图内两边合计
+function btPeaks(P) {
+  const cur = BT.cur, step = (BT.hi - BT.lo) / BT_BINS, price = n => BT.lo + (n + 0.5) * step, amt = n => (cur[n - 1] || 0) + cur[n] + (cur[n + 1] || 0);
+  const pick = above => {
+    const got = [], ids = [...cur.keys()].filter(n => cur[n] > 0 && (price(n) > P) === above).sort((a, b) => amt(b) - amt(a));
+    ids.forEach(n => { if (got.length < 3 && got.every(g => Math.abs(g - n) > 3)) got.push(n); });
+    return { peaks: got.map(n => ({ p: price(n), v: amt(n) })), total: ids.reduce((s, n) => s + cur[n], 0) };
+  };
+  return { up: pick(true), dn: pick(false) };
+}
 function btDrawHeat(view, P) {
   const el = $("btHeat"), { c, w, h } = btCanvas(el);
   if (!isFinite(BT.lo)) return;
@@ -3159,9 +3169,11 @@ function btDrawHeat(view, P) {
   const muted = css("--muted"), heat = css("--warn"), up = css("--good"), dn = css("--bad");
   const nice = (BT.hi - BT.lo) / 6, tick = [100, 200, 500, 1000, 2000, 5000].find(v => v >= nice) || 10000;
   c.strokeStyle = css("--grid"); c.fillStyle = muted; c.lineWidth = 1; c.textAlign = "right";
+  const pk = BT.cur && isFinite(P) ? btPeaks(P) : null, marks = pk ? [...pk.up.peaks, ...pk.dn.peaks] : [];
+  const taken = [P, ...marks.map(x => x.p)].filter(isFinite).map(y);
   for (let p = Math.ceil(BT.lo / tick) * tick; p <= BT.hi; p += tick) {
     c.beginPath(); c.moveTo(0, y(p) + 0.5); c.lineTo(x1, y(p) + 0.5); c.stroke();
-    c.fillText(fmt(p), w - 2, y(p));
+    if (taken.every(v => Math.abs(v - y(p)) > 14)) c.fillText(fmt(p), w - 2, y(p));   // 让位给爆仓带价格
   }
   const all = [...BT.cols.values()].flatMap(a => [...a]).filter(v => v > 0).sort((a, b) => a - b), top99 = all[Math.floor(all.length * 0.99)] || 1, floor = all[Math.floor(all.length * 0.5)] || 0;
   c.fillStyle = heat;
@@ -3191,6 +3203,17 @@ function btDrawHeat(view, P) {
     const tw = c.measureText(text).width + 8;
     c.fillStyle = css("--fg"); c.fillRect(w - tw, yp - 8, tw, 16);
     c.fillStyle = css("--card"); c.textAlign = "right"; c.fillText(text, w - 3, yp);
+  }
+  if (pk) {
+    const side = (x, name) => `${name} ${btUsd(x.total)}` + (x.peaks[0] ? `，最密 ${fmt(x.peaks[0].p)} 附近 ${btUsd(x.peaks[0].v)}` : "");
+    c.textAlign = "right";
+    marks.forEach(x => {
+      const yy = y(x.p), text = btUsd(x.v), tw = c.measureText(text).width + 8;
+      c.globalAlpha = 0.88; c.fillStyle = css("--card"); c.fillRect(x1 - tw - 3, yy - 8, tw, 16);
+      c.globalAlpha = 1; c.fillStyle = css("--fg"); c.fillText(text, x1 - 7, yy);
+      if (Math.abs(yy - y(P)) > 14) { c.fillStyle = heat; c.fillText(fmt(x.p), w - 2, yy); }
+    });
+    setHTML($("btHeatS"), `币安估算：${esc(side(pk.up, "上方爆空头"))}；${esc(side(pk.dn, "下方爆多头"))}`);
   }
   btTimeAxis(c, view, bw, h - 8, muted);
 }
@@ -3245,9 +3268,10 @@ function renderBattle() {
   ];
   setHTML($("btStats"), stats.map(([a, b, k, s]) => `<div class="bt-stat"><span>${esc(a)}</span><b class="${k}">${esc(b)}</b><small>${esc(s)}</small></div>`).join(""));
 
-  if (isFinite(S.funding)) { $("btFund").textContent = `${btSign(S.funding, 4)}%`; $("btFund").className = "num " + (S.funding > 0 ? "bad" : S.funding < 0 ? "good" : ""); $("btFundN").textContent = S.funding > 0 ? "多头付给空头" : S.funding < 0 ? "空头付给多头" : "两边不付费"; }
-  const flat = !isFinite(d1) || Math.abs(dp) < 0.15 || Math.abs(d1) < 0.15;
-  const state = flat ? ["盘整", ""] : dp > 0 ? (d1 > 0 ? ["多头加仓", "good"] : ["空头回补", "good"]) : d1 > 0 ? ["空头加仓", "bad"] : ["多头离场", "bad"];
+  if (isFinite(S.funding)) { $("btFund").textContent = `${btSign(S.funding, 4)}%`; $("btFund").className = "num " + (S.funding > 0 ? "bad" : S.funding < 0 ? "good" : ""); $("btFundN").textContent = (S.funding > 0 ? "多头付给空头" : S.funding < 0 ? "空头付给多头" : "两边不付费") + (S.nextFunding ? ` · ${fmtClock(S.nextFunding)} 结算` : ""); }
+  const pMove = Math.abs(dp) >= 0.15, oMove = Math.abs(d1) >= 0.15;
+  const state = !isFinite(d1) ? ["—", ""] : !pMove && !oMove ? ["价格持仓都没动", ""] : !pMove ? [d1 > 0 ? "多空都在加仓" : "多空都在减仓", ""]
+    : !oMove ? (dp > 0 ? ["上涨，持仓没变", "good"] : ["下跌，持仓没变", "bad"]) : dp > 0 ? (d1 > 0 ? ["多头加仓", "good"] : ["空头平仓", "good"]) : d1 > 0 ? ["空头加仓", "bad"] : ["多头平仓", "bad"];
   $("btState").textContent = state[0]; $("btState").className = state[1];
   $("btStateN").textContent = `1h 价格 ${btSign(dp)}% · 持仓 ${btSign(d1)}%`;
 
