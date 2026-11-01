@@ -1,6 +1,6 @@
 """全网 BTC 永续爆仓：从 Coinalyze 取各交易所爆仓历史，汇总成 out/liq.json 给面板读。
 
-每 5 分钟取一次最近 25 小时的 15 分钟数据，金额换算成美元。Coinalyze 每个合约算一次调用，
+每 5 分钟取一次最近 25 小时的 5 分钟数据，金额换算成美元；面板再按所选周期合并。Coinalyze 每个合约算一次调用，
 限额每分钟 40 次，所以合约数封顶 BTC_MAX_SYMBOLS。
 "全网"只是 Coinalyze 接入的交易所相加；币安公开的爆仓流本身是抽样的，数字可能偏低。
 密钥放环境变量 COINALYZE_API_KEY（GitHub Secret），不写进面板和输出文件。只用标准库。
@@ -47,7 +47,7 @@ class Liquidations:
         now, rows = int(time.time()), []
         for i in range(0, len(self.symbols), 20):
             part = ",".join(self.symbols[i:i + 20])
-            rows += self._get("liquidation-history", symbols=part, interval="15min", convert_to_usd="true", **{"from": now - WINDOW, "to": now})
+            rows += self._get("liquidation-history", symbols=part, interval="5min", convert_to_usd="true", **{"from": now - WINDOW, "to": now})
         return self.summarize(rows, now)
 
     def summarize(self, rows, now):

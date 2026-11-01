@@ -148,6 +148,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .bt-pane{border:1px solid var(--line);border-radius:6px;padding:6px 6px 2px;min-width:0}
 .bt-pane p{margin:0 0 2px;font-size:12px;color:var(--fg2)}.bt-pane p small{color:var(--muted)}
 .bt-pane canvas{display:block;width:100%}
+.bt-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:2px}.bt-head p{margin:0;min-width:0}
+.bt-tf{display:flex;flex:none;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.bt-tf button{appearance:none;border:0;background:transparent;color:var(--fg2);font:inherit;font-size:12px;padding:5px 10px;min-height:30px;cursor:pointer}
+.bt-tf button[aria-pressed="true"]{background:var(--accent);color:#fff}
 .bt-pane p.bt-ex{margin:4px 0;font-size:11.5px;color:var(--muted)}.bt-ex b{font-family:var(--m);font-weight:500;color:var(--fg2)}
 #btHeat{height:260px}#btLiq{height:112px}
 .bt-foot{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -396,8 +400,8 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
         <div class="bt-stats" id="btStats"></div>
       </div>
       <div class="bt-main">
-        <div class="bt-pane"><p>15 分钟 K 线 + 爆仓热力图 <small>估算 · 颜色越浓，预计爆仓的仓位越多</small></p><canvas id="btHeat" role="img" aria-label="15 分钟 K 线和估算爆仓热力图"></canvas><p class="bt-ex" id="btHeatS"></p></div>
-        <div class="bt-pane"><p id="btLiqT">实际爆仓</p><canvas id="btLiq" role="img" aria-label="每 15 分钟实际爆仓金额"></canvas><p class="bt-ex" id="btEx"></p></div>
+        <div class="bt-pane"><div class="bt-head"><p><span id="btTfT">15 分钟</span> K 线 + 爆仓热力图 <small>估算 · 颜色越浓，预计爆仓的仓位越多</small></p><div class="bt-tf" id="btTf" role="group" aria-label="K 线周期"><button type="button" data-tf="5">5 分钟</button><button type="button" data-tf="15">15 分钟</button></div></div><canvas id="btHeat" role="img" aria-label="K 线和估算爆仓热力图"></canvas><p class="bt-ex" id="btHeatS"></p></div>
+        <div class="bt-pane"><p id="btLiqT">实际爆仓</p><canvas id="btLiq" role="img" aria-label="实际爆仓金额"></canvas><p class="bt-ex" id="btEx"></p></div>
         <div class="bt-foot">
           <div><span>下期预测资金费率</span><b class="num" id="btFund">—</b><small id="btFundN"></small></div>
           <div><span>盘面状态</span><b id="btState">—</b><small id="btStateN"></small></div>
@@ -3076,34 +3080,41 @@ function drawCone(e, s, t, levels) {
 }
 
 // ---------------- 盘面总览：K 线叠估算爆仓带、OKX 实际爆仓、持仓与多空读数 ----------------
-const BT = { k: [], oi: [], okx: [], seen: new Set(), okxFull: false, cols: new Map(), lo: NaN, hi: NaN, cur: null, err: "" };
-const BT_BARS = 96, BT_BINS = 64, BT_MS = 900e3;
+const BT = { tf: 15, k15: [], oi15: [], k5: [], oi5: [], okx: [], seen: new Set(), okxFull: false, cols: new Map(), lo: NaN, hi: NaN, cur: null, err: "" };
+const BT_BARS = 96, BT_BINS = 64, btMs = () => BT.tf * 60e3;
+try { if (localStorage.getItem("btc_bt_tf") === "5") BT.tf = 5; } catch (e) { /* 读不到就用 15 分钟 */ }
 const BT_LEV = [[10, 0.2], [25, 0.3], [50, 0.3], [100, 0.2]];
 const btUsd = v => !isFinite(v) ? "—" : Math.abs(v) >= 1e9 ? `$${(v / 1e9).toFixed(2)}B` : Math.abs(v) >= 1e6 ? `$${(v / 1e6).toFixed(2)}M` : `$${(v / 1e3).toFixed(0)}K`;
 const btSign = (v, d = 2) => !isFinite(v) ? "—" : `${v > 0 ? "+" : ""}${v.toFixed(d)}`;
 // 最近 BT_BARS 根：接口数据为底，最后一根用 WebSocket 实时更新
-function btView() {
-  const k = BT.k.slice(), live = S.b15 && S.b15.at(-1);
+function btView(tf = BT.tf) {
+  const k = BT["k" + tf].slice(), live = (tf === 5 ? S.b5 : S.b15 || []).at(-1);
   if (live && k.length) { if (live.t === k.at(-1).t) k[k.length - 1] = live; else if (live.t > k.at(-1).t) k.push(live); }
   return k.slice(-BT_BARS);
 }
 async function pollBattle() {
-  const [k, oi] = await Promise.all([jfetch(`${FAPI}/fapi/v1/klines?symbol=BTCUSDT&interval=15m&limit=500`),
-    jfetch(`${FAPI}/futures/data/openInterestHist?symbol=BTCUSDT&period=15m&limit=500`)]);
-  BT.k = k.map(toBar); BT.oi = oi.map(x => ({ t: +x.timestamp, v: +x.sumOpenInterest })); BT.err = "";
+  await Promise.all([5, 15].map(async tf => {
+    const [k, oi] = await Promise.all([jfetch(`${FAPI}/fapi/v1/klines?symbol=BTCUSDT&interval=${tf}m&limit=500`),
+      jfetch(`${FAPI}/futures/data/openInterestHist?symbol=BTCUSDT&period=${tf}m&limit=500`)]);
+    BT["k" + tf] = k.map(toBar); BT["oi" + tf] = oi.map(x => ({ t: +x.timestamp, v: +x.sumOpenInterest }));
+  }));
+  BT.err = "";
   btHeatBuild();
 }
 // 逐根重放：持仓增加 → 多空两边各新增一批仓位；持仓减少 → 全部按比例缩小；K 线碰到爆仓价 → 这批仓位消失
 function btHeatBuild() {
-  const bars = BT.k, oi = new Map(BT.oi.map(x => [x.t, x.v]));
+  // 5 分钟只能回溯约 41 小时，更早的用 15 分钟补上，两个周期算出的仓位才对得上
+  const bars = BT.tf === 15 ? BT.k15 : [...BT.k15.filter(b => BT.k5.length && b.t + 900e3 <= BT.k5[0].t), ...BT.k5];
+  const oi = new Map([...BT.oi15, ...(BT.tf === 5 ? BT.oi5 : [])].map(x => [x.t, x.v]));
   if (bars.length < BT_BARS) return;
   const view = bars.slice(-BT_BARS), P = view.at(-1).c;
   const lo = Math.min(...view.map(b => b.l), P * 0.97), hi = Math.max(...view.map(b => b.h), P * 1.03), step = (hi - lo) / BT_BINS;
   let lv = [];
   BT.cols = new Map();
   bars.forEach((b, i) => {
+    const next = bars[i + 1];
     lv = lv.filter(x => x.long ? x.p < b.l : x.p > b.h);
-    const a = oi.get(b.t), z = oi.get(b.t + BT_MS);
+    const a = oi.get(b.t), z = next && oi.get(next.t);
     if (a > 0 && z > 0) {
       if (z > a) {
         const e = (b.h + b.l + b.c) / 3;
@@ -3219,15 +3230,16 @@ function btDrawHeat(view, P) {
 }
 function btTimeAxis(c, view, bw, y, color) {
   c.fillStyle = color; c.textAlign = "center";
-  const every = bw * 16 < 60 ? 24 : 16;
-  view.forEach((b, i) => { if (i >= 4 && i < view.length - 4 && Math.round(b.t / BT_MS) % every === 0) c.fillText(fmtClock(b.t), i * bw + bw / 2, y); });
+  const step = BT.tf === 5 ? 12 : 16, every = bw * step < 60 ? step * 2 : step;
+  view.forEach((b, i) => { if (i >= 4 && i < view.length - 4 && Math.round(b.t / btMs()) % every === 0) c.fillText(fmtClock(b.t), i * bw + bw / 2, y); });
 }
 function btDrawLiq(view) {
   const el = $("btLiq"), { c, w, h } = btCanvas(el), x1 = w - BT_RIGHT(w), bw = x1 / BT_BARS, bot = h - 16, mid = bot / 2;
   const up = new Map(), dn = new Map();
   const all = btLiqAll();
-  if (all) all.bars.forEach(([t, l, s]) => { dn.set(t, l); up.set(t, s); });
-  else BT.okx.forEach(x => { const t = Math.floor(x.t / BT_MS) * BT_MS, m = x.long ? dn : up; m.set(t, (m.get(t) || 0) + x.usd); });
+  const add = (m, ms, v) => { const t = Math.floor(ms / btMs()) * btMs(); m.set(t, (m.get(t) || 0) + v); };
+  if (all) all.bars.forEach(([t, l, s]) => { add(dn, t, l); add(up, t, s); });
+  else BT.okx.forEach(x => add(x.long ? dn : up, x.t, x.usd));
   const mx = Math.max(1, ...view.map(b => Math.max(up.get(b.t) || 0, dn.get(b.t) || 0)));
   c.strokeStyle = css("--line"); c.beginPath(); c.moveTo(0, mid + 0.5); c.lineTo(x1, mid + 0.5); c.stroke();
   const col = { up: css("--good"), dn: css("--bad") };
@@ -3243,20 +3255,20 @@ function btDrawLiq(view) {
 function renderBattle() {
   const view = btView();
   if (!view.length) { if (BT.err) $("btUpd").textContent = BT.err; return; }
-  const P = isFinite(S.price) ? S.price : view.at(-1).c, first = view[0].o, chg = (P / first - 1) * 100;
-  const hAgo = view.at(-5) || view[0], dp = (P / hAgo.c - 1) * 100;
+  const v15 = btView(15), P = isFinite(S.price) ? S.price : view.at(-1).c, first = v15[0].o, chg = (P / first - 1) * 100;
+  const hAgo = v15.at(-5) || v15[0], dp = (P / hAgo.c - 1) * 100;
   $("btPx").textContent = P.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   $("btPx").className = "bt-px " + (chg >= 0 ? "good" : "bad");
   $("btChg").textContent = `${btSign(chg)}% 24h`; $("btChg").className = "num " + (chg >= 0 ? "good" : "bad");
 
-  const oiNow = S.oi.length ? S.oi.at(-1)[1] : BT.oi.length ? BT.oi.at(-1).v : NaN;
-  const oiH1 = BT.oi.at(-5), oiH2 = BT.oi.at(-9);
+  const oiNow = S.oi.length ? S.oi.at(-1)[1] : BT.oi15.length ? BT.oi15.at(-1).v : NaN;
+  const oiH1 = BT.oi15.at(-5), oiH2 = BT.oi15.at(-9);
   const d1 = oiH1 ? (oiNow / oiH1.v - 1) * 100 : NaN, d0 = oiH1 && oiH2 ? (oiH1.v / oiH2.v - 1) * 100 : NaN;
   const all = btLiqAll();
   const liqL = all ? all.exchanges.reduce((s, x) => s + x.l, 0) : BT.okx.filter(x => x.long).reduce((s, x) => s + x.usd, 0), liqS = all ? all.exchanges.reduce((s, x) => s + x.s, 0) : BT.okx.filter(x => !x.long).reduce((s, x) => s + x.usd, 0);
   const hrs = BT.okx.length ? (Date.now() - Math.min(...BT.okx.map(x => x.t))) / 36e5 : 0, hrsTxt = `${Math.max(1, Math.round(hrs))}h`;
   const m = S.mood || {}, tp = m.topP && m.topP.at(-1), tp0 = m.topP && m.topP.at(-2), rt = m.retail && m.retail.at(-1), rt0 = m.retail && m.retail.at(-2);
-  const h4 = view.slice(-4), vol = h4.reduce((s, b) => s + b.v, 0), buy = vol ? h4.reduce((s, b) => s + b.tb, 0) / vol * 100 : NaN;
+  const h4 = v15.slice(-4), vol = h4.reduce((s, b) => s + b.v, 0), buy = vol ? h4.reduce((s, b) => s + b.tb, 0) / vol * 100 : NaN;
   const cls = v => !isFinite(v) || v === 0 ? "" : v > 0 ? "good" : "bad";
   const stats = [
     [all ? "全网 24h 爆仓" : `OKX 近 ${hrsTxt} 爆仓`, all || BT.okx.length ? btUsd(liqL + liqS) : "—", "bad", `多 ${btUsd(liqL)} / 空 ${btUsd(liqS)}`],
@@ -3279,13 +3291,23 @@ function renderBattle() {
     const lp = tp.l * 100, sp = 100 - lp;
     setHTML($("btBar"), `<div class="s" style="flex:${sp} 1 0"><span class="num">${sp.toFixed(0)}%</span><span>大户空</span></div><div class="l" style="flex:${lp} 1 0"><span class="num">${lp.toFixed(0)}%</span><span>大户多</span></div>`);
   }
-  $("btLiqT").innerHTML = `${all ? "全网" : "OKX "}实际爆仓 <small>每 15 分钟 · 上面爆空头，下面爆多头</small>`;
+  $("btLiqT").innerHTML = `${all ? "全网" : "OKX "}实际爆仓 <small>每 ${BT.tf} 分钟 · 上面爆空头，下面爆多头</small>`;
   setHTML($("btEx"), all ? "24h 分交易所：" + all.exchanges.slice(0, 5).map(x => `${esc(x.name)} <b>${btUsd(x.l + x.s)}</b>`).join(" · ") : "");
   $("btUpd").textContent = BT.err || `币安 · OKX · 每分钟更新 ${fmtClock(Date.now())}`;
   const r = $("battleCard").getBoundingClientRect();
+  $("btTfT").textContent = `${BT.tf} 分钟`;
+  $("btTf").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.tf === BT.tf)));
   if (r.bottom < 0 || r.top > innerHeight) return;   // 滚走了就不画
   btDrawHeat(view, P); btDrawLiq(view);
 }
+
+$("btTf").addEventListener("click", e => {
+  const tf = +(e.target.closest("button") || {dataset: {}}).dataset.tf;
+  if (!tf || tf === BT.tf) return;
+  BT.tf = tf;
+  try { localStorage.setItem("btc_bt_tf", String(tf)); } catch (err) { /* 存不了就只在本次有效 */ }
+  btHeatBuild(); renderBattle();
+});
 
 // ---------------- 主循环 ----------------
 function everySecond() {
