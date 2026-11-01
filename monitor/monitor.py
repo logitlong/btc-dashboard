@@ -607,10 +607,12 @@ def main():
         zalert = None
         log("张主任规则提醒未启动:", ex)
     from publish import Publisher
+    from liquidations import Liquidations
     pub = Publisher(OUT, log)
     spub = StatePublisher(OUT, log)
     log(f"提醒发件箱：{'私有仓库 ' + outbox.repo + ' 的 alerts.json（Muse 读取）' if outbox.enabled else '只记在本地 out/outbox.json'}")
     log(f"启动。输出目录 {OUT}，时区 {TZ}。首轮抓到的新闻只入库不推送。")
+    liq = Liquidations(OUT, log)
     end = time.time() + args.minutes * 60 if args.minutes else None
     last_backfill = 0
     while True:
@@ -623,6 +625,7 @@ def main():
         if zalert:
             zalert.step()
         cal.poll()
+        liq.step()
         if time.time() - last_backfill > 600:
             backfill(store)
             last_backfill = time.time()

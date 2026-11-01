@@ -6,6 +6,7 @@
 # 需要在仓库 Settings → Secrets and variables → Actions 里设置：
 #   DEEPSEEK_API_KEY  新闻 AI 判断（没有就用关键词规则）
 #   RECORDS_TOKEN     细粒度令牌，只勾 btc-records，Contents 读写（读人工喊单、写提醒给 Muse）
+#   COINALYZE_API_KEY 全网爆仓（没有就跳过，面板退回只看 OKX）
 name: 后台监控
 
 on:
@@ -80,6 +81,7 @@ jobs:
           RECORDS_REPO: weilong-lab/btc-records
           RECORDS_TOKEN: ${{ secrets.RECORDS_TOKEN }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          COINALYZE_API_KEY: ${{ secrets.COINALYZE_API_KEY }}
           MAC_NOTIFY: "0"
           MARKET_SOURCE: cloud          # 美国服务器连不上币安合约：K 线用币安公开行情镜像，持仓量 / 资金费率用 OKX
           DISPLAY_TZ: Asia/Tokyo

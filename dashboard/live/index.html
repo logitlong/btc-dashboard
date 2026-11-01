@@ -148,6 +148,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .bt-pane{border:1px solid var(--line);border-radius:6px;padding:6px 6px 2px;min-width:0}
 .bt-pane p{margin:0 0 2px;font-size:12px;color:var(--fg2)}.bt-pane p small{color:var(--muted)}
 .bt-pane canvas{display:block;width:100%}
+.bt-pane p.bt-ex{margin:4px 0;font-size:11.5px;color:var(--muted)}.bt-ex b{font-family:var(--m);font-weight:500;color:var(--fg2)}
 #btHeat{height:260px}#btLiq{height:112px}
 .bt-foot{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .bt-foot>div{border:1px solid var(--line);border-radius:6px;padding:6px 8px;text-align:center;min-width:0}
@@ -396,7 +397,7 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
       </div>
       <div class="bt-main">
         <div class="bt-pane"><p>15 分钟 K 线 + 爆仓热力图 <small>估算 · 颜色越浓，预计爆仓的仓位越多</small></p><canvas id="btHeat" role="img" aria-label="15 分钟 K 线和估算爆仓热力图"></canvas></div>
-        <div class="bt-pane"><p id="btLiqT">实际爆仓</p><canvas id="btLiq" role="img" aria-label="每 15 分钟实际爆仓金额"></canvas></div>
+        <div class="bt-pane"><p id="btLiqT">实际爆仓</p><canvas id="btLiq" role="img" aria-label="每 15 分钟实际爆仓金额"></canvas><p class="bt-ex" id="btEx"></p></div>
         <div class="bt-foot">
           <div><span>当前资金费率</span><b class="num" id="btFund">—</b><small id="btFundN"></small></div>
           <div><span>盘面状态</span><b id="btState">—</b><small id="btStateN"></small></div>
@@ -404,7 +405,7 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
       </div>
       <div class="bt-bar" id="btBar"></div>
     </div>
-    <p class="note">热力图不是真实挂单：用币安最近约 5 天的持仓变化，假设新仓在当根 K 线均价开出，杠杆 10 / 25 / 50 / 100 倍各占 20 / 30 / 30 / 20%，价格碰到后算已爆掉，持仓减少时按比例扣除。下方爆仓柱是 OKX 的真实记录，只代表这一家。盘面状态只描述过去 1 小时，没有回测过，不是开仓信号。</p>
+    <p class="note">热力图不是真实挂单：用币安最近约 5 天的持仓变化，假设新仓在当根 K 线均价开出，杠杆 10 / 25 / 50 / 100 倍各占 20 / 30 / 30 / 20%，价格碰到后算已爆掉，持仓减少时按比例扣除。下方爆仓柱是交易所公开的实际爆仓，由 Coinalyze 汇总；“全网”只是它接入的几家相加，币安公开数据是抽样的，可能偏低；这份数据读不到时自动改看 OKX 一家。盘面状态只描述过去 1 小时，没有回测过，不是开仓信号。</p>
   </section>
 
   <section data-grp="1" class="card span" id="summaryCard">
@@ -3137,6 +3138,11 @@ async function pollOkxLiq() {
   const cut = Date.now() - 864e5;
   BT.okx = BT.okx.filter(x => x.t >= cut || (BT.seen.delete(x.key), false));
 }
+// 全网爆仓由后台从 Coinalyze 汇总（密钥不进页面）；超过 30 分钟没更新就退回 OKX
+async function pollLiqAll() {
+  try { BT.all = await jfetch(DATA + "liq.json?t=" + Date.now()); } catch (e) { BT.all = null; }
+}
+const btLiqAll = () => BT.all && BT.all.bars && BT.all.bars.length && Date.now() - BT.all.updated_ms < 1800e3 ? BT.all : null;
 function btCanvas(el) {
   const w = el.clientWidth, h = el.clientHeight, dpr = window.devicePixelRatio || 1;
   if (el.width !== Math.round(w * dpr) || el.height !== Math.round(h * dpr)) { el.width = Math.round(w * dpr); el.height = Math.round(h * dpr); }
@@ -3196,7 +3202,9 @@ function btTimeAxis(c, view, bw, y, color) {
 function btDrawLiq(view) {
   const el = $("btLiq"), { c, w, h } = btCanvas(el), x1 = w - BT_RIGHT(w), bw = x1 / BT_BARS, bot = h - 16, mid = bot / 2;
   const up = new Map(), dn = new Map();
-  BT.okx.forEach(x => { const t = Math.floor(x.t / BT_MS) * BT_MS, m = x.long ? dn : up; m.set(t, (m.get(t) || 0) + x.usd); });
+  const all = btLiqAll();
+  if (all) all.bars.forEach(([t, l, s]) => { dn.set(t, l); up.set(t, s); });
+  else BT.okx.forEach(x => { const t = Math.floor(x.t / BT_MS) * BT_MS, m = x.long ? dn : up; m.set(t, (m.get(t) || 0) + x.usd); });
   const mx = Math.max(1, ...view.map(b => Math.max(up.get(b.t) || 0, dn.get(b.t) || 0)));
   c.strokeStyle = css("--line"); c.beginPath(); c.moveTo(0, mid + 0.5); c.lineTo(x1, mid + 0.5); c.stroke();
   const col = { up: css("--good"), dn: css("--bad") };
@@ -3221,13 +3229,14 @@ function renderBattle() {
   const oiNow = S.oi.length ? S.oi.at(-1)[1] : BT.oi.length ? BT.oi.at(-1).v : NaN;
   const oiH1 = BT.oi.at(-5), oiH2 = BT.oi.at(-9);
   const d1 = oiH1 ? (oiNow / oiH1.v - 1) * 100 : NaN, d0 = oiH1 && oiH2 ? (oiH1.v / oiH2.v - 1) * 100 : NaN;
-  const liqL = BT.okx.filter(x => x.long).reduce((s, x) => s + x.usd, 0), liqS = BT.okx.filter(x => !x.long).reduce((s, x) => s + x.usd, 0);
+  const all = btLiqAll();
+  const liqL = all ? all.exchanges.reduce((s, x) => s + x.l, 0) : BT.okx.filter(x => x.long).reduce((s, x) => s + x.usd, 0), liqS = all ? all.exchanges.reduce((s, x) => s + x.s, 0) : BT.okx.filter(x => !x.long).reduce((s, x) => s + x.usd, 0);
   const hrs = BT.okx.length ? (Date.now() - Math.min(...BT.okx.map(x => x.t))) / 36e5 : 0, hrsTxt = `${Math.max(1, Math.round(hrs))}h`;
   const m = S.mood || {}, tp = m.topP && m.topP.at(-1), tp0 = m.topP && m.topP.at(-2), rt = m.retail && m.retail.at(-1), rt0 = m.retail && m.retail.at(-2);
   const h4 = view.slice(-4), vol = h4.reduce((s, b) => s + b.v, 0), buy = vol ? h4.reduce((s, b) => s + b.tb, 0) / vol * 100 : NaN;
   const cls = v => !isFinite(v) || v === 0 ? "" : v > 0 ? "good" : "bad";
   const stats = [
-    [`OKX 近 ${hrsTxt} 爆仓`, BT.okx.length ? btUsd(liqL + liqS) : "—", "bad", `多 ${btUsd(liqL)} / 空 ${btUsd(liqS)}`],
+    [all ? "全网 24h 爆仓" : `OKX 近 ${hrsTxt} 爆仓`, all || BT.okx.length ? btUsd(liqL + liqS) : "—", "bad", `多 ${btUsd(liqL)} / 空 ${btUsd(liqS)}`],
     ["币安持仓量", btUsd(oiNow * P), "", `近 1h ${btSign(d1)}%`],
     ["持仓变化", `${btSign(d1)}%`, cls(d1), `上一小时 ${btSign(d0)}%`],
     ["大户持仓多空比", tp ? tp.v.toFixed(2) : "—", tp ? (tp.v >= 1 ? "good" : "bad") : "", tp && tp0 ? `较 1h 前 ${btSign(tp.v - tp0.v)}` : ""],
@@ -3246,7 +3255,8 @@ function renderBattle() {
     const lp = tp.l * 100, sp = 100 - lp;
     setHTML($("btBar"), `<div class="s" style="flex:${sp} 1 0"><span class="num">${sp.toFixed(0)}%</span><span>大户空</span></div><div class="l" style="flex:${lp} 1 0"><span class="num">${lp.toFixed(0)}%</span><span>大户多</span></div>`);
   }
-  $("btLiqT").innerHTML = `OKX 实际爆仓 <small>每 15 分钟 · 上面爆空头，下面爆多头</small>`;
+  $("btLiqT").innerHTML = `${all ? "全网" : "OKX "}实际爆仓 <small>每 15 分钟 · 上面爆空头，下面爆多头</small>`;
+  setHTML($("btEx"), all ? "24h 分交易所：" + all.exchanges.slice(0, 5).map(x => `${esc(x.name)} <b>${btUsd(x.l + x.s)}</b>`).join(" · ") : "");
   $("btUpd").textContent = BT.err || `币安 · OKX · 每分钟更新 ${fmtClock(Date.now())}`;
   const r = $("battleCard").getBoundingClientRect();
   if (r.bottom < 0 || r.top > innerHeight) return;   // 滚走了就不画
@@ -3641,7 +3651,7 @@ setInterval(renderUF, 1000);
 setInterval(() => pollUFHist().catch(() => {}), 300000);
 setInterval(pollETF, 3600e3);
 const btPoll = () => pollBattle().catch(e => { BT.err = "币安数据读取失败，稍后自动重试"; console.error(e); });
-const btPollLiq = () => pollOkxLiq().catch(e => console.error(e));
+const btPollLiq = () => { pollLiqAll(); return pollOkxLiq().catch(e => console.error(e)); };
 btPoll(); btPollLiq();
 setInterval(btPoll, 60000);
 setInterval(btPollLiq, 60000);
