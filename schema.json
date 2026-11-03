@@ -1,0 +1,21 @@
+{
+ "branch": "factor-history",
+ "cadence": "每 15 分钟追加一行，按 UTC 日期分文件 snapshots/YYYY-MM-DD.jsonl",
+ "append_only": true,
+ "note": "单个来源失败时该字段是 {error: ...}，其他字段仍在。币安合约、Bybit 在部分云主机上会被拒绝，失败是预期情况。",
+ "fields": {
+  "t": "UTC 时间，精确到分钟",
+  "spot": "币安现货中间价",
+  "deribit.dvol": "Deribit BTC DVOL 最近一根 1 小时收盘",
+  "deribit.atm_iv": "所选到期日、行权价最接近标的的看涨/看跌 mark_iv 平均（Deribit 的点位，45 表示 45%）",
+  "deribit.skew_25d": "25 delta 看跌 IV 减 25 delta 看涨 IV（点）。行权价用 ATM IV 近似，不是交易所直接给的 delta",
+  "deribit.max_pain": "所选到期日的最大痛点行权价（美元）",
+  "deribit.oi_by_expiry": "每个到期日的看涨/看跌持仓，单位是 Deribit book summary 的 open_interest（BTC 期权）",
+  "book.imb_05": "现货盘口 ±0.5% 的深度失衡 (买量-卖量)/(买量+卖量)。请求 5000 档；truncated_05 为 true 表示档位没盖满这条带",
+  "book.imb_10": "现货盘口 ±1% 的深度失衡。truncated_10 为 true 时带内数量不完整",
+  "cvd_15m": "最近 15 根 1 分钟 K 线的主动买、主动卖和差值（币安现货，base 数量）",
+  "exchanges.*.funding": "资金费率，原样保存。OKX / Bitget / Gate 约 8 小时，Hyperliquid 约 1 小时，不能直接横比",
+  "exchanges.*.basis_pct": "永续相对现货的基差（%）。Hyperliquid 没有现货中间价时用标记价相对预言机",
+  "coinbase_premium_pct": "Coinbase BTC-USD / (币安现货 × Coinbase USDT-USD) − 1，单位 %"
+ }
+}
