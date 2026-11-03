@@ -555,6 +555,20 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
     </div>
   </section>
 
+  <section data-grp="3" id="optCard" class="card span">
+    <h2>期权在怕什么 <small id="opUpd">Deribit · BTC 期权 · 每 5 分钟更新</small></h2>
+    <div class="status" id="opChips"></div>
+    <div class="verdict" id="opSum">读取中…</div>
+    <div class="tablewrap"><table class="ma" id="opTbl"></table></div>
+    <div class="note">
+      <p><b>只用来观察，不当开仓信号：</b>回测过 2022–2026 年 Deribit 的平值波动率、偏斜、看涨看跌成交和 DVOL，用来猜涨跌基本没用，对预测波动也只多一点点帮助。这里看的是「花真钱买保险的人在怕什么」。</p>
+      <p><b>DVOL：</b>Deribit 按 BTC 期权价格算出来的「未来 30 天年化波动」，相当于比特币的恐慌指数。除以 √365 就是期权市场预期的一天波动幅度（一个标准差，大约三分之二的日子不会超过它）。</p>
+      <p><b>期权预期 vs 最近实际：</b>DVOL 和最近 24 小时实际走出来的年化波动比。期权平时比实际贵一点（卖保险的人要赚钱）；贵很多说明市场在防一件事（数据、监管、大到期）；比实际还便宜说明大家太放松，行情容易突然走出来。</p>
+      <p><b>偏斜：</b>同一到期日，离现价一样远的看跌期权和看涨期权（25 delta，到期越远、离现价越远），隐含波动率差几个点。正数 = 下跌保险更贵，买的人更怕跌；负数 = 更多人在抢上涨。</p>
+      <p><b>大到期日和最大痛点：</b>持仓多的到期日（每周五 UTC 8:00，东京 17:00、北京 16:00）前后，期权做市商对冲会放大或压住波动。最大痛点是「到期时让期权买方整体赔最多」的价格，常说到期前价格会被吸过去。这条我们没回测过，只是参考。</p>
+    </div>
+  </section>
+
   <section data-grp="3" class="card span" id="usCard">
     <h2>美股联动 <small id="usSess">—</small></h2>
     <div class="tablewrap"><table class="ma" id="us"></table></div>
@@ -835,6 +849,7 @@ const S = { b1: [], b5: [], price: NaN, lastPrice: NaN, mark: NaN, funding: NaN,
 const $ = id => document.getElementById(id);
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const fmt = n => isFinite(n) ? Math.round(n).toLocaleString() : "—";
+const fmtDate = ms => new Date(ms).toLocaleDateString("zh-CN", { timeZone: TZ, month: "numeric", day: "numeric", weekday: "short" });
 // 时区：右上角切换东京 / 北京时间，页面上所有时间都按它显示（保存在本机浏览器）
 const TZNAME = { "Asia/Tokyo": "东京时间", "Asia/Shanghai": "北京时间" }, TZOFF = { "Asia/Tokyo": 540, "Asia/Shanghai": 480 };
 let TZ = (() => { try { const v = localStorage.getItem("btc_tz"); return TZNAME[v] ? v : "Asia/Tokyo"; } catch (e) { return "Asia/Tokyo"; } })();
@@ -3659,6 +3674,83 @@ const DERIV = [
     return { oi: +c.openInterest, oi24: NaN, fr: +c.funding, hrs: 1, next: Math.ceil(now / 36e5) * 36e5, px: +c.markPx };   // 每小时结算，不公开持仓历史
   }],
 ];
+// ---------------- 期权（Deribit，网页可以直接跨域读） ----------------
+const DERIBIT = "https://www.deribit.com/api/v2/public";
+const OPT_MON = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
+function optParse(name) {   // BTC-13NOV26-83000-P → 到期（UTC 8:00）、行权价、看涨/看跌
+  const m = /^BTC-(\d{1,2})([A-Z]{3})(\d{2})-(\d+)-([CP])$/.exec(name || "");
+  return m && OPT_MON[m[2]] !== undefined ? { exp: Date.UTC(2000 + +m[3], OPT_MON[m[2]], +m[1], 8), k: +m[4], put: m[5] === "P" } : null;
+}
+async function pollOpt() {
+  const now = Date.now();
+  const [dv, bk] = await Promise.all([
+    jfetch(`${DERIBIT}/get_volatility_index_data?currency=BTC&resolution=3600&start_timestamp=${now - 26 * 3600e3}&end_timestamp=${now}`),
+    jfetch(`${DERIBIT}/get_book_summary_by_currency?currency=BTC&kind=option`)]);
+  const d = (dv.result && dv.result.data) || [];
+  const by = new Map();
+  let und = NaN;
+  for (const r of bk.result || []) {
+    const o = optParse(r.instrument_name);
+    if (!o || o.exp <= now) continue;
+    if (!by.has(o.exp)) by.set(o.exp, { exp: o.exp, rows: [], und: [] });
+    const e = by.get(o.exp);
+    e.rows.push({ k: o.k, put: o.put, oi: +r.open_interest || 0, iv: +r.mark_iv });
+    if (+r.underlying_price > 0) e.und.push(+r.underlying_price);
+    if (!isFinite(und) && +r.estimated_delivery_price > 0) und = +r.estimated_delivery_price;
+  }
+  const exps = [...by.values()].map(e => {
+    const u = e.und.length ? e.und.sort((a, b) => a - b)[e.und.length >> 1] : und;
+    const call = e.rows.filter(r => !r.put).reduce((a, r) => a + r.oi, 0), put = e.rows.filter(r => r.put).reduce((a, r) => a + r.oi, 0);
+    // 最大痛点：到期价格落在哪个行权价，期权买方整体拿到的钱最少
+    const ks = [...new Set(e.rows.map(r => r.k))].sort((a, b) => a - b);
+    let pain = NaN, best = Infinity;
+    for (const K of ks) {
+      const pay = e.rows.reduce((a, r) => a + r.oi * Math.max(0, r.put ? r.k - K : K - r.k), 0);
+      if (pay < best) { best = pay; pain = K; }
+    }
+    const near = (put, tgt) => e.rows.filter(r => r.put === put && isFinite(r.iv) && r.iv > 0).sort((a, b) => Math.abs(a.k - tgt) - Math.abs(b.k - tgt))[0];
+    // 偏斜用 25 delta 附近的行权价：离现价的距离按到期时间缩放（近到期的 ±10% 是好几个标准差外，翼部会把偏斜放大）
+    const pa = near(true, u), ca = near(false, u), atm = pa && ca ? (pa.iv + ca.iv) / 2 : NaN, days = (e.exp - now) / 864e5;
+    const w = 0.674 * atm / 100 * Math.sqrt(days / 365), p25 = isFinite(w) ? near(true, u * Math.exp(-w)) : null, c25 = isFinite(w) ? near(false, u * Math.exp(w)) : null;
+    return { exp: e.exp, days, u, call, put, pain, skew: p25 && c25 ? p25.iv - c25.iv : NaN, atm };
+  }).sort((a, b) => a.exp - b.exp);
+  S.opt = { t: now, dvol: d.length ? d.at(-1)[4] : NaN, dvol24: d.length > 24 ? d.at(-25)[4] : NaN, exps, und };
+  S.optErr = null;
+  renderOpt();
+}
+function renderOpt() {
+  if (!$("opTbl")) return;
+  const O = S.opt;
+  if (!O) { if (S.optErr) $("opSum").textContent = S.optErr; return; }
+  const P = isFinite(S.price) ? S.price : O.und, now = Date.now();
+  // 主看的到期日：1–14 天里持仓最多的（和后台因子快照同一个口径）
+  const band = O.exps.filter(e => e.days >= 1 && e.days <= 14), main = (band.length ? band : O.exps).slice().sort((a, b) => (b.call + b.put) - (a.call + a.put))[0];
+  const totC = O.exps.reduce((a, e) => a + e.call, 0), totP = O.exps.reduce((a, e) => a + e.put, 0), pcr = totC ? totP / totC : NaN;
+  const b5 = S.b5.slice(-289), lr = b5.slice(1).map((b, i) => Math.log(b.c / b5[i].c));
+  const mu = lr.reduce((a, x) => a + x, 0) / (lr.length || 1), rv = lr.length > 200 ? Math.sqrt(lr.reduce((a, x) => a + (x - mu) ** 2, 0) / (lr.length - 1) * 288 * 365) * 100 : NaN;
+  const gap = O.dvol - rv, day1 = O.dvol / 100 / Math.sqrt(365) * P, dChg = O.dvol - O.dvol24;
+  const gapWord = !isFinite(gap) ? "—" : gap > 15 ? "期权比实际贵很多：市场在防大波动" : gap > 3 ? "期权比实际略贵：正常" : gap >= -3 ? "差不多" : "期权比实际还便宜：大家太放松";
+  const skWord = x => !isFinite(x) ? "—" : x > 5 ? "下跌保险明显更贵：怕跌" : x > 1.5 ? "略偏怕跌" : x >= -1.5 ? "两边差不多" : "上涨期权更贵：在抢涨";
+  const n1 = (x, d = 1) => isFinite(x) ? x.toFixed(d) : "—", sg = (x, d = 1) => isFinite(x) ? (x >= 0 ? "+" : "") + x.toFixed(d) : "—";
+  setHTML($("opChips"), [
+    ["DVOL（期权预期年化波动）", n1(O.dvol), isFinite(dChg) && Math.abs(dChg) >= 3 ? "warn" : "", `24 小时 ${sg(dChg)} 点 · 一天约 ±${isFinite(day1) ? fmt(day1) : "—"} 美元`],
+    ["期权预期 − 最近 24h 实际", isFinite(gap) ? sg(gap) + " 点" : "—", Math.abs(gap) > 15 || gap < -3 ? "warn" : "", `实际 ${n1(rv)} · ${gapWord}`],
+    [`偏斜（${main ? fmtDate(main.exp) : "—"} 到期）`, main && isFinite(main.skew) ? sg(main.skew) + " 点" : "—", main && Math.abs(main.skew) > 5 ? "warn" : "", main ? skWord(main.skew) : "—"],
+    ["看跌 / 看涨持仓", n1(pcr, 2), "", "全部到期日 · 大于 1 说明保险买得多"],
+  ].map(([k, v, c, sub]) => `<div class="chip"><span>${k}</span><b class="${c}">${v}</b><span>${esc(sub)}</span></div>`).join(""));
+  const next = O.exps.find(e => e.days > 0);
+  const pd = main && isFinite(main.pain) && isFinite(P) ? (main.pain / P - 1) * 100 : NaN;
+  setHTML($("opSum"), `期权市场预期接下来一天的波动大约 <b>±${isFinite(day1) ? fmt(day1) : "—"} 美元</b>（DVOL ${n1(O.dvol)}，${gapWord}）。`
+    + (main ? `主要到期日 ${fmtDate(main.exp)}（还有 ${n1(main.days)} 天）持仓 ${Math.round(main.call + main.put).toLocaleString()} BTC，偏斜 ${sg(main.skew)} 点（${skWord(main.skew)}），最大痛点 ${fmt(main.pain)}（比现价 ${sg(pd, 1)}%）。` : "")
+    + (next && next.days < 1 && (next.call + next.put) * P >= 1e9 ? ` <b class="warn">${n1(next.days * 24, 0)} 小时后有约 ${((next.call + next.put) * P / 1e8).toFixed(0)} 亿美元的期权到期。</b>` : ""));
+  const big = O.exps.filter(e => e.days <= 45).sort((a, b) => (b.call + b.put) - (a.call + a.put)).slice(0, 5).sort((a, b) => a.exp - b.exp);
+  const th = `<thead><tr><th>到期（${TZ === "Asia/Shanghai" ? "北京 16:00" : "东京 17:00"}）</th><th>还有</th><th>看涨持仓</th><th>看跌持仓</th><th>合计价值</th><th>平值波动率</th><th>偏斜</th><th>最大痛点</th></tr></thead>`;
+  const tr = big.map(e => `<tr><td class="t">${fmtDate(e.exp)}${e === main ? " <small>主看</small>" : ""}</td><td>${e.days < 1 ? n1(e.days * 24, 0) + " 小时" : n1(e.days) + " 天"}</td>`
+    + `<td>${Math.round(e.call).toLocaleString()}</td><td>${Math.round(e.put).toLocaleString()}</td><td>${((e.call + e.put) * P / 1e8).toFixed(1)} 亿美元</td>`
+    + `<td>${n1(e.atm)}</td><td>${sg(e.skew)}</td><td>${fmt(e.pain)}<small>${sg((e.pain / P - 1) * 100, 1)}%</small></td></tr>`).join("");
+  setHTML($("opTbl"), th + `<tbody>${tr}</tbody>`);
+  $("opUpd").textContent = S.optErr || `Deribit · BTC 期权 · 更新于 ${fmtClock(O.t)} · 每 5 分钟`;
+}
 async function pollDeriv() {
   const rs = await Promise.allSettled(DERIV.map(([, f]) => f()));
   S.deriv = { t: Date.now(), rows: DERIV.map(([n], i) => rs[i].status === "fulfilled" ? { n, ...rs[i].value } : { n, err: String(rs[i].reason?.message || rs[i].reason || "读取失败") }) };
@@ -3786,6 +3878,8 @@ setInterval(btPoll, 60000);
 setInterval(btPollLiq, 60000);
 setInterval(renderBattle, 1000);
 setInterval(() => pollDeriv().catch(() => {}), 60000);
+pollOpt().catch(e => { S.optErr = "Deribit 读取失败，5 分钟后重试"; renderOpt(); console.error(e); });
+setInterval(() => pollOpt().catch(e => { S.optErr = "Deribit 读取失败，5 分钟后重试"; renderOpt(); console.error(e); }), 300000);
 setInterval(() => { if (S.season) renderSeason(); }, 60000);
 setInterval(() => pollSeason().catch(() => {}), 3600e3);
 setInterval(verifyCalls, 60000);
