@@ -18,6 +18,8 @@
 | 美股官方价 | QQQ、SPY、IWM、NVDA、MSTR、COIN、BMNR、CRCL、HOOD、MARA、IREN、BITO 的常规收盘、盘前盘后最后一笔、含夜盘的全时段最新价（面板的实时价直接连币安股票永续，不经过这里） | Yahoo Finance |
 | 事件日历 | 美国高影响数据（CPI、非农、FOMC 等）、美股开盘；发布前 60 分钟和 10 分钟各提醒一次 | ForexFactory 日历 |
 | 预期振幅 | 根据当前时段和过去 24h 活跃度，给出未来 1h 振幅中位数、4h 振幅 P80 | 一年回测得出（见 `../backtest/range_table.py`） |
+| 波动尺子 | 预测未来 1 小时和 4 小时振幅、档位、拟合权重和样本外 R²，并换成参考止损距离和杠杆对照 | 见下面「波动尺子」。结果在 `out/vol_ruler.json`，随 data 分支发布 |
+| 因子快照 | 每 15 分钟记录 DVOL、期权偏斜、盘口失衡、主动买卖、跨所资金费率和基差、Coinbase 溢价 | 见下面「因子快照」。追加到 `factor-history` 分支，不进面板 |
 
 ## 分级
 
@@ -86,6 +88,45 @@ export LABEL_MODE=muse
 `lean` 只能是 利多 / 利空 / 中性，`strength` 只能是 强 / 中 / 弱。程序每分钟读取一次并合并。
 
 AI 结果回来之前，面板显示关键词规则的结果，并标注「规则判断」；回来后改为「AI判断」。
+
+## 波动尺子
+
+预测的是未来振幅（高低跨度），不是涨跌方向。方向在第一轮实验里接近抛硬币，这张卡不报方向。
+
+- 数据：币安公开行情 `data-api.binance.vision` 的 BTCUSDT 现货 5 分钟 K 线，加上 Deribit 的 BTC DVOL。默认用最近 90 天。
+- 模型：和 `backtest/factor_oos.py`、第一轮实验同一套。因子先标准化，再做岭回归（alpha = 1）。权重每次拟合算出来，写进 JSON，不在代码里写死。
+- 走步：先留 30 天，之后每 7 天往前推一截；训练只用预测窗口开始之前的数据。样本外 R² 打在 `vol_ruler.json` 的 `h4.oos` / `h1.oos` 里，后台日志也会打印。
+- 节奏：监控每分钟一轮，但预测默认 15 分钟一次（`VOL_PREDICT_EVERY`）。上次拟合超过 20 小时（`VOL_REFIT_HOURS`）才重新下载并走步。拟合存在 `out/vol_model.json`，跟其他状态一起放到 `monitor-state` 分支，下一段接着用。
+- 发布：`vol_ruler.json` 和 `status.json` 一起推到 `data` 分支。面板「波动尺子」卡片读它。上面那张「预期振幅」仍是原来的历史查表，两张都留着。
+- 卡片上的参考止损距离 = 预测的 4 小时振幅。强平距离按 `1/杠杆 − 0.4%`，和面板持仓推演同一口径，用来看 20 / 40 / 50 / 100 倍时正常波动会不会碰到强平。只换算距离，不下单。
+
+本机看一眼（需要 `pip install -r requirements.txt`）：
+
+```bash
+python3 vol_ruler.py --once --refit
+```
+
+## 因子快照
+
+给两三个月以后的因子检验攒历史。每 15 分钟（`FACTOR_EVERY`）抓一次，一个来源失败只在这一行记 `error`，其他来源照常，监控主循环也不停。
+
+记这些公开数据，不需要密钥：
+
+- Deribit：BTC DVOL、平值隐含波动率、25 delta 偏斜（用平值波动率近似行权价）、最大痛点、各到期日持仓
+- 币安现货（`data-api.binance.vision`）：±0.5% 和 ±1% 盘口失衡，最近 15 分钟主动买 / 主动卖（CVD）
+- OKX、Bitget、Gate 的资金费率和永续相对现货的基差；Hyperliquid 的资金费率，基差用标记价相对预言机
+- Coinbase 溢价（和面板「美国资金」同一算法）
+- 币安合约、Bybit 会各试一次。云主机上常见 451 / 403，失败就跳过
+
+推送：有 `GITHUB_REPO` 和 `GITHUB_TOKEN` 时，追加到 `factor-history` 分支（`FACTOR_BRANCH` 可改）的 `snapshots/年-月-日.jsonl`，一天一个文件。这个分支是普通提交，往上追加，不会像 `data` 分支那样整支覆盖。没有令牌时写到 `out/factor-history/`。字段说明在分支里的 `schema.json`，也写在 `factor_snap.py` 的 `SCHEMA`。
+
+攒够之后怎么测，见 `../backtest/README.md` 的「因子快照的增量检验」。
+
+```bash
+python3 factor_snap.py --once --no-push   # 只写本机，不推分支
+```
+
+这里的 `--no-push` 只表示这次别推因子分支。监控主程序的 `--no-push` 仍然是「不发邮件 / Telegram」，数据发布和因子分支照常。
 
 ## 模拟盘
 

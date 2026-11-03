@@ -3,6 +3,9 @@
 # 状态每 10 分钟存到 monitor-state 分支，下一段接着跑。每 30 分钟排一次，同一时间只跑一段，
 # 前一段没结束时下一段排队等，所以基本是连续的（GitHub 定时任务高峰时可能晚几分钟）。
 #
+# 同一段里还会：波动尺子大约每 15 分钟预测一次（超过 20 小时就重新走步拟合，权重写进 data 分支的 vol_ruler.json），
+# 以及每 15 分钟把候选因子追加到 factor-history 分支。都不发邮件。--no-push 继续关着。
+#
 # 需要在仓库 Settings → Secrets and variables → Actions 里设置：
 #   DEEPSEEK_API_KEY  新闻 AI 判断（没有就用关键词规则）
 #   RECORDS_TOKEN     细粒度令牌，只勾 btc-records，Contents 读写（读人工喊单、写提醒给 Muse）
@@ -43,7 +46,10 @@ jobs:
             "https://api.hyperliquid.xyz/info" \
             "https://api.gateio.ws/api/v4/futures/usdt/candlesticks?contract=BTC_USDT&interval=5m&limit=2" \
             "https://contract.mexc.com/api/v1/contract/kline/BTC_USDT?interval=Min5" \
-            "https://api.bitget.com/api/v2/mix/market/candles?symbol=BTCUSDT&productType=usdt-futures&granularity=5m&limit=2" ; do
+            "https://api.bitget.com/api/v2/mix/market/candles?symbol=BTCUSDT&productType=usdt-futures&granularity=5m&limit=2" \
+            "https://www.deribit.com/api/v2/public/get_index_price?index_name=btc_usd" \
+            "https://api.exchange.coinbase.com/products/BTC-USD/ticker" \
+            "https://data-api.binance.vision/api/v3/depth?symbol=BTCUSDT&limit=5" ; do
             code=$(curl -s -o /tmp/r -w "%{http_code}" -m 15 "$u"); echo "$code  $u  $(head -c 120 /tmp/r)"; done
 
   run:
@@ -85,5 +91,10 @@ jobs:
           MAC_NOTIFY: "0"
           MARKET_SOURCE: cloud          # 美国服务器连不上币安合约：K 线用币安公开行情镜像，持仓量 / 资金费率用 OKX
           DISPLAY_TZ: Asia/Tokyo
+          VOL_PREDICT_EVERY: "900"      # 波动尺子：15 分钟预测一次
+          VOL_REFIT_HOURS: "20"         # 超过 20 小时重新走步拟合
+          VOL_LOOKBACK_DAYS: "90"
+          FACTOR_EVERY: "900"           # 因子快照：15 分钟追加一行
+          FACTOR_BRANCH: factor-history
           PYTHONWARNINGS: ignore
         run: python monitor.py --minutes 55 --no-push

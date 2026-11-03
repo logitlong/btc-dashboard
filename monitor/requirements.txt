@@ -1,4 +1,4 @@
-# 模拟盘需要（paper.py）
+# 模拟盘（paper.py）和波动尺子（vol_ruler.py）需要
 pandas>=2.0
 numpy>=1.24
 # 可选：只有用 Claude API 标注新闻时才需要

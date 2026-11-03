@@ -738,6 +738,18 @@ def main():
         log("张主任规则提醒未启动:", ex)
     from publish import Publisher
     from liquidations import Liquidations
+    try:
+        from vol_ruler import VolRuler
+        vol_ruler = VolRuler(OUT, log)
+    except Exception as ex:
+        vol_ruler = None
+        log("波动尺子未启动:", ex)
+    try:
+        from factor_snap import FactorRecorder
+        factor_rec = FactorRecorder(OUT, log)
+    except Exception as ex:
+        factor_rec = None
+        log("因子快照未启动:", ex)
     pub = Publisher(OUT, log)
     spub = StatePublisher(OUT, log)
     log(f"提醒发件箱：{'私有仓库 ' + outbox.repo + ' 的 alerts.json（Muse 读取）' if outbox.enabled else '只记在本地 out/outbox.json'}")
@@ -764,6 +776,11 @@ def main():
             write_status(market, cal, notifier, store)
         except Exception as ex:
             log("状态页写入失败:", ex)
+        # 拟合和快照失败都不能挡住新闻、模拟盘和原来的发布。--no-push 只关邮件 / Telegram，数据照常写。
+        if vol_ruler:
+            vol_ruler.step()
+        if factor_rec:
+            factor_rec.step()
         pub.step()
         try:
             save_state(OUT, news, market, notifier)
