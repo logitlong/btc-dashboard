@@ -17,6 +17,8 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 
+import exchanges as EX
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.environ.get("OUT_DIR", os.path.join(HERE, "out"))
 UA = {"User-Agent": "btc-monitor/1.0", "Accept": "application/json"}
@@ -24,13 +26,6 @@ API = "https://api.github.com"
 
 VISION = "https://data-api.binance.vision"
 DERIBIT = "https://www.deribit.com/api/v2/public"
-OKX = "https://www.okx.com"
-BITGET = "https://api.bitget.com"
-GATE = "https://api.gateio.ws"
-HL = "https://api.hyperliquid.xyz/info"
-COINBASE = "https://api.exchange.coinbase.com"
-FAPI = "https://fapi.binance.com"
-BYBIT = "https://api.bybit.com"
 
 MONTHS = {m: i for i, m in enumerate(
     ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"], 1)}
@@ -273,8 +268,9 @@ def basis_pct(perp, spot):
     return (perp / spot - 1.0) * 100.0
 
 
-def collect_snapshot(get=http_json, now=None):
-    """抓一次。get(url, body=None) 抛 SnapError 或任意异常都只影响该来源。"""
+def collect_snapshot(get=http_json, now=None, ex_get=EX.client):
+    """抓一次。get(url, body=None) 用于币安现货盘口 / K 线和 Deribit；各交易所永续和 Coinbase 走 ccxt（ex_get 取客户端）。
+    任何一个来源抛异常都只影响它自己。"""
     now = now or datetime.now(timezone.utc)
     if now.tzinfo is None:
         now = now.replace(tzinfo=timezone.utc)
@@ -326,81 +322,6 @@ def collect_snapshot(get=http_json, now=None):
         surface["dvol"] = _r(data[-1][4], 4)
         return surface
 
-    def okx():
-        perp = get(f"{OKX}/api/v5/market/ticker?instId=BTC-USDT-SWAP")["data"][0]
-        spot = get(f"{OKX}/api/v5/market/ticker?instId=BTC-USDT")["data"][0]
-        fund = get(f"{OKX}/api/v5/public/funding-rate?instId=BTC-USDT-SWAP")["data"][0]
-        pm = _mid(perp.get("bidPx"), perp.get("askPx"), perp.get("last"))
-        sm = _mid(spot.get("bidPx"), spot.get("askPx"), spot.get("last"))
-        return {"funding": _r(fund.get("fundingRate"), 8), "interval_hours": 8,
-                "perp": _r(pm, 2), "spot": _r(sm, 2), "basis_pct": _r(basis_pct(pm, sm), 6),
-                "basis_kind": "perp_vs_spot"}
-
-    def bitget():
-        perp = get(f"{BITGET}/api/v2/mix/market/ticker?symbol=BTCUSDT&productType=usdt-futures")["data"][0]
-        spot = get(f"{BITGET}/api/v2/spot/market/tickers?symbol=BTCUSDT")["data"][0]
-        pm = _mid(perp.get("bidPr"), perp.get("askPr"), perp.get("lastPr"))
-        sm = _mid(spot.get("bidPr"), spot.get("askPr"), spot.get("lastPr"))
-        return {"funding": _r(perp.get("fundingRate"), 8), "interval_hours": 8,
-                "perp": _r(pm, 2), "spot": _r(sm, 2), "basis_pct": _r(basis_pct(pm, sm), 6),
-                "mark": _r(perp.get("markPrice"), 2), "index": _r(perp.get("indexPrice"), 2),
-                "basis_kind": "perp_vs_spot"}
-
-    def gate():
-        perp = get(f"{GATE}/api/v4/futures/usdt/tickers?contract=BTC_USDT")[0]
-        spot = get(f"{GATE}/api/v4/spot/tickers?currency_pair=BTC_USDT")[0]
-        pm = _f(perp.get("last"))
-        sm = _mid(spot.get("highest_bid"), spot.get("lowest_ask"), spot.get("last"))
-        return {"funding": _r(perp.get("funding_rate"), 8), "interval_hours": 8,
-                "perp": _r(pm, 2), "spot": _r(sm, 2), "basis_pct": _r(basis_pct(pm, sm), 6),
-                "mark": _r(perp.get("mark_price"), 2), "index": _r(perp.get("index_price"), 2),
-                "basis_kind": "perp_vs_spot"}
-
-    def hyperliquid():
-        meta = get(HL, body={"type": "metaAndAssetCtxs"})
-        universe, ctxs = meta[0]["universe"], meta[1]
-        i = next(i for i, u in enumerate(universe) if u.get("name") == "BTC")
-        ctx = ctxs[i]
-        mark, oracle = _f(ctx.get("markPx")), _f(ctx.get("oraclePx"))
-        return {"funding": _r(ctx.get("funding"), 8), "interval_hours": 1,
-                "mark": _r(mark, 2), "oracle": _r(oracle, 2),
-                "basis_pct": _r(basis_pct(mark, oracle), 6), "basis_kind": "mark_vs_oracle"}
-
-    def binance_perp():
-        # 云主机通常 451。能通就记，不通由 take() 吞掉。
-        px = get(f"{FAPI}/fapi/v1/premiumIndex?symbol=BTCUSDT")
-        mark, index = _f(px.get("markPrice")), _f(px.get("indexPrice"))
-        return {"funding": _r(px.get("lastFundingRate"), 8), "interval_hours": 8,
-                "mark": _r(mark, 2), "index": _r(index, 2),
-                "basis_pct": _r(basis_pct(mark, index), 6), "basis_kind": "mark_vs_index"}
-
-    def bybit():
-        lin = get(f"{BYBIT}/v5/market/tickers?category=linear&symbol=BTCUSDT")["result"]["list"][0]
-        try:
-            spot = get(f"{BYBIT}/v5/market/tickers?category=spot&symbol=BTCUSDT")["result"]["list"][0]
-            sm = _mid(spot.get("bid1Price"), spot.get("ask1Price"), spot.get("lastPrice"))
-        except Exception:
-            sm = None
-        pm = _mid(lin.get("bid1Price"), lin.get("ask1Price"), lin.get("lastPrice"))
-        return {"funding": _r(lin.get("fundingRate"), 8), "interval_hours": 8,
-                "perp": _r(pm, 2), "spot": _r(sm, 2), "basis_pct": _r(basis_pct(pm, sm), 6),
-                "mark": _r(lin.get("markPrice"), 2), "index": _r(lin.get("indexPrice"), 2),
-                "basis_kind": "perp_vs_spot"}
-
-    def coinbase_premium():
-        btc = get(f"{COINBASE}/products/BTC-USD/ticker")
-        usdt = get(f"{COINBASE}/products/USDT-USD/ticker")
-        book = out.get("book") if isinstance(out.get("book"), dict) else None
-        bn = _f(book.get("mid")) if book else None
-        if not bn:
-            tick = get(f"{VISION}/api/v3/ticker/bookTicker?symbol=BTCUSDT")
-            bn = _mid(tick.get("bidPrice"), tick.get("askPrice"))
-        cb = _mid(btc.get("bid"), btc.get("ask"), btc.get("price"))
-        usd = _mid(usdt.get("bid"), usdt.get("ask"), usdt.get("price")) or 1.0
-        if not cb or not bn:
-            raise SnapError("Coinbase 或币安现货价格缺失")
-        return _r((cb / (bn * usd) - 1.0) * 100.0, 6)
-
     take("book", spot_book)
     if isinstance(out.get("book"), dict) and out["book"].get("mid"):
         out["spot"] = out["book"]["mid"]
@@ -416,15 +337,16 @@ def collect_snapshot(get=http_json, now=None):
             exchanges[key] = {"error": msg}
             errors.append(f"{key}: {msg}")
 
-    put_ex("okx", okx)
-    put_ex("bitget", bitget)
-    put_ex("gate", gate)
-    put_ex("hyperliquid", hyperliquid)
-    put_ex("binance_perp", binance_perp)
-    put_ex("bybit", bybit)
+    for key, name in (("okx", "okx"), ("bitget", "bitget"), ("gate", "gate"), ("hyperliquid", "hyperliquid"),
+                      ("binance_perp", "binanceusdm"), ("bybit", "bybit")):
+        # 币安合约在云主机上 451、Bybit 403，失败只记在这一家
+        put_ex(key, lambda name=name: EX.perp_snapshot(name, ex_get))
     out["exchanges"] = exchanges
     try:
-        out["coinbase_premium_pct"] = coinbase_premium()
+        # 币安价现取：前面几家交易所要十几秒，用开头的盘口中间价会和 Coinbase 差出这段时间的行情
+        tick = get(f"{VISION}/api/v3/ticker/bookTicker?symbol=BTCUSDT")
+        bn = _mid(tick.get("bidPrice"), tick.get("askPrice"))
+        out["coinbase_premium_pct"] = _r(EX.coinbase_premium_pct(bn, ex_get), 6)
     except Exception as ex:
         msg = str(ex)[:180]
         out["coinbase_premium_pct"] = None

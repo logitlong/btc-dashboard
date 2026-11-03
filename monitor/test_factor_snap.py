@@ -49,52 +49,73 @@ def test_surface_from_names():
     assert surface["skew_25d"] is not None
 
 
+class FakeEx:
+    """假的 ccxt 客户端：只回答因子快照会问的几个方法。"""
+
+    def __init__(self, tickers=None, funding=None, fail=None, rates=None):
+        self.tickers, self.funding, self.fail, self.rates = tickers or {}, funding or {}, fail, rates
+
+    def _check(self):
+        if self.fail:
+            raise RuntimeError(self.fail)
+
+    def fetch_ticker(self, sym):
+        self._check()
+        return self.tickers[sym]
+
+    def fetch_funding_rate(self, sym):
+        self._check()
+        return self.funding
+
+    def fetch_funding_rates(self, syms):
+        self._check()
+        return {syms[0]: self.rates}
+
+
+def fake_clients():
+    tk = lambda b, a, last: {"bid": b, "ask": a, "last": last}  # noqa: E731
+    return {
+        "okx": FakeEx({"BTC/USDT:USDT": tk(100, 102, 101), "BTC/USDT": tk(100, 100, 100)}, {"fundingRate": 0.0001}),
+        "bitget": FakeEx({"BTC/USDT:USDT": tk(100, 100, 100), "BTC/USDT": tk(100, 101, 100)},
+                         {"fundingRate": 0.0002, "markPrice": 100, "indexPrice": 100}),
+        "gate": FakeEx({"BTC/USDT:USDT": tk(None, None, 100), "BTC/USDT": tk(99, 101, 100)},
+                       {"fundingRate": 0.0001, "markPrice": 100, "indexPrice": 99}),
+        "hyperliquid": FakeEx(rates={"fundingRate": 0.00001, "markPrice": 101, "indexPrice": 100}),
+        "binanceusdm": FakeEx(fail="451 fapi.binance.com"),
+        "bybit": FakeEx(fail="403 api.bybit.com"),
+        "coinbaseexchange": FakeEx({"BTC/USD": tk(101, 103, 102), "USDT/USD": tk(1, 1, 1)}),
+    }
+
+
 def test_one_source_fails_others_remain():
     def get(url, body=None, timeout=15):
         if "deribit" in url:
             raise F.SnapError("HTTP 500 www.deribit.com")
-        if "fapi.binance.com" in url:
-            raise F.SnapError("HTTP 451 fapi.binance.com")
-        if "bybit" in url:
-            raise F.SnapError("HTTP 403 api.bybit.com")
-        if url.endswith("/depth?symbol=BTCUSDT&limit=1000") or "depth?symbol=BTCUSDT" in url:
+        if "depth?symbol=BTCUSDT" in url:
             return {"bids": [["100", "2"]], "asks": [["101", "3"]]}
         if "klines" in url:
             return [[0, "1", "1", "1", "1", "4", 0, "0", 1, "3", "0"]]
-        if "okx.com" in url and "ticker" in url and "SWAP" in url:
-            return {"data": [{"bidPx": "100", "askPx": "102", "last": "101"}]}
-        if "okx.com" in url and "ticker" in url:
-            return {"data": [{"bidPx": "100", "askPx": "100", "last": "100"}]}
-        if "funding-rate" in url:
-            return {"data": [{"fundingRate": "0.0001"}]}
-        if "bitget.com" in url and "mix" in url:
-            return {"data": [{"bidPr": "100", "askPr": "100", "lastPr": "100", "fundingRate": "0.0002",
-                              "markPrice": "100", "indexPrice": "100"}]}
-        if "bitget.com" in url:
-            return {"data": [{"bidPr": "100", "askPr": "101", "lastPr": "100"}]}
-        if "gateio" in url and "futures" in url:
-            return [{"last": "100", "funding_rate": "0.0001", "mark_price": "100", "index_price": "99"}]
-        if "gateio" in url:
-            return [{"last": "100", "highest_bid": "99", "lowest_ask": "101"}]
-        if "hyperliquid" in url:
-            return [{"universe": [{"name": "BTC"}]}, [{"funding": "0.00001", "markPx": "101", "oraclePx": "100"}]]
-        if "BTC-USD" in url:
-            return {"bid": "101", "ask": "103", "price": "102"}
-        if "USDT-USD" in url:
-            return {"bid": "1", "ask": "1", "price": "1"}
+        if "bookTicker" in url:
+            return {"bidPrice": "100", "askPrice": "101"}
         raise AssertionError(url)
 
-    snap = F.collect_snapshot(get, now=__import__("datetime").datetime(2026, 11, 3, 11, 47, tzinfo=__import__("datetime").timezone.utc))
+    clients = fake_clients()
+    snap = F.collect_snapshot(get, now=__import__("datetime").datetime(2026, 11, 3, 11, 47, tzinfo=__import__("datetime").timezone.utc),
+                              ex_get=clients.__getitem__)
     assert snap["t"] == "2026-11-03T11:47:00Z"
     assert "error" in snap["deribit"]
     assert "error" in snap["exchanges"]["binance_perp"]
     assert "error" in snap["exchanges"]["bybit"]
     assert snap["exchanges"]["okx"]["funding"] == 0.0001
+    assert snap["exchanges"]["okx"]["basis_pct"] == 1.0  # 永续中间价 101，现货 100
+    assert snap["exchanges"]["gate"]["perp"] == 100      # 没有买一卖一就用最新价
+    assert snap["exchanges"]["hyperliquid"]["interval_hours"] == 1
     assert snap["book"]["mid"] == 100.5
     # 成交量 4，主动买 3，主动卖 1，差值 2
     assert snap["cvd_15m"]["buy"] == 3
     assert snap["cvd_15m"]["cvd"] == 2
-    assert snap["coinbase_premium_pct"] is not None
+    # Coinbase 102 / (币安现取的 100.5 × 1) − 1
+    assert abs(snap["coinbase_premium_pct"] - (102 / 100.5 - 1) * 100) < 1e-4
     assert any(e.startswith("deribit") for e in snap["errors"])
     # 失败的来源没有把整行弄丢
     line = F.snapshot_line(snap)

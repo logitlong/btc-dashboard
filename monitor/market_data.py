@@ -6,16 +6,19 @@ MARKET_SOURCE=cloud：
 - K 线：币安公开行情镜像 data-api.binance.vision 的 BTCUSDT 现货（格式和合约 K 线一样，也有主动买入量）。
   现货和永续价格通常只差 0.01%–0.05%，方向模型在现货数据上的样本外准确率和永续相当（2017–19 现货检验 53.3%）。
 - 持仓量、资金费率、多空比：OKX 的 BTC-USDT 永续（只看变化幅度，用来做盘面异常提醒）。
-面板在浏览器里直接连币安，不受影响。只用标准库。
+面板在浏览器里直接连币安，不受影响。
+
+K 线直接读币安原始格式（要主动买入量那一列）；持仓量、资金费率、多空比、OKX 统计数据走 ccxt（exchanges.py）。
 """
 import json
 import os
 import urllib.request
 
+import exchanges as EX
+
 SOURCE = os.environ.get("MARKET_SOURCE", "binance")
 FAPI = "https://fapi.binance.com"
 VISION = "https://data-api.binance.vision"
-OKX = "https://www.okx.com"
 
 
 def _get(url, timeout=20):
@@ -37,25 +40,25 @@ def klines(interval, limit=1500, start_ms=None):
     return first
 
 
+def _perp():
+    return "binanceusdm" if SOURCE == "binance" else "okx"
+
+
 def open_interest():
     """当前持仓量（BTC）。"""
-    if SOURCE == "binance":
-        return float(_get(f"{FAPI}/fapi/v1/openInterest?symbol=BTCUSDT")["openInterest"])
-    return float(_get(f"{OKX}/api/v5/public/open-interest?instId=BTC-USDT-SWAP")["data"][0]["oiCcy"])
+    return EX.open_interest_btc(_perp())
 
 
 def funding_pct():
     """最近一次资金费率（%）。"""
-    if SOURCE == "binance":
-        return float(_get(f"{FAPI}/fapi/v1/premiumIndex?symbol=BTCUSDT")["lastFundingRate"]) * 100
-    return float(_get(f"{OKX}/api/v5/public/funding-rate?instId=BTC-USDT-SWAP")["data"][0]["fundingRate"]) * 100
+    return EX.funding_pct(_perp())
 
 
 def long_short(n=4):
     """最近 n 个 5 分钟的多空账户比，从旧到新。"""
     if SOURCE == "binance":
-        return [float(x["longShortRatio"]) for x in _get(f"{FAPI}/futures/data/globalLongShortAccountRatio?symbol=BTCUSDT&period=5m&limit={n}")]
-    d = _get(f"{OKX}/api/v5/rubik/stat/contracts/long-short-account-ratio?ccy=BTC&period=5m")["data"]
+        return EX.binance_long_short(n)
+    d = EX.okx_rubik("rubik/stat/contracts/long-short-account-ratio", {"ccy": "BTC", "period": "5m"})
     return [float(x[1]) for x in d[:n]][::-1]
 
 
@@ -75,21 +78,21 @@ def spot_klines(interval, limit=1000, start_ms=None):
 
 def okx_coin_oi_change():
     """OKX 币本位 BTC-USD-SWAP 持仓（币）最近两根 1 小时的变化，百分比。"""
-    d = _get(f"{OKX}/api/v5/rubik/stat/contracts/open-interest-history?instId=BTC-USD-SWAP&period=1H")["data"]
+    d = EX.okx_rubik("rubik/stat/contracts/open-interest-history", {"instId": "BTC-USD-SWAP", "period": "1H"})
     now, old = float(d[0][2]), float(d[1][2])
     return dict(now=now, old=old, chg=(now / old - 1) * 100 if old else 0.0)
 
 
 def okx_ls_1h():
     """OKX 多空账户比，最新一根 1 小时相对上一根的差值（不是百分比）。"""
-    d = _get(f"{OKX}/api/v5/rubik/stat/contracts/long-short-account-ratio?ccy=BTC&period=1H")["data"]
+    d = EX.okx_rubik("rubik/stat/contracts/long-short-account-ratio", {"ccy": "BTC", "period": "1H"})
     now, old = float(d[0][1]), float(d[1][1])
     return dict(now=now, old=old, chg=now - old)
 
 
 def okx_taker_1h():
     """OKX 近一根 1 小时主动卖、主动买（美元）。"""
-    d = _get(f"{OKX}/api/v5/rubik/stat/taker-volume?ccy=BTC&instType=CONTRACTS&period=1H")["data"][0]
+    d = EX.okx_rubik("rubik/stat/taker-volume", {"ccy": "BTC", "instType": "CONTRACTS", "period": "1H"})[0]
     return dict(sell=float(d[1]), buy=float(d[2]))
 
 
@@ -105,7 +108,7 @@ def okx_liq_1h():
     import time
     now, long_usd, short_usd = time.time() * 1000, 0.0, 0.0
     for fam, kind in (("BTC-USDT", "linear"), ("BTC-USD", "inverse")):
-        d = _get(f"{OKX}/api/v5/public/liquidation-orders?instType=SWAP&instFamily={fam}&state=filled&limit=100")
+        d = EX.okx_liquidations(fam)
         for row in d.get("data") or []:
             for det in row.get("details") or []:
                 if now - int(det["ts"]) > 3600e3:

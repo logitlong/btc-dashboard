@@ -1,5 +1,7 @@
 # 模拟盘（paper.py）和波动尺子（vol_ruler.py）需要
 pandas>=2.0
 numpy>=1.24
+# 各交易所持仓、资金费率、多空比、基差（exchanges.py）
+ccxt==4.5.6
 # 可选：只有用 Claude API 标注新闻时才需要
 anthropic>=0.125
