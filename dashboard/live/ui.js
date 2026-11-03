@@ -4,7 +4,7 @@ const UI = (() => {
   const page = document.body.dataset.page;
   const NAMES = { main: "陈总", zhang: "张主任" };
   const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* 存不了 */ } }, del: k => { try { localStorage.removeItem(k); } catch (e) { /* 无所谓 */ } } };
-  const PAGES = [["panel", "./", "作战面板", "面板"], ["sim", "sim.html", "模拟盘", "模拟"], ["review", "review.html", "复盘", "复盘"]];
+  const PAGES = [["lite", "./?lite=1", "精简", "精简"], ["panel", "./", "作战面板", "面板"], ["sim", "sim.html", "模拟盘", "模拟"], ["review", "review.html", "复盘", "复盘"]];
   document.querySelectorAll(".pnav").forEach(n => {
     n.setAttribute("aria-label", "页面");
     n.innerHTML = PAGES.map(([k, href, l, s]) => `<a href="${href}"${k === page ? ' aria-current="page"' : ""}><span class="l">${l}</span><span class="s">${s}</span></a>`).join("");
