@@ -35,6 +35,7 @@ from zoneinfo import ZoneInfo
 import labeler as LB
 import rules
 import market_data as MD
+import signal_logic as SL
 import sources as S
 
 OUT = os.environ.get("OUT_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "out"))
@@ -137,19 +138,22 @@ class Notifier:
         self.recent = []  # 给状态页
 
     def send(self, level, title, body, kind):
-        rec = dict(time=now_utc().isoformat(), time_local=fmt(now_utc()), level=level, kind=kind, title=title, body=body)
+        email = SL.is_signal_email(kind, level)
+        subject = f"[BTC信号] {title}" if email else title
+        rec = dict(time=now_utc().isoformat(), time_local=fmt(now_utc()), level=level, kind=kind, title=title, body=body,
+                   email=email, subject=subject)
         self.recent.insert(0, rec)
         self.recent = self.recent[:60]
         with open(os.path.join(OUT, "alerts.jsonl"), "a", encoding="utf-8") as f:
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
         icon = {"red": "🔴", "yellow": "🟡", "gray": "⚪"}[level]
         log(icon, f"[{kind}]", title)
-        if level in ("red", "yellow") and getattr(self, "outbox", None):
-            self.outbox.add(level, kind, title, body)
-        if level == "red":
-            self._deliver(f"{icon} {title}", body)
-        elif level == "yellow":
-            self.queue.append(f"{icon} {title}\n{body}")
+        if getattr(self, "outbox", None) and (level in ("red", "yellow") or kind in ("背景", "共振")):
+            self.outbox.add(level, kind, title, body, email=email, subject=subject)
+        # 邮件只发规格里的三类（共振档位升高、盘面异动、仓位异动），而且立刻发，不进黄色汇总。
+        # 新闻、日历、跨市场、背景、档位回落只进记录。GitHub Actions 用 --no-push，这里也不会真的发出去。
+        if email:
+            self._deliver(subject, body)
 
     def flush(self, force=False):
         if self.queue and (force or time.time() - self.last_flush >= YELLOW_BATCH_SEC):
@@ -312,6 +316,10 @@ class Market:
         self.oi_hist = []
         self.state = {}
         self.cool = {}
+        self.pos_at = 0
+        self.slope_state = None
+        self.slope_bar = None
+        self.minute_seen = {}
 
     def _cooldown(self, key, sec=1800):
         if time.time() - self.cool.get(key, 0) < sec:
@@ -325,6 +333,10 @@ class Market:
         except Exception as ex:
             log("BTC 行情获取失败:", ex)
         try:
+            self.check_spec_anomaly()
+        except Exception as ex:
+            log("盘面异动获取失败:", ex)
+        try:
             self.check_cross()
         except Exception as ex:
             log("跨市场行情获取失败:", ex)
@@ -332,6 +344,10 @@ class Market:
             self.check_stocks()
         except Exception as ex:
             log("美股官方价获取失败:", ex)
+        try:
+            self.check_position()
+        except Exception as ex:
+            log("仓位结构获取失败:", ex)
 
     def check_btc(self):
         kl = MD.klines("1m", 1500)
@@ -351,10 +367,6 @@ class Market:
             d = "上涨" if cl[-1] > cl[-6] else "下跌"
             self.n.send(lvl, f"BTC 5 分钟急速{d}：振幅 {now5:.2f}%（平时约 {base5:.2f}%）",
                         f"现价 {self.price:,.0f}，15 分钟 {move15:+.2f}%。可能有突发消息，先看新闻时间线，别急着进场。", "盘面异常")
-        if vbase and vol[-1] >= 8 * vbase and abs(cl[-1] / cl[-2] - 1) * 100 >= 0.25 and self._cooldown("btc_vol", 900):
-            self.n.send("yellow", f"BTC 1 分钟成交量是平时的 {vol[-1]/vbase:.0f} 倍",
-                        f"现价 {self.price:,.0f}，这一分钟 {(cl[-1]/cl[-2]-1)*100:+.2f}%。", "盘面异常")
-
         oi = MD.open_interest()
         self.oi_hist.append((time.time(), oi, self.price))
         self.oi_hist = [x for x in self.oi_hist if time.time() - x[0] < 3600]
@@ -363,19 +375,11 @@ class Market:
             t0, oi0, p0 = old[-1]
             doi, dp = (oi / oi0 - 1) * 100, (self.price / p0 - 1) * 100
             self.state.update(oi=oi, oi_chg15=doi)
-            if abs(doi) >= 1.5 and self._cooldown("oi", 1800):
-                meaning = ("价涨 + 持仓增：新多单推动，或空头在逆势加仓（挤压燃料）" if dp > 0 and doi > 0 else
-                           "价涨 + 持仓减：空头在平仓（逼空）" if dp > 0 else
-                           "价跌 + 持仓增：新空单推动，或多头在逆势抄底" if doi > 0 else "价跌 + 持仓减：多头在平仓 / 爆仓")
-                self.n.send("yellow", f"15 分钟持仓量 {doi:+.1f}%，价格 {dp:+.2f}%", meaning, "仓位异动")
         else:
             self.state.update(oi=oi)
 
         fr = MD.funding_pct()
         self.state.update(funding=fr)
-        if abs(fr) >= 0.03 and self._cooldown("funding", 8 * 3600):
-            self.n.send("yellow", f"资金费率达到 {fr:+.4f}%（这一年很少超过 ±0.01%）",
-                        "一边仓位极度拥挤，注意反向挤压。", "仓位异动")
         try:
             ls = MD.long_short(4)
             self.state.update(ls=ls[-1], ls_chg15=ls[-1] - ls[0])
@@ -387,6 +391,132 @@ class Market:
             if new:
                 f.write("time,price,open_interest,funding_pct,long_short_ratio\n")
             f.write(f"{now_utc().isoformat()},{self.price},{oi},{fr},{self.state.get('ls', '')}\n")
+
+    def _minute(self, spec, row, prior_rows, prev_row):
+        bar = dict(t=int(row[0]), c=float(row[4]), v=float(row[5]))
+        hit = SL.minute_spike([float(x[5]) for x in prior_rows], [float(prev_row[4])], bar, spec)
+        if hit["vol"] and self.minute_seen.get("vol") != bar["t"]:
+            self.minute_seen["vol"] = bar["t"]
+            self.n.send("yellow", f"1 分钟成交量是前 2 小时中位数的 {hit['vol_ratio']:.1f} 倍",
+                        f"这一分钟涨跌 {hit['move_pct']:+.2f}%。量达到 6 倍就报，不要求同时大涨大跌。只是提醒，不会下单。", "盘面异动")
+        if hit["move"] and self.minute_seen.get("move") != bar["t"]:
+            self.minute_seen["move"] = bar["t"]
+            self.n.send("yellow", f"1 分钟涨跌 {hit['move_pct']:+.2f}%",
+                        "单分钟涨跌到了 0.5%。只是提醒，不会下单。", "盘面异动")
+
+    def check_spec_anomaly(self):
+        """每分钟：1 分钟量或涨跌、5 分钟阶梯三连阳、5 分钟 MA7 斜率转折。"""
+        spec = SL.load_spec()
+        kl = MD.spot_klines("1m", spec["anomaly"]["vol_median_bars"] + 5)
+        closed = kl[:-1]
+        if len(closed) > spec["anomaly"]["vol_median_bars"] + 1:
+            n = spec["anomaly"]["vol_median_bars"]
+            self._minute(spec, kl[-1], closed[-n:], closed[-1])
+            self._minute(spec, closed[-1], closed[-n - 1:-1], closed[-2])
+        k5 = MD.spot_klines("5m", 40)
+        bars = [dict(t=int(x[0]), o=float(x[1]), h=float(x[2]), l=float(x[3]), c=float(x[4]), v=float(x[5])) for x in k5]
+        trio = bars[-3]["t"] if len(bars) >= 8 else None
+        if trio is not None and SL._three_bull(bars, spec):
+            if self.minute_seen.get("three") != trio:
+                self.minute_seen["three"] = trio
+                self.n.send("yellow", "5 分钟阶梯三连阳",
+                            "连续 3 根阳线，实体都不小于全幅的 40%，收盘逐根抬高，回踩不深过前一根全幅的一半，合计涨幅不少于 0.30%。只是形态提醒，没有对应的三连阴。不会下单。",
+                            "盘面异动")
+        elif self.minute_seen.get("three") == trio:
+            self.minute_seen["three"] = None
+        if len(bars) >= 10:
+            closed_t = bars[-2]["t"]
+            if self.slope_bar != closed_t:
+                cc = [b["c"] for b in bars[:-1]]
+                ma_now, ma_prev = sum(cc[-7:]) / 7, sum(cc[-8:-1]) / 7
+                slope = (ma_now / ma_prev - 1) * 100 if ma_prev else 0.0
+                self.slope_state, events = SL.step_ma7(self.slope_state, slope, spec)
+                self.slope_bar = closed_t
+                self.state["ma7_slope"] = slope
+                self.state["ma7_mode"] = self.slope_state["mode"]
+                for ev in events:
+                    title = "5 分钟 MA7 斜率放缓" if ev["kind"] == "slow" else "5 分钟 MA7 斜率接近水平"
+                    self.n.send("yellow", title, ev["text"] + "不会下单。", "盘面异动")
+
+    def _liq_1h(self):
+        spec = SL.load_spec()
+        found = []
+        path = os.path.join(OUT, "liq.json")
+        try:
+            if os.path.exists(path) and time.time() - os.path.getmtime(path) < 1200:
+                data = json.load(open(path, encoding="utf-8"))
+                now, lo, sh = time.time() * 1000, 0.0, 0.0
+                for row in data.get("bars") or []:
+                    if now - row[0] <= 3600e3:
+                        lo += row[1]
+                        sh += row[2]
+                if lo + sh > 0:
+                    found.append(dict(long=lo, short=sh, source="全网（Coinalyze）"))
+        except Exception as ex:
+            log("读取全网爆仓失败:", ex)
+        try:
+            found.append(MD.okx_liq_1h())
+        except Exception as ex:
+            log("OKX 爆仓获取失败:", ex)
+        self.state["liq_1h"] = found
+        for src in found:
+            hit = SL.liq_hit(src["long"], src["short"], spec)
+            if hit:
+                hit["source"] = src["source"]
+                return hit
+        return None
+
+    def _taker_text(self):
+        t = self.state.get("taker")
+        if not t:
+            return ""
+        return f"近 1 小时主动买 {t['buy'] / 1e6:.1f} 百万美元，主动卖 {t['sell'] / 1e6:.1f} 百万美元。"
+
+    def check_position(self):
+        """每 15 分钟看一次仓位结构。每一类单独冷却 2 小时。"""
+        spec = SL.load_spec()
+        if time.time() - self.pos_at < spec["position_every_sec"]:
+            return
+        self.pos_at = time.time()
+        p, cool = spec["position"], spec["position_cooldown_sec"]
+        try:
+            self.state["taker"] = MD.okx_taker_1h()
+        except Exception as ex:
+            log("主动买卖量获取失败:", ex)
+        try:
+            oi, px = MD.okx_coin_oi_change(), MD.spot_change_1h()
+            self.state.update(oi_coin=oi["now"], oi_chg1h=oi["chg"], px_chg1h=px)
+            if abs(oi["chg"]) >= p["oi_1h_pct"] and self._cooldown("oi_1h", cool):
+                self.n.send("yellow", f"币本位持仓 1 小时 {oi['chg']:+.2f}%，价格 {px:+.2f}%",
+                            SL.quadrant(px, oi["chg"]) + "。" + self._taker_text() + "只是提醒，不会下单。", "仓位异动")
+        except Exception as ex:
+            log("币本位持仓获取失败:", ex)
+        try:
+            fr = self.state.get("funding")
+            if fr is None:
+                fr = MD.funding_pct()
+                self.state["funding"] = fr
+            if abs(fr) >= p["funding_abs"] and self._cooldown("funding", cool):
+                self.n.send("yellow", f"资金费率 {fr:+.4f}% / 8 小时",
+                            "绝对值到了 0.03%/8 小时。只是提醒，不会下单。", "仓位异动")
+        except Exception as ex:
+            log("资金费率获取失败:", ex)
+        try:
+            ls = MD.okx_ls_1h()
+            self.state.update(ls_1h=ls["now"], ls_chg1h=ls["chg"])
+            if abs(ls["chg"]) >= p["ls_1h_abs"] and self._cooldown("ls_1h", cool):
+                way = "上升" if ls["chg"] > 0 else "下降"
+                self.n.send("yellow", f"多空比 1 小时{way} {ls['chg']:+.2f}（现 {ls['now']:.2f}）",
+                            "变化达到 0.10。" + self._taker_text() + "只是提醒，不会下单。", "仓位异动")
+        except Exception as ex:
+            log("多空比获取失败:", ex)
+        try:
+            hit = self._liq_1h()
+            if hit and self._cooldown("liq_1h", cool):
+                self.n.send("yellow", f"近 1 小时爆仓 {hit['total'] / 1e6:.1f} 百万美元，{hit['side']}占 {hit['frac'] * 100:.0f}%",
+                            f"来源：{hit['source']}。单边不少于 70%，合计不少于 1500 万美元。只是提醒，不会下单。", "仓位异动")
+        except Exception as ex:
+            log("爆仓统计失败:", ex)
 
     def check_cross(self):
         syms = ",".join(urllib.parse.quote(s) for s in S.CROSS_ASSETS)
@@ -557,7 +687,7 @@ ul{{margin:0;padding-left:18px;font-size:13px}}.w{{overflow-x:auto}}@media(prefe
 <div class="g">
 <div class="c"><h2>BTCUSDT 永续</h2><b>{(market.price or 0):,.0f}</b><div>15 分钟 {m.get('move15', 0):+.2f}% · 5 分钟振幅 {m.get('range5', 0):.2f}%（平时 {m.get('base5', 0):.2f}%）</div></div>
 <div class="c"><h2>预期振幅（{e(ru.get('session',''))} · 过去 24h {e(ru.get('activity',''))}）</h2><b>1h ≈ {ru.get('h1_median_pts','—')} 点</b><div>4h 内 80% 情况下不超过 {ru.get('h4_p80_pts','—')} 点。止损小于 1h 中位数容易被扫。</div></div>
-<div class="c"><h2>仓位</h2><div>持仓量 {m.get('oi', 0):,.0f} BTC（15 分钟 {m.get('oi_chg15', 0):+.2f}%）</div><div>资金费率 {m.get('funding', 0):+.4f}% · 散户多空比 {m.get('ls', 0):.2f}（15 分钟 {m.get('ls_chg15', 0):+.2f}）</div></div>
+<div class="c"><h2>仓位</h2><div>{"币本位持仓 " + format(m.get("oi_coin") or 0, ",.0f") + " BTC（1 小时 " + format(m.get("oi_chg1h") or 0, "+.2f") + "%）" if m.get("oi_coin") else "持仓量 " + format(m.get("oi") or 0, ",.0f") + " BTC（15 分钟 " + format(m.get("oi_chg15") or 0, "+.2f") + "%）"}</div><div>资金费率 {m.get('funding', 0):+.4f}% / 8 小时 · 多空比 {m.get('ls_1h', m.get('ls', 0)):.2f}（1 小时 {m.get('ls_chg1h', 0):+.2f}）</div></div>
 <div class="c"><h2>跨市场（15 分钟）</h2><div style="font-size:13px">{e(cx) or '—'}</div></div>
 <div class="c"><h2>即将发生</h2><ul>{up}</ul></div>
 <div class="c"><h2>最近警报</h2><ul>{al}</ul></div>
