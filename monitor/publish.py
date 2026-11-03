@@ -40,7 +40,7 @@ class Publisher:
 
     def files(self):
         out = {}
-        for name in ("status.json", "paper.json", "model_calls.json", "liq.json"):
+        for name in ("status.json", "paper.json", "model_calls.json", "liq.json", "vol_ruler.json"):
             p = os.path.join(self.out, name)
             if os.path.exists(p):
                 out[name] = open(p, "rb").read()

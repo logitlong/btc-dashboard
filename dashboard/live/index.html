@@ -608,6 +608,14 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
     <p class="note">止损小于 1h 振幅中位数，被正常波动扫掉的概率很高。</p>
   </section>
 
+  <section data-grp="4" id="ampCard" class="card span">
+    <h2>波动尺子 <small id="ampTag">模型预测未来振幅 · 只提供信息</small></h2>
+    <div class="row" id="ampHead"></div>
+    <div class="tablewrap"><table class="ma" id="ampEq"></table></div>
+    <div class="tablewrap"><table class="ma" id="ampLev"></table></div>
+    <p class="note" id="ampNote">正在读波动尺子…</p>
+  </section>
+
   <section data-grp="4" id="calcCard" class="card span">
     <h2>我的持仓 · 推演 <small>只做计算，不会下单</small></h2>
     <form id="pos" onsubmit="return false">
@@ -752,6 +760,7 @@ const GH = location.hostname.endsWith(".github.io") ? [location.hostname.split("
 // 在本机（localhost）打开时，直接读本机监控程序的输出和仓库里的规则文件
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
 let DATA = params.get("data") || (LOCAL ? "../../monitor/out/" : "data/");
+let AMP_URL = DATA + "vol_ruler.json";
 let NEWS_URL = params.get("news") || DATA + "status.json";
 let PAPER_URL = DATA + "paper.json";
 let SPEC_URL = params.get("spec") || (LOCAL ? "../../rules_spec.json" : DATA + "rules_spec.json");
@@ -760,7 +769,7 @@ let SPEC_URL = params.get("spec") || (LOCAL ? "../../rules_spec.json" : DATA + "
 // 连了云端就带上令牌查（每小时 5000 次）；查不到时（比如同一网络下匿名限额用完）改按分支名读，最多晚 5 分钟
 async function resolveData() {
   if (!GH || params.get("data")) return;
-  const setData = base => { DATA = base; NEWS_URL = params.get("news") || DATA + "status.json"; PAPER_URL = DATA + "paper.json"; SPEC_URL = params.get("spec") || DATA + "rules_spec.json"; };
+  const setData = base => { DATA = base; NEWS_URL = params.get("news") || DATA + "status.json"; PAPER_URL = DATA + "paper.json"; SPEC_URL = params.get("spec") || DATA + "rules_spec.json"; AMP_URL = base + "vol_ruler.json"; };
   try {
     const tok = typeof CLOUD !== "undefined" && CLOUD.token;
     const r = await fetch(`https://api.github.com/repos/${GH[0]}/${GH[1]}/git/ref/heads/data`, { cache: "no-cache", ...(tok ? { headers: { Authorization: `Bearer ${tok}` } } : {}) });
@@ -876,7 +885,7 @@ async function bootstrap() {
   S.b1 = k1.map(toBar); S.b5 = k5.map(toBar); S.b15 = k15.map(toBar); S.b60 = k60.map(toBar);
   S.b30 = k30.map(toBar); S.b240 = k240.map(toBar); S.b1d = k1d.map(toBar);
   S.price = S.lastPrice = S.b1.at(-1).c;
-  await Promise.allSettled([pollOI(), pollLS(), pollFunding(), pollNews()]);
+  await Promise.allSettled([pollOI(), pollLS(), pollFunding(), pollNews(), pollAmp()]);
 }
 async function pollOI() {
   const r = await jfetch(`${FAPI}/fapi/v1/openInterest?symbol=BTCUSDT`);
@@ -987,6 +996,60 @@ function renderRuler(st) {
   const lo80 = S.price * (1 + CONE[240][0] / 100), hi80 = S.price * (1 + CONE[240][3] / 100);
   $("ruler").innerHTML = [["未来 1h 振幅中位", `≈ ${fmt(st.h1)} 点`], ["未来 4h 振幅 P80", `≈ ${fmt(st.h4)} 点`], ["4h 后价格 80% 区间", `${fmt(lo80)} – ${fmt(hi80)}`], ["24h 高 / 低", `${fmt(st.hi24)} / ${fmt(st.lo24)}`]]
     .map(([a, b]) => `<div class="chip"><span>${a}</span><b>${b}</b></div>`).join("");
+}
+// 波动尺子：data 分支的 vol_ruler.json。权重和 R² 都是后台拟合写出来的，这里只展示。
+function fmtIso(s) { const t = Date.parse(s); return isFinite(t) ? fmtDT(t) : (s || "—"); }
+function fmtSigned(x, d = 3) { const n = +x; return isFinite(n) ? (n > 0 ? "+" : "") + n.toFixed(d) : "—"; }
+async function pollAmp() {
+  try {
+    S.amp = await jfetch(AMP_URL + (AMP_URL.includes("?") ? "&" : "?") + "t=" + Date.now());
+    S.ampErr = "";
+  } catch (e) {
+    if (!S.amp) S.ampErr = "波动尺子还没有数。后台大约每天重新拟合，每 15 分钟更新预测，写在 data 分支的 vol_ruler.json。";
+  }
+  renderAmp();
+}
+function renderAmp() {
+  const head = $("ampHead");
+  if (!head) return;
+  const a = S.amp, h4 = a && a.h4;
+  if (!h4 || !isFinite(+h4.pred_pct)) {
+    head.innerHTML = `<div class="chip"><span>未来 4 小时振幅</span><b>—</b></div>`;
+    $("ampEq").innerHTML = "";
+    $("ampLev").innerHTML = "";
+    $("ampNote").textContent = S.ampErr || "正在读波动尺子…";
+    return;
+  }
+  const h1 = a.h1 || {}, px = isFinite(S.price) ? S.price : +a.price, stop = +h4.pred_pct;
+  const usd = isFinite(px) ? px * stop / 100 : NaN;
+  const hist = ((h4.oos && h4.oos.quintiles) || []).find(x => x.q === h4.quintile);
+  const r2 = (h4.oos && h4.oos.r2) || {}, r1 = (h1.oos && h1.oos.r2) || {};
+  $("ampTag").textContent = `上次拟合 ${fmtIso(a.refit_at)} · 只提供信息`;
+  head.innerHTML = [
+    ["未来 4 小时振幅", stop.toFixed(2) + "%"],
+    ["换成美元", isFinite(usd) ? Math.round(usd).toLocaleString() + " 美元" : "—"],
+    ["档位", h4.quintile ? `${h4.quintile} / 5 · ${h4.quintile_label || ""}` : "—"],
+    ["未来 1 小时振幅", isFinite(+h1.pred_pct) ? `${(+h1.pred_pct).toFixed(2)}%` + (h1.quintile ? ` · 档位 ${h1.quintile}` : "") : "—"],
+  ].map(([n, v]) => `<div class="chip"><span>${esc(n)}</span><b>${esc(v)}</b></div>`).join("");
+  const eq = h4.equation || [];
+  $("ampEq").innerHTML = `<thead><tr><th>因子</th><th>权重</th><th>高 1 个标准差，振幅大约</th><th>此刻</th><th>这次贡献</th></tr></thead><tbody>`
+    + eq.map(r => `<tr><td class="t">${esc(r.name)}</td><td>${fmtSigned(r.weight)}</td><td>×${isFinite(+r.amp_mult_per_std) ? (+r.amp_mult_per_std).toFixed(2) : "—"}</td><td class="t">${esc(r.now_text || "")}</td><td>${fmtSigned(r.contrib)}</td></tr>`).join("")
+    + `<tr><td class="t">截距</td><td>${fmtSigned(h4.intercept)}</td><td class="t" colspan="3">对数振幅 = 截距 + 上面的贡献。权重是上次拟合得到的。</td></tr></tbody>`;
+  const lev = (a.practical && a.practical.leverage) || [];
+  $("ampLev").innerHTML = `<thead><tr><th>杠杆</th><th>强平大约在</th><th>参考止损是否小于强平距离的一半</th><th>正常波动会不会碰到强平</th></tr></thead><tbody>`
+    + lev.map(r => `<tr><td class="t">${r.lev} 倍</td><td>${(+r.liq_distance_pct).toFixed(2)}%</td><td>${r.stop_below_half_liq ? "小于" : "不小于"}</td><td class="${r.normal_move_reaches_liq ? "warn" : ""}">${r.normal_move_reaches_liq ? "会碰到" : "碰不到"}</td></tr>`).join("")
+    + `</tbody>`;
+  const maxL = a.practical && a.practical.max_leverage_stop_below_half_liq;
+  const bits = [
+    `参考止损距离按未来 4 小时预计振幅算，是 ${stop.toFixed(2)}%` + (isFinite(usd) ? `，按现价大约 ${Math.round(usd).toLocaleString()} 美元。` : "。") + `数字来自 ${fmtIso(h4.asof)} 这根已经走完的小时。`,
+    "这是正常波动大概会走出的高低跨度，用来对照强平距离，不是下单指令。",
+    hist ? `档位 ${h4.quintile}：样本外预测落在这一档时，实际 4 小时振幅中位大约 ${hist.actual_med_pct}%（当时预测的中位是 ${hist.pred_med_pct}%）。` : "",
+    maxL ? `若希望这个距离小于强平距离的一半，杠杆大约要低于 ${maxL} 倍。` : "按这个振幅，上表这几档都放不进「小于强平距离的一半」。",
+    `4 小时样本外 R²：只看过去振幅 ${r2.har ?? "—"}，加时段和成交量 ${r2.full ?? "—"}，再加 DVOL ${r2.full_dvol ?? "—"}。1 小时再加 DVOL ${r1.full_dvol ?? r1.full ?? "—"}。`,
+    a.dvol_note || "",
+    "强平距离按 1/杠杆 − 0.4% 维持保证金估算，和本页持仓推演同一口径。20 / 40 / 50 / 100 倍只是对照。",
+  ];
+  $("ampNote").textContent = bits.filter(Boolean).join("");
 }
 function renderNews() {
   const ul = $("news");
@@ -3278,6 +3341,7 @@ $("btTf").addEventListener("click", e => {
 // ---------------- 主循环 ----------------
 function everySecond() {
   renderConn();
+  renderAmp();
   if (!S.b1.length) return;
   try {
     computeProbs();
@@ -3676,7 +3740,8 @@ setInterval(verifyCalls, 60000);
 setInterval(() => { if (document.visibilityState === "visible") cloudSync(); }, 15000);
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") cloudSync(); });
 setInterval(() => pollStocks(true).catch(() => {}), 600000);
-setInterval(async () => { await resolveData(); pollNews(); pollPaper(); pollModelCalls(); }, 60000);
+setInterval(async () => { await resolveData(); pollNews(); pollPaper(); pollModelCalls(); pollAmp(); }, 60000);
+pollAmp();
 </script>
 </body>
 </html>

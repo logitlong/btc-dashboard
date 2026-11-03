@@ -23,7 +23,8 @@ TZ = ZoneInfo(os.environ.get("DISPLAY_TZ", "Asia/Tokyo"))      # 提醒时间按
 
 from publish import Publisher
 
-STATE_FILES = ("events.db", "paper_state.json", "monitor_state.json", "market_log.csv", "alerts.jsonl", "zhang_alert_state.json")
+STATE_FILES = ("events.db", "paper_state.json", "monitor_state.json", "market_log.csv", "alerts.jsonl", "zhang_alert_state.json",
+               "vol_model.json", "factor_queue.jsonl")
 
 
 def _dt(s):
