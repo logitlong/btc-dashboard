@@ -34,7 +34,9 @@ def save_state(out, news, market, notifier):
     st = dict(saved=time.time(),
               news=dict(next_at=news.next_at, fail=news.fail,
                         clusters=[[c[0].isoformat(), sorted(c[1]), c[2], sorted(c[3]), c[4]] for c in news.clusters]),
-              market=dict(cool=market.cool, oi_hist=market.oi_hist),
+              market=dict(cool=market.cool, oi_hist=market.oi_hist, pos_at=getattr(market, "pos_at", 0),
+                          slope_state=getattr(market, "slope_state", None), slope_bar=getattr(market, "slope_bar", None),
+                          minute_seen=getattr(market, "minute_seen", {})),
               notifier=dict(recent=notifier.recent, queue=notifier.queue, last_flush=notifier.last_flush))
     tmp = os.path.join(out, "monitor_state.json.tmp")
     with open(tmp, "w", encoding="utf-8") as f:
@@ -54,6 +56,10 @@ def load_state(out, news, market, notifier, log):
         news.first_pass = {k: False for k in news.first_pass}     # 之前跑过：新抓到的就是新消息，照常推送
         market.cool = st["market"]["cool"]
         market.oi_hist = [tuple(x) for x in st["market"]["oi_hist"]]
+        market.pos_at = st["market"].get("pos_at", 0)
+        market.slope_state = st["market"].get("slope_state")
+        market.slope_bar = st["market"].get("slope_bar")
+        market.minute_seen = st["market"].get("minute_seen") or {}
         notifier.recent = st["notifier"]["recent"]
         notifier.queue = st["notifier"]["queue"]
         notifier.last_flush = st["notifier"]["last_flush"]
@@ -115,10 +121,10 @@ class Outbox:
                 raise
         self.loaded = True
 
-    def add(self, level, kind, title, body):
+    def add(self, level, kind, title, body, email=False, subject=None):
         t = time.time()
         a = dict(id=f"{int(t * 1000)}-{hashlib.md5((title + body).encode()).hexdigest()[:6]}", time=datetime.fromtimestamp(t, TZ).isoformat(timespec="seconds"),
-                 level=level, kind=kind, title=title, body=body)
+                 level=level, kind=kind, title=title, body=body, email=bool(email), subject=subject or title)
         self.items.append(a)
         self.items = self.items[-300:]
         self.dirty = True

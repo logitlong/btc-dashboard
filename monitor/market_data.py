@@ -57,3 +57,63 @@ def long_short(n=4):
         return [float(x["longShortRatio"]) for x in _get(f"{FAPI}/futures/data/globalLongShortAccountRatio?symbol=BTCUSDT&period=5m&limit={n}")]
     d = _get(f"{OKX}/api/v5/rubik/stat/contracts/long-short-account-ratio?ccy=BTC&period=5m")["data"]
     return [float(x[1]) for x in d[:n]][::-1]
+
+
+def spot_klines(interval, limit=1000, start_ms=None):
+    """币安公开现货 K 线。先走公开行情镜像，不行再走主站。格式和合约 K 线一样。"""
+    base_paths = (f"{VISION}/api/v3/klines?symbol=BTCUSDT&interval={interval}",
+                  f"https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval={interval}")
+    last = None
+    for base in base_paths:
+        try:
+            url = f"{base}&limit={min(limit, 1000)}" + (f"&startTime={int(start_ms)}" if start_ms is not None else "")
+            return _get(url)
+        except Exception as ex:
+            last = ex
+    raise last
+
+
+def okx_coin_oi_change():
+    """OKX 币本位 BTC-USD-SWAP 持仓（币）最近两根 1 小时的变化，百分比。"""
+    d = _get(f"{OKX}/api/v5/rubik/stat/contracts/open-interest-history?instId=BTC-USD-SWAP&period=1H")["data"]
+    now, old = float(d[0][2]), float(d[1][2])
+    return dict(now=now, old=old, chg=(now / old - 1) * 100 if old else 0.0)
+
+
+def okx_ls_1h():
+    """OKX 多空账户比，最新一根 1 小时相对上一根的差值（不是百分比）。"""
+    d = _get(f"{OKX}/api/v5/rubik/stat/contracts/long-short-account-ratio?ccy=BTC&period=1H")["data"]
+    now, old = float(d[0][1]), float(d[1][1])
+    return dict(now=now, old=old, chg=now - old)
+
+
+def okx_taker_1h():
+    """OKX 近一根 1 小时主动卖、主动买（美元）。"""
+    d = _get(f"{OKX}/api/v5/rubik/stat/taker-volume?ccy=BTC&instType=CONTRACTS&period=1H")["data"][0]
+    return dict(sell=float(d[1]), buy=float(d[2]))
+
+
+def spot_change_1h():
+    """现货最近一根 1 小时（含未收盘）相对上一根收盘的涨跌，百分比。"""
+    k = spot_klines("1h", 2)
+    prev, cur = float(k[-2][4]), float(k[-1][4])
+    return (cur / prev - 1) * 100 if prev else 0.0
+
+
+def okx_liq_1h():
+    """OKX 公开强平：BTC 本位和 U 本位近 1 小时名义美元。多单被强平 / 空单被强平分开。"""
+    import time
+    now, long_usd, short_usd = time.time() * 1000, 0.0, 0.0
+    for fam, kind in (("BTC-USDT", "linear"), ("BTC-USD", "inverse")):
+        d = _get(f"{OKX}/api/v5/public/liquidation-orders?instType=SWAP&instFamily={fam}&state=filled&limit=100")
+        for row in d.get("data") or []:
+            for det in row.get("details") or []:
+                if now - int(det["ts"]) > 3600e3:
+                    continue
+                sz, px = float(det["sz"]), float(det.get("bkPx") or 0)
+                usd = sz * 0.01 * px if kind == "linear" else sz * 100
+                if det.get("posSide") == "long":
+                    long_usd += usd
+                else:
+                    short_usd += usd
+    return dict(long=long_usd, short=short_usd, source="OKX")

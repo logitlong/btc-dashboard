@@ -24,5 +24,52 @@
     "max_hold_bars": 288,
     "status": "参考",
     "backtest": "2021–2026：每年约 45 笔，胜率 31%，每笔扣费 -0.08%，6 年 2 年为正。加关键价位（等待计划）：每年约 10 笔，每笔 -0.15%。未通过。"
+  },
+  "signals": {
+    "_说明": "2026-11-03 现行监控规格。后台 monitor/signal_logic.py 与面板 dashboard/live/model.js 共用这些数。只提醒，不下单。阈值不要另行收紧。",
+    "five_min_every_sec": 180,
+    "anomaly_every_sec": 60,
+    "position_every_sec": 900,
+    "position_cooldown_sec": 7200,
+    "bounds": {
+      "5m": {"rsi_ob": 80, "rsi_os": 20, "j_ob": 110, "j_os": -5},
+      "15m": {"rsi_ob": 70, "rsi_os": 20, "j_ob": 100, "j_os": 0},
+      "30m": {"rsi_ob": 70, "rsi_os": 20, "j_ob": 100, "j_os": 0},
+      "1h": {"rsi_ob": 70, "rsi_os": 20, "j_ob": 100, "j_os": 0},
+      "4h": {"rsi_ob": 70, "rsi_os": 20, "j_ob": 100, "j_os": 0}
+    },
+    "_bounds_note": "规格写明了 5 分钟严格档和 15 分钟配对档。30 分钟、1 小时、4 小时没有单独的数字，沿用 15 分钟边界，没有收紧。极端档看同一指标，各自用上表，含未收盘 K 线。",
+    "daily": {"ma": 99, "lookback": 7},
+    "h4": {"ma": 99, "lookback": 6},
+    "mid_ma": 25,
+    "six": {
+      "rsi_touch_ob": 70,
+      "rsi_touch_os": 30,
+      "j_hot": 100,
+      "j_cold": 0,
+      "j_look": 6,
+      "hist_look": 8,
+      "ma_cross_look": 48,
+      "div_window": 48,
+      "div_vol_frac": 0.9
+    },
+    "candle": {"doji_body_frac": 0.1, "long_shadow_frac": 0.5, "top_bars": 6},
+    "_candle_note": "规格只写了「长上影/长下影+十字星」，没有给比例。十字星 = 实体不超过全幅 10%；长影 = 影线不少于全幅 50%，并且不短于另一侧影线；顶部/底部 = 这根的高点或低点是近 6 根里的极值。两边用同一份，不是在规格之外再加门槛。",
+    "custom": {"closes_above": 6, "ma_gap": 0.001, "cross_look": 10},
+    "anomaly": {
+      "vol_mult": 6,
+      "vol_median_bars": 120,
+      "move_pct": 0.5,
+      "three": {"body_frac": 0.4, "overlap_frac": 0.5, "total_pct": 0.3},
+      "ma7": {"surge_pct": 0.1, "peak_frac": 0.6, "flat_pct": 0.02}
+    },
+    "position": {
+      "oi_1h_pct": 1.5,
+      "funding_abs": 0.03,
+      "ls_1h_abs": 0.1,
+      "liq_usd": 15000000,
+      "liq_side_frac": 0.7
+    },
+    "email_kinds": ["共振", "极端", "盘面异动", "仓位异动"]
   }
 }

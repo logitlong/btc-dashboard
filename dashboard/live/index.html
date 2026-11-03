@@ -423,17 +423,17 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
       <label>名义仓位 · 强平距离<span class="levinfo" id="sinfo">—</span></label>
     </form>
     <div class="sum-sides" id="sumSides"></div>
-    <p class="note">判断顺序：先看硬性禁止（重大数据前 60 分钟、今日亏损超 15%、保证金占用超三分之一），再看规则 A / B 和张主任多周期信号（顺 4 小时 MA99 方向的才算）有没有触发，最后看是不是在急涨急跌后逆势进场。规则 A / B 和张主任多周期信号在扣手续费的回测里都没有稳定赚钱，所以即使出现信号也只叫「有参考信号」，仅供模拟验证。仓位按上面填的买入金额 × 杠杆算（名义仓位），每一边显示打到止损亏多少、打到止盈赚多少（都扣了约 0.1% 的开平手续费）和强平价；强平价比止损还近会标红，并给出这个止损下建议的最高杠杆（强平距离至少是止损距离的 2 倍，按 1 ÷ 杠杆 − 0.4% 估算）。买入金额和杠杆会同步到云端，也是喊单记录里没写金额时的默认值。</p>
+    <p class="note">判断顺序：先看硬性禁止（重大数据前 60 分钟、今日亏损超 15%、保证金占用超三分之一），再看规则 A / B，以及共振第 3 档及以上并且顺着日线 MA99 的提示，最后看是不是在急涨急跌后逆势进场。规则 A / B 在扣手续费的回测里没有稳定赚钱；共振提示只是提醒，不会下单。所以即使出现也只叫「有参考信号」，仅供模拟验证。仓位按上面填的买入金额 × 杠杆算（名义仓位），每一边显示打到止损亏多少、打到止盈赚多少（都扣了约 0.1% 的开平手续费）和强平价；强平价比止损还近会标红，并给出这个止损下建议的最高杠杆（强平距离至少是止损距离的 2 倍，按 1 ÷ 杠杆 − 0.4% 估算）。买入金额和杠杆会同步到云端，也是喊单记录里没写金额时的默认值。</p>
   </section>
 
   <section data-grp="1" class="card span" id="zhangCard">
-    <h2>张主任多周期信号 <small>先 4 小时 → 再 1 小时 / 30 分 → 最后 15 分 / 5 分 · 指标按盘中实时</small></h2>
+    <h2>张主任多周期信号 <small>日线定调 → 4 小时作日内参考 → 1 小时 / 30 分看阶段 → 15 分 / 5 分找触发 · 含未收盘 K 线</small></h2>
     <div class="verdict bad" id="zhExtreme" hidden></div>
     <div class="verdict" id="zhVerdict">正在读取行情…</div>
     <div class="tablewrap"><table class="jt" id="zhTable"></table></div>
     <p class="sum-line" id="zhRec"></p>
-    <p class="note">规则（张主任 10/28）：① 4 小时 MA99 向上只做多、向下只做空；② 看 1 小时、30 分钟正处在上涨还是下跌阶段（MA7 方向）；③ 5 分钟 RSI6 &gt; 80 或 J &gt; 110 算超买，RSI6 &lt; 20 或 J &lt; -5 算超卖（RSI 优先）；④ 15 分钟放宽：RSI6 &gt; 70 或 J &gt; 100 超买，RSI6 &lt; 20 或 J &lt; 0 超卖；同一个指标要 5 分钟和 15 分钟同时在区间外才提示，只有 5 分钟不报；RSI 优先：两个周期的 RSI 都在区间外就一定提示，KDJ 不用满足，只有 KDJ 两个周期在区间外也提示但标明参考性弱一些；⑤ 同时出现量价顶背离 / 底背离 = 强烈提示；⑥ 最后看 5 分钟 MA7 拐不拐头。另外：5 分、15 分、30 分、1 小时、4 小时全部在区间外（每个周期 RSI6 或 J 有一项即可，30 分以上用 15 分的区间），标「极端」，并写出历史上通常先反向走多远、50 倍 / 100 倍先爆仓的比例；两个周期都超买却还在放量创新高，标「反常」，说明有场外资金在推（例如 10/28 17:00 美股盘前那一波），不要逆着做。<br>
-    回测（2021–2026 年 1 分钟数据，市价进出扣 0.10% 往返手续费）：按这个口径每年做空约 1200 次、做多约 800 次，之后 15 分钟方向对的比例约 58–59%，但平均只走 0.01%–0.03%，不够付手续费；加 4 小时 MA99 同向、1 小时 / 30 分阶段、量价背离、MA7 拐头，或者再要求 30 分 / 1 小时也超买超卖，扣费后每笔都在 -0.01% 到 -0.12% 之间，6 年里没有一种做法稳定为正。进场后 1 小时内价格通常还会再往不利方向走 0.3% 左右（五次里有一次超过 0.8%），所以「进去就是最高 / 最低点」只在少数时候成立。这张卡片按张主任的要求做提示用，不是赚钱信号；开了浏览器提醒的话，出现新提示会弹通知。</p>
+    <p class="note">现行规格（2026-11-03），阈值在 rules_spec.json，和后台是同一套。大大方向是日线 MA99 相对 7 天前，冲突时以日线为准；4 小时 MA99 相对 24 小时前，只作日内参考。1 小时和 30 分看价格在 MA25 的哪一侧、以及 MA25 的斜率，分成上涨、下跌或过渡震荡。5 分钟做空六维、做多六维、自定义 6 项，只要从没有变成有就在后台记一条背景（哪怕 1/6），一直满足不重复，失效后再出现可以再报。这些单项只是背景，不会写成「提示做多 / 做空」。<br>
+    共振只看 RSI 和 KDJ，RSI 优先，跨指标拼在一起不算：① 5 分钟严格档（超买 RSI&gt;80 或 J&gt;110，超卖 RSI&lt;20 或 J&lt;-5）= 观察；② 5 分钟和 15 分钟同一个指标同时出区间（15 分钟超买 RSI&gt;70 或 J&gt;100，超卖 RSI&lt;20 或 J&lt;0）= 配对观察；③ 两边都到严格档才写「提示做空 / 提示做多」；④ 再叠加严格量价背离 = 强烈提示；⑤ 同一个指标在 5 分、15 分、30 分、1 小时都出各自的区间 = 「大仓位做空信号」或「大仓位买入信号」，4 小时也出再升一级。邮件只在档位升高时发，回落或失效会说明，但不发邮件。量能背离：48 根里的真新高或真新低，而且这根的量低于近期高点或低点量的中位数的 90%。反常异动（出了区间还在放量创新高或新低）仍然单独标出来。开了浏览器提醒的话，只在状态变化时弹一次。</p>
   </section>
 
   <section data-grp="1" class="card span" id="fastCard">
@@ -1559,8 +1559,7 @@ function renderSummary(st) {
     const fade = cx && cx.key && (key === "long" ? cx.down : !cx.down);        // 急跌后做多 / 急涨后做空
     const chase = cx && cx.key && !fade;                                          // 急跌后追空 / 急涨后追多
     const against = key === "long" ? F.tr.dn : F.tr.up;
-    const zs = S.zh, zhSig = zs && (key === "long" ? zs.long : zs.short), zhWith = zhSig && (key === "long" ? zs.dir4 > 0 : zs.dir4 < 0);
-    const zhBy = zhSig ? (key === "long" ? zs.byL : zs.byS) : "";
+    const zs = S.zh, zhSig = zs && (key === "long" ? zs.long : zs.short), zhWith = !!(zhSig && zs.withDaily);
     const cnt = [z.now[key === "long" ? "cold" : "hot"], z.now[key === "long" ? "fadeL" : "fadeS"], z.now[key === "long" ? "volL" : "volS"], z.now[key === "long" ? "below7" : "above7"], z.now[key === "long" ? "trigL" : "trigS"]].filter(Boolean).length;
     let vd, cls, why = [], pl = null;
     if (hard.length) { vd = "不要开"; cls = "bad"; why = hard.slice(); }
@@ -1571,8 +1570,8 @@ function renderSummary(st) {
       else pl = { entry: `挂限价 ${fmt(c5.at(-1).c)}，${A.limit_valid_bars * 5} 分钟内不成交就撤`, ref: c5.at(-1).c, stop: VOLSTAT.mae_atr["4 小时"].p80 * v.atr, hold: `${A.hold_bars * 5 / 60} 小时后平仓`, stopNote: "这里给的是方案 A′ = 规则 A + 按 4 小时 P80 逆向放的保险止损。回测和「模型严格执行」验证的都是不设止损的原版规则 A，A′ 本身还没有验证，它的成绩只看喊单记录里「模型·此刻结论」标 A′ 的单" };
     } else if (zhWith) {
       vd = "有参考信号"; cls = "warn";
-      why.push(`张主任多周期信号：5 分和 15 分 ${zhBy} 都${key === "long" ? "超卖" : "超买"}，顺 4 小时 MA99 方向${zhBy === "KDJ" ? "（只有 KDJ，参考性弱一些）" : ""}`,
-        "回测拿满 4 小时赚钱的比例 48–50%，扣费每笔 -0.06% 到 -0.09%，仅供模拟验证");
+      why.push(`${zs.label}。${BTCModel.directionPhrase(zs)}顺日线才算参考信号。`,
+        "10/28 那版回测拿满 4 小时扣费后没有稳定赚钱，不能当成现在这一档的胜率。只是提醒，不会下单。");
       pl = { entry: `市价 ≈ ${fmt(P)}`, ref: P, stop: VOLSTAT.mae_atr["4 小时"].p80 * v.atr, tpR: 0, hold: "4 小时后平仓", zh: true,
         stopNote: "止损按 4 小时 P80 逆向放（约八成样本 4 小时内的最大逆向没超过这个距离）；张主任信号进场时价格通常还会先反向走一段，止损太近容易被扫" };
     } else if (fade && !z.now[key === "long" ? "trigL" : "trigS"]) {
@@ -1588,8 +1587,8 @@ function renderSummary(st) {
         `4 小时模型的${key === "long" ? "上涨" : "下跌"}概率 ${(key === "long" ? S.prob["4 小时"] : 100 - S.prob["4 小时"]).toFixed(1)}%，规则 A 要 ≥ ${Math.round((key === "long" ? A.p_long : 1 - A.p_short) * 100)}%`);
       if (chase) why.push(`现在是急${cx.down ? "跌" : "涨"}后，顺势追${key === "long" ? "多" : "空"}要防反抽，止损不能太近`);
     }
-    if (zhSig && !zhWith && !hard.length) why.push(`张主任多周期信号提示${key === "long" ? "做多" : "做空"}，但逆着 4 小时 MA99 方向，不算参考信号`);
-    if (zs && zs.ext === key && !hard.length) why.push(`极端：所有周期都${key === "long" ? "超卖" : "超买"}，历史上 4 小时内通常还会先反向走 ${key === "long" ? "0.72" : "0.65"}%，50 倍约 ${key === "long" ? 19 : 13}% 的时候会先爆仓`);
+    if (zhSig && !zhWith && !hard.length) why.push(`${zs.label}。逆着日线 MA99（${zs.daily.bias}），不算参考信号。${BTCModel.directionPhrase(zs)}`);
+    if (zs && zs.extreme === key && !zhSig && !hard.length) why.push(`${zs.label}。只是提醒，不会下单。`);
     const cell = (k, x, cls = "") => `<div><span>${k}</span><b class="${cls}">${x}</b></div>`;
     let body;
     // 两边用同一套格子显示：有信号用信号的方案；没有信号用「如果你还是要做」的方案（现价进、按波动放的止损、所选持有时间、不设止盈）
@@ -1617,7 +1616,7 @@ function renderSummary(st) {
     ["市场状态", `4 小时 ${pct(mv4)} · 波动${v.state}`, "", `${S.maRel || "均线读取中"}${cx && cx.key ? "；刚" + (cx.down ? "急跌超卖" : "急涨超买") : ""}`],
   ].map(([a, b, c, d]) => `<div class="chip"><span>${a}</span><b class="${c}">${esc(b)}</b><span>${esc(d)}</span></div>`).join("");
   // 策略状态：一行小字，提醒参考信号还没被验证过
-  $("sumStrat").textContent = `策略状态：参考，未通过验证——规则 A / B 和张主任多周期信号扣费回测都没有稳定赚钱${pr ? `；模型严格执行 A ${pr.A.n} 笔累计 ${pct(pr.A.cum || 0)}、B ${pr.B.n} 笔累计 ${pct(pr.B.cum || 0)}` : ""}${mine.length ? `；模型自动记单已卖 ${mine.length} 笔，${uTxt(mineU)}（按默认金额）` : ""}。仅作模拟验证；模型输出不是已验证的赚钱概率。`;
+  $("sumStrat").textContent = `策略状态：参考，未通过验证——规则 A / B 扣费回测没有稳定赚钱；共振按现行规格只作提醒${pr ? `；模型严格执行 A ${pr.A.n} 笔累计 ${pct(pr.A.cum || 0)}、B ${pr.B.n} 笔累计 ${pct(pr.B.cum || 0)}` : ""}${mine.length ? `；模型自动记单已卖 ${mine.length} 笔，${uTxt(mineU)}（按默认金额）` : ""}。仅作模拟验证；模型输出不是已验证的赚钱概率。不会下单。`;
   { const amt = J.defAmt || 100, lev = J.defLev || 10; $("sinfo").textContent = `${fmt(amt * lev)} U · 反向 ${(Math.max(0, 1 / lev - 0.004) * 100).toFixed(2)}% 强平`; }
   const L = side("long"), Sh = side("short");
   $("sumSides").innerHTML = L.html + Sh.html + (S.sumMsg && Date.now() - S.sumMsg.t < 15e3 ? `<p class="sum-line good" style="grid-column:1/-1">${S.sumMsg.html}</p>` : "");
@@ -2678,7 +2677,7 @@ function renderRulesDoc() {
     ], true),
     sec("此刻结论：做多 / 做空怎么判", [
       `<b>不要开</b>：重大数据或美股开盘前 ${SPEC.event_block_min} 分钟、今天已亏 15% 以上、保证金占用超过余额三分之一，满足任一条。`,
-      "<b>有参考信号</b>：规则 A、规则 B 或张主任多周期信号（顺 4 小时 MA99 方向）触发（见下面几条）。给出进场价、止损、止盈、拿多久、仓位和杠杆。张主任信号逆着 4 小时 MA99 时不算参考信号，只在理由里提一句。",
+      "<b>有参考信号</b>：规则 A、规则 B，或共振第 3 档及以上并且顺着日线 MA99。给出进场价、止损、止盈、拿多久、仓位和杠杆。共振逆着日线时不算参考信号，只在理由里提一句。不会下单。",
       "<b>不建议</b>：刚急跌（4 小时跌 ≥1.5% 且 RSI6 ≤20）就抄底、刚急涨就摸顶，且还没出现扳机；或者逆着 1 小时趋势。",
       "<b>等待</b>：以上都不是，会写出还差哪个条件。",
       "仓位 = 买入金额（保证金）× 杠杆。打到止损亏 = 名义仓位 × 止损幅度 + 手续费；强平距离按 1 ÷ 杠杆 − 0.4% 估算，比止损近时会先爆仓、亏掉全部保证金。",
@@ -2697,15 +2696,19 @@ function renderRulesDoc() {
       `进场：下一根 5 分钟 K 线开盘市价进。止损 = 近 12 根的低点（做空用高点）再往外 ${B.stop_atr} 个 5 分钟 ATR；止盈 = ${B.tp_R} 倍止损距离；最长 ${B.max_hold_bars * 5 / 60} 小时。持有时间由价格先碰到哪个决定，本来就随波动变。`,
       `<span class="bt">回测：${esc(B.backtest)}</span>`,
     ]),
-    sec("张主任多周期信号（10/28）", [
-      "顺序：先看 4 小时 MA99 方向定多空（向上只做多、向下只做空）→ 再看 1 小时、30 分钟正处于上涨段还是下跌段（MA7 方向）→ 最后看 5 分钟、15 分钟的 RSI6 和 KDJ 的 J。",
-      "区间：5 分钟 RSI6 > 80 或 J > 110 算超买，RSI6 < 20 或 J < -5 算超卖；15 分钟放宽到 RSI6 > 70 或 J > 100 超买，RSI6 < 20 或 J < 0 超卖。",
-      "触发：<b>同一个指标</b>要 5 分钟和 15 分钟同时在区间外。RSI 优先：两个周期的 RSI 都在区间外就一定提示，KDJ 不用满足；只有 KDJ 两个周期都在区间外也提示，但标「参考性弱一些」；5 分钟只有 KDJ、15 分钟只有 RSI 这种交叉情况不提示。只有 5 分钟在区间外不提示。",
-      "加强：同时出现量价顶背离 / 底背离 = 强烈提示；之后看 5 分钟 MA7 有没有拐头。",
-      "反常：两个周期都超买（超卖）却还在放量创新高（新低），说明有场外资金在推（例如 10/28 17:00 美股盘前那波），提示先别反着做。",
-      "极端：5 分、15 分、30 分、1 小时、4 小时全部在区间外。历史上之后 4 小时内价格通常还会先反向走 0.65%（做空）/ 0.72%（做多），五次里有一次超过 1.6% / 1.9%；50 倍杠杆约 13% / 19% 的时候会先爆仓，100 倍约 36% / 39%。不提示加大仓位。",
-      "在哪里看：第 1 步「张主任多周期信号」卡片逐项显示；后台每根 5 分钟收盘检查一次，顺大方向的提示、反常、极端发红色提醒，逆大方向的发黄色；此刻结论里顺 4 小时 MA99 的信号算「有参考信号」，按「拿满 4 小时」给方案。",
-      '<span class="bt">回测（2021–2026，市价进出扣 0.10%）：每年做空约 1200 次、做多约 800 次。15 分钟后方向对约 58%，但平均只走 0.01%–0.03%。按交易算：拿满 4 小时赚钱的比例 48–50%（随便挑时间买只有 42–44%），扣费每笔 -0.06% 到 -0.09%，4 小时不比 3、5、6 小时特别；5 分钟反向超买超卖就卖，胜率 57–60%，每笔 -0.02% 到 -0.09%；MA7 一拐头就卖，胜率约 30%（超买时 MA7 多半还在往上，进场下一根就被卖掉）；做多拿到出现完整做空信号才卖最好，胜率 65%，扣费刚好打平。加 4 小时 MA99、1 小时 / 30 分阶段、量价背离、MA7 拐头、1 ATR 止损都没有变成稳定赚钱。4 小时 MA99 本身没有额外的压力 / 支撑作用。</span>',
+    sec("张主任多周期信号（2026-11-03 现行规格）", [
+      "大大方向：日线 MA99，现值和 7 天前比。斜率为正偏多，为负偏空；走平就看价格在均线上方还是下方。这一层冲突时说了算。",
+      "大方向：4 小时 MA99，现值和 24 小时前（6 根）比。和日线不一致时只作日内参考，顺还是逆以日线为准，并写明 4 小时是什么关系。",
+      "中层：1 小时、30 分。价格在 MA25 上并且 MA25 向上 = 上涨；价格在 MA25 下并且 MA25 向下 = 下跌；其余是过渡震荡。",
+      "做空六维（做多是镜像，每一项单独跟踪）：量能顶背离（48 根窗口里的真新高，量低于近期高点量中位数的 90%）；J&gt;100 后拐头向下；RSI6 触及 70（停在钝化里不重复算）；MACD 正柱见顶衰减但还是正的；MA7 上穿 MA25 之后拐头准备下穿，已经死叉也算；顶部长上影加十字星。",
+      "自定义 6 项也是单独跟踪：近 6 根收盘都在 MA7 上；MA7 准备上穿 MA25（差距小于 0.1% 并且拐头向上）或 10 根之内曾经在下方、现在已经上穿；J&gt;100；RSI6&gt;70；近 3 根量连续递减；MACD 柱为正并且比上一根短。",
+      "单项从没有变成有就报，哪怕只有 1/6；一直满足不重复；失效后重新满足可以再报。六维和自定义只写背景，不用下单口吻。",
+      "共振漏斗（只有这里能写成提示）：1. 5 分钟严格档 = 观察。2. 同一个指标 5 分钟和 15 分钟同时出区间 = 配对观察，15 分钟用自己的边界。3. 两边 RSI 都 &gt;80 或两边 J 都 &gt;110 才是提示做空；两边 RSI 都 &lt;20 或两边 J 都 &lt;-5 才是提示做多。4. 第 3 档再加严格量价背离 = 强烈提示。5. 同一个指标在 5 分、15 分、30 分、1 小时都出各自边界（含未收盘 K 线）= 大仓位做空信号或大仓位买入信号；4 小时也出再升一级。",
+      "邮件只在档位升高时发，主题带 [BTC信号]，并写明日线和 4 小时两层方向。档位回落或失效会说明，不发邮件。后台 5 分钟信号每 3 分钟查一次现货 K 线。",
+      "盘面异动每 60 秒：1 分钟量 ≥ 前约 2 小时 1 分钟量中位数的 6 倍，或单分钟涨跌 ≥ 0.5%（两个条件各自成立即可）；5 分钟阶梯三连阳（只报形态，没有三连阴）；5 分钟 MA7 斜率冲过 +0.10%/根后跟踪，跌破峰值的 60% 且逐根走低报放缓，落到 +0.02%/根以内报接近水平，转负注明拐头。放缓不等于反转。",
+      "仓位结构每 15 分钟，每一类冷却 2 小时：币本位持仓 1 小时变化绝对值 ≥ 1.5%（价涨仓增是新多，价跌仓增是新空，价涨仓减是空头回补，价跌仓减是多头投降）；资金费率绝对值 ≥ 0.03%/8 小时；多空比 1 小时变化 ≥ 0.10；近 1 小时爆仓 ≥ 1500 万美元且单边 ≥ 70%。",
+      "反常异动仍保留：已经配对出区间，却还在放量创新高或新低。这时不把这一档记成模拟单。",
+      '<span class="bt">2021–2026 的回测数字是 10/28 旧口径（配对就提示、极端还要求 4 小时、背离用 6 根对 24 根的最大量），不能直接当成现在这套档位的胜率。旧口径的结论见 backtest/README.md。</span>',
     ]),
     sec("方向判断（模型）", [
       "逻辑回归模型，20 个特征：过去 1 / 3 / 12 / 48 / 288 根涨跌、离 MA7 / MA25 / MA99 多远、RSI6、KDJ 的 J、MACD 柱、成交量、主动买入占比、24 小时高低位置和振幅、是否周末、是否美股时段、4 小时趋势。",
@@ -2782,118 +2785,78 @@ function renderMA() {
     S.maRel = relation; S.maRes = res;
   }
 }
-// ---------------- 张主任多周期信号（与 backtest/zhang_mtf.py、monitor/zhang_alert.py 同口径） ----------------
-// RSI6（平滑系数 1/6）和 KDJ(9,3,3) 的 J，返回最后一根的值
-function osc(bars) {
-  let up = 0, dn = 0, k = null, d = null, rsi = NaN, j = NaN;
-  for (let i = 0; i < bars.length; i++) {
-    if (i > 0) {
-      const dl = bars[i].c - bars[i - 1].c, u = Math.max(dl, 0), w = Math.max(-dl, 0);
-      if (i === 1) { up = u; dn = w; } else { up = up * 5 / 6 + u / 6; dn = dn * 5 / 6 + w / 6; }
-      rsi = dn === 0 ? 100 : 100 - 100 / (1 + up / dn);
-    }
-    let rsv = 50;
-    if (i >= 8) {
-      let lo = Infinity, hi = -Infinity;
-      for (let m = i - 8; m <= i; m++) { lo = Math.min(lo, bars[m].l); hi = Math.max(hi, bars[m].h); }
-      if (hi > lo) rsv = (bars[i].c - lo) / (hi - lo) * 100;
-    }
-    k = k === null ? rsv : k * 2 / 3 + rsv / 3; d = d === null ? k : d * 2 / 3 + k / 3; j = 3 * k - 2 * d;
-  }
-  return { rsi, j };
-}
-const ZH = {
-  s5: o => o.rsi > 80 || o.j > 110, l5: o => o.rsi < 20 || o.j < -5,
-  s15: o => o.rsi > 70 || o.j > 100, l15: o => o.rsi < 20 || o.j < 0,
-};
-// 同一个指标在 5 分和 15 分同时在区间外才算；RSI 优先：两个周期 RSI 都在区间外一定报，KDJ 不用满足
-function zhPair(o5, o15, s) {
-  const rsi = s ? o5.rsi > 80 && o15.rsi > 70 : o5.rsi < 20 && o15.rsi < 20;
-  const kdj = s ? o5.j > 110 && o15.j > 100 : o5.j < -5 && o15.j < 0;
-  return rsi && kdj ? "RSI 和 KDJ" : rsi ? "RSI" : kdj ? "KDJ" : "";
+// ---------------- 张主任多周期信号（与 monitor/signal_logic.py、model.js 同一套） ----------------
+function signalBars(b) {
+  return live(b || []).map(x => ({ t: x.t, o: x.o, h: x.h, l: x.l, c: x.c, v: x.v }));
 }
 function zhState() {
-  const closedB = b => (b || []).slice(0, -1);
-  const b5 = live(S.b5 || []), b15 = live(S.b15 || []), c5 = closedB(S.b5), h4 = closedB(S.b240);
-  if (b5.length < 200 || b15.length < 100 || h4.length < 103 || (S.b60 || []).length < 20 || (S.b30 || []).length < 20) return null;
-  const ma = (arr, i, n) => { let t = 0; for (let k = i - n + 1; k <= i; k++) t += arr[k].c; return t / n; };
-  const slope7 = b => { const c = closedB(b), i = c.length - 1; return Math.sign(ma(c, i, 7) - ma(c, i - 1, 7)); };
-  const i4 = h4.length - 1, ma99 = ma(h4, i4, 99), dir4 = Math.sign(ma99 - ma(h4, i4 - 3, 99));
-  const o5 = osc(b5.slice(-300)), o15 = osc(b15.slice(-300));
-  const big = [o15, osc(live(S.b30).slice(-200)), osc(live(S.b60).slice(-120)), osc(live(S.b240).slice(-120))];
-  const ext = ZH.s5(o5) && big.every(ZH.s15) ? "short" : ZH.l5(o5) && big.every(ZH.l15) ? "long" : null;
-  const ph1 = slope7(S.b60), ph30 = slope7(S.b30);
-  // 量价背离：最近 6 根（已收盘）创了之前 2 小时的新高 / 新低，但这 6 根里最大的量不到之前 2 小时最大量的 9 成
-  const r6 = c5.slice(-6), p24 = c5.slice(-30, -6), mx = (a, f) => Math.max(...a.map(f)), mn = (a, f) => Math.min(...a.map(f));
-  const volLo = mx(r6, x => x.v) < 0.9 * mx(p24, x => x.v);
-  const divS = mx(r6, x => x.h) >= mx(p24, x => x.h) && volLo, divL = mn(r6, x => x.l) <= mn(p24, x => x.l) && volLo;
-  const n = c5.length - 1, m7 = ma(c5, n, 7), m7p = ma(c5, n - 1, 7), m7pp = ma(c5, n - 2, 7);
-  const t7 = Math.sign(m7 - m7p), t7prev = Math.sign(m7p - m7pp);
-  const byS = zhPair(o5, o15, true), byL = zhPair(o5, o15, false), short = !!byS, long = !byS && !!byL;
-  // 反常：两个周期都超买（超卖）还在放量创新高（新低）
-  const cur = b5.at(-1), avgV = c5.slice(-24).reduce((t, x) => t + x.v, 0) / 24, el = (Date.now() - cur.t) / 300e3;
-  const vNow = cur.v / Math.max(0.2, Math.min(1, el));   // 未走完的这根按已过时间折算成整根的量
-  const hot = vNow > 2 * avgV && vNow > c5.at(-1).v;
-  const anomS = short && hot && cur.h >= mx(c5.slice(-12), x => x.h), anomL = long && hot && cur.l <= mn(c5.slice(-12), x => x.l);
-  return { ext, big, dir4, ma99, ph1, ph30, o5, o15, short, long, byS, byL, divS, divL, t7, t7prev, anomS, anomL, bar: cur.t };
+  const spec = (SPEC && SPEC.signals) || BTCModel.SIGNAL_DEFAULT;
+  const bundle = { "5m": signalBars(S.b5), "15m": signalBars(S.b15), "30m": signalBars(S.b30), "1h": signalBars(S.b60), "4h": signalBars(S.b240), "1d": signalBars(S.b1d) };
+  return BTCModel.evaluateSignals(bundle, spec, Date.now());
 }
 function renderZhang() {
   const z = zhState();
   S.zh = z;
   if (!z) return;
-  const dirTxt = s => s > 0 ? '<span class="good">↑ 向上</span>' : s < 0 ? '<span class="bad">↓ 向下</span>' : '<span class="mut">→ 走平</span>';
-  const ob = (o, s, l) => s(o) ? '<span class="bad">超买</span>' : l(o) ? '<span class="good">超卖</span>' : '<span class="mut">区间内</span>';
-  const n1 = v => isFinite(v) ? v.toFixed(1) : "—";
+  const spec = (SPEC && SPEC.signals) || BTCModel.SIGNAL_DEFAULT;
+  const bias = x => `${fmt(x.ma)} <span class="${x.dir > 0 ? "good" : x.dir < 0 ? "bad" : "mut"}">${x.bias}</span><small>斜率 ${x.slope >= 0 ? "+" : ""}${x.slope.toFixed(1)}（${x.pct >= 0 ? "+" : ""}${x.pct.toFixed(2)}%）</small>`;
+  const n1 = v => Number.isFinite(v) ? v.toFixed(1) : "—";
+  const osc = (k) => `${n1(z.osc[k].rsi)} / ${n1(z.osc[k].j)}`;
+  const list = xs => xs.map(x => `${x.on ? "●" : "○"}${x.name}`).join("  ");
+  const mode = (S.slopeState && S.slopeState.mode) || "idle";
+  const modeTxt = { idle: "还没进暴涨段", surge: "暴涨段，跟踪峰值", slowing: "放缓（≠反转）", flat: "接近水平" }[mode] || mode;
   const rows = [
-    ["① 4 小时 MA99", `${fmt(z.ma99)} ${dirTxt(z.dir4)}`, z.dir4 > 0 ? "大方向偏多：只考虑做多" : z.dir4 < 0 ? "大方向偏空：只考虑做空" : "走平：方向不明"],
-    ["② 1 小时 / 30 分 阶段", `1 小时 ${dirTxt(z.ph1)} · 30 分 ${dirTxt(z.ph30)}`, z.ph1 > 0 && z.ph30 > 0 ? "正在上涨段" : z.ph1 < 0 && z.ph30 < 0 ? "正在下跌段" : "两个周期不一致"],
-    ["③ 5 分 RSI6 / J", `${n1(z.o5.rsi)} / ${n1(z.o5.j)}`, ob(z.o5, ZH.s5, ZH.l5) + "<small>超买 RSI&gt;80 或 J&gt;110 · 超卖 RSI&lt;20 或 J&lt;-5</small>"],
-    ["④ 15 分 RSI6 / J", `${n1(z.o15.rsi)} / ${n1(z.o15.j)}`, ob(z.o15, ZH.s15, ZH.l15) + "<small>超买 RSI&gt;70 或 J&gt;100 · 超卖 RSI&lt;20 或 J&lt;0</small>"],
-    ["⑤ 量价背离（5 分）", z.divS ? '<span class="bad">顶背离</span>' : z.divL ? '<span class="good">底背离</span>' : '<span class="mut">没有</span>', "新高 / 新低时量没跟上"],
-    ["⑥ 5 分 MA7", dirTxt(z.t7), z.t7 !== z.t7prev ? "刚拐头" : "没拐头"],
+    ["大大方向 · 日线 MA99", bias(z.daily), z.daily.flat ? "走平，看价格在均线哪一侧" : "现值和 7 天前比"],
+    ["大方向 · 4 小时 MA99", bias(z.h4), z.conflict ? "和日线冲突，以日线为准" : "现值和 24 小时前比"],
+    ["1 小时阶段", z.stage1h ? z.stage1h.name : "—", "价格相对 MA25，加上 MA25 斜率"],
+    ["30 分阶段", z.stage30 ? z.stage30.name : "—", "和 1 小时同一套"],
+    ["共振档位", z.label, z.via && z.via.length ? z.via.join("、") : "RSI 优先，跨指标不算"],
+    ["5 分 / 15 分 RSI · J", `${osc("5m")} · ${osc("15m")}`, "5 分严格，15 分配对用自己的边界"],
+    ["30 分 / 1 小时 / 4 小时", `${osc("30m")} · ${osc("1h")} · ${osc("4h")}`, "极端档看同一个指标"],
+    ["做空六维", `${z.sixSN}/6`, list(z.sixS)],
+    ["做多六维", `${z.sixLN}/6`, list(z.sixL)],
+    ["自定义 6 项", `${z.custom.filter(x => x.on).length}/6`, list(z.custom)],
+    ["严格量价背离", z.divS ? "顶背离" : z.divL ? "底背离" : "没有", "48 根真新高/新低，量低于高点或低点量的中位数 90%"],
+    ["阶梯三连阳", z.threeBull ? "有" : "没有", "只是形态，没有三连阴"],
+    ["5 分 MA7 斜率", `${z.ma7Slope >= 0 ? "+" : ""}${z.ma7Slope.toFixed(3)}%/根`, modeTxt],
   ];
-  $("zhTable").innerHTML = `<tbody>${rows.map(r => `<tr><td class="t">${r[0]}</td><td class="t">${r[1]}</td><td class="t">${r[2]}</td></tr>`).join("")}</tbody>`;
-  let v = "没有信号：5 分和 15 分的 RSI（或 KDJ）没有同时在区间外，按兵不动。", cls = "verdict", note = null;
-  const side = z.short ? "short" : z.long ? "long" : null;
-  if (side) {
-    const s = side === "short", word = s ? "做空" : "做多", with4 = s ? z.dir4 < 0 : z.dir4 > 0;
-    const div = s ? z.divS : z.divL, turned = s ? z.t7 < 0 : z.t7 > 0, anom = s ? z.anomS : z.anomL;
-    const by = s ? z.byS : z.byL, byTxt = by === "KDJ" ? "KDJ 两个周期都" + (s ? "超买" : "超卖") + "（RSI 没到，参考性弱一些）" : `${by} 两个周期都${s ? "超买" : "超卖"}`;
-    if (anom) {
-      v = `反常：5 分和 15 分${byTxt}，但还在放量${s ? "创新高" : "创新低"}，可能有场外资金在推。先别${word}，等量缩下来、MA7 拐头再说。`;
-      cls = "verdict bad"; note = ["反常异动", v];
-    } else {
-      v = `${div ? "强烈" : ""}提示${word}：5 分和 15 分 ${byTxt}${div ? `，还出现量价${s ? "顶" : "底"}背离` : ""}；${with4 ? "顺着 4 小时 MA99 大方向" : "但逆着 4 小时 MA99 大方向，要更小心"}；5 分 MA7 ${turned ? "已经拐头" : "还没拐头，可以再等等"}。盘中值，以这根 5 分钟收盘为准。`;
-      cls = "verdict " + (with4 ? (div ? "goodv" : "") : "bad"); note = [`${div ? "强烈" : ""}提示${word}`, v];
-    }
-  }
-  $("zhVerdict").className = cls; $("zhVerdict").textContent = v;
-  // 自动记单：后台每次出信号就记一条「张主任多周期信号」喊单，拿满 4 小时卖（喊单记录里能看到每一单）
+  $("zhTable").innerHTML = `<tbody>${rows.map(r => `<tr><td class="t">${r[0]}</td><td class="t">${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody>`;
+  const anom = z.anomS || z.anomL;
+  let cls = "verdict";
+  if (anom || z.tier >= 5) cls = "verdict bad";
+  else if (z.tier >= 3 && z.withDaily) cls = "verdict goodv";
+  const head = anom ? `反常：已经出了区间，但这根还在放量${z.anomS ? "创新高" : "创新低"}。先别顺着共振去做。${z.label}` : z.label;
+  $("zhVerdict").className = cls;
+  $("zhVerdict").textContent = `${head} ${BTCModel.directionPhrase(z)} 只是提醒，不会下单。`;
+  const exEl = $("zhExtreme");
+  if (z.tier >= 5) {
+    exEl.hidden = false;
+    exEl.textContent = z.label + "。" + BTCModel.directionPhrase(z) + "只是提醒，不会下单。";
+  } else exEl.hidden = true;
   const zc = C.calls.filter(c => c.who === ZH_WHO), zd = zc.filter(c => c.exit), zo = zc.length - zd.length;
   const wins = zd.filter(c => c.exit.pnl > 0.1).length, avg = zd.length ? zd.reduce((t, c) => t + c.exit.pnl, 0) / zd.length - 0.1 : NaN;
-  $("zhRec").innerHTML = zc.length ? `自动记单：共 ${zc.length} 单，已卖 ${zd.length} 单${zo ? `、持有中 ${zo} 单` : ""}${zd.length ? `；扣 0.1% 手续费后赚钱 ${wins} 单（${Math.round(wins / zd.length * 100)}%），平均每单 ${pct(avg)}，回测是赚钱 48–50%、每单 -0.06% 到 -0.09%` : ""}。在「喊单记录」里选「${ZH_WHO}」看每一单。`
-    : `自动记单：后台每出一次信号就记一单（5 分钟收盘价进、拿满 4 小时卖、不设止损止盈，持有期间遇到急涨急跌或数据公布照样提醒），喊单记录里名字是「${ZH_WHO}」。还没有记录。`;
-  // 极端：5 分 / 15 分 / 30 分 / 1 小时 / 4 小时全部在区间外（数字来自 backtest/zhang_mtf.py 第 2b 节）
-  const EX = { short: [0.65, 1.63, 13, 36, "-0.07%（6 年里只有 1 年为正）"], long: [0.72, 1.88, 19, 39, "+0.12%（6 年里 4 年为正，但 2025、2026 都为负）"] };
-  const exEl = $("zhExtreme");
-  if (z.ext) {
-    const s = z.ext === "short", e = EX[z.ext], ob = s ? "超买" : "超卖";
-    const rs = [z.o5, ...z.big].map(o => o.rsi.toFixed(0)).join(" / ");
-    const msg = `极端：5 分、15 分、30 分、1 小时、4 小时全部${ob}（RSI6 ${rs}）。历史上这之后 4 小时内价格通常还会先往${s ? "上冲" : "下砸"} ${e[0]}%，五次里有一次超过 ${e[1]}%；50 倍杠杆约 ${e[2]}% 的时候会先爆仓，100 倍约 ${e[3]}%。4 小时后平仓扣费每笔 ${e[4]}。方向常常是对的，但要先扛得住反向那一段。`;
-    exEl.hidden = false; exEl.textContent = msg;
-    const key = `zhx:${z.ext}`; S.zhExtAt = S.zhExtAt || {};
-    if (!S.zhExtAt[key] || Date.now() - S.zhExtAt[key] > 4 * 3600e3) {
-      S.zhExtAt[key] = Date.now();
-      try { if ("Notification" in window && Notification.permission === "granted") new Notification(`张主任规则 · 极端：所有周期都${ob}`, { body: msg, tag: key }); } catch (err) { /* 只在页面提示 */ }
-    }
-  } else exEl.hidden = true;
-  if (note) {
-    const key = `zh:${note[0]}:${z.bar}`; S.zhNotified = S.zhNotified || new Set();
-    if (!S.zhNotified.has(key)) {
-      S.zhNotified.add(key);
-      try { if ("Notification" in window && Notification.permission === "granted") new Notification(`张主任规则 · ${note[0]}`, { body: note[1], tag: key }); } catch (e) { /* 只在页面提示 */ }
-    }
+  $("zhRec").innerHTML = zc.length ? `模拟记录：共 ${zc.length} 笔，已结束 ${zd.length} 笔${zo ? `、还在记的 ${zo} 笔` : ""}${zd.length ? `；扣 0.1% 手续费后赚钱 ${wins} 笔（${Math.round(wins / zd.length * 100)}%），平均每笔 ${pct(avg)}` : ""}。只在共振第 3 档及以上记一笔，拿满 4 小时，不会下单。`
+    : `模拟记录：共振升到第 3 档及以上时记一笔（拿满 4 小时，不设止损止盈）。六维和自定义不记。还没有记录。`;
+  if (S.slopeBar !== z.closedT) {
+    const stepped = BTCModel.stepMa7(S.slopeState, z.ma7Slope, spec);
+    S.slopeState = stepped.state;
+    S.slopeEvents = S.slopeReady ? stepped.events : [];
+    S.slopeBar = z.closedT;
+    S.slopeReady = true;
   }
+  const say = (title, body) => { try { if ("Notification" in window && Notification.permission === "granted") new Notification(title, { body: body.slice(0, 180), tag: title }); } catch (e) { /* 页面上已经写了 */ } };
+  const snap = { s: z.tiers.short.tier, l: z.tiers.long.tier, flags: Object.assign({}, z.flags) };
+  if (!S.sigReady) { S.sigReady = true; S.sigPrev = snap; return; }
+  const p = S.sigPrev;
+  [["short", p.s, snap.s], ["long", p.l, snap.l]].forEach(([side, oldT, newT]) => {
+    if (newT > oldT) say(BTCModel.tierSubject(side, newT), BTCModel.directionSubject(z) + "。" + BTCModel.tierLabel(side, newT, z.tiers[side].via));
+    else if (newT < oldT && oldT > 0) say(newT ? "共振档位回落" : "共振档位失效", `从「${BTCModel.tierSubject(side, oldT)}」变为「${newT ? BTCModel.tierSubject(side, newT) : "没有"}」。这一条不发邮件。`);
+  });
+  z.sixS.concat(z.sixL, z.custom).forEach(x => { if (x.on && !p.flags[x.id]) say("背景参考", `刚满足「${x.name}」。这一项只记背景。`); });
+  if (z.threeBull && !p.flags.three) say("阶梯三连阳", "5 分钟出现阶梯三连阳。只是形态提醒。");
+  (S.slopeEvents || []).forEach(ev => say(ev.kind === "slow" ? "5 分钟 MA7 斜率放缓" : "5 分钟 MA7 斜率接近水平", ev.text));
+  S.slopeEvents = [];
+  S.sigPrev = snap;
 }
 // 喊单 / 持仓每秒重画：手指按着或正在滑动时先不重画（不然按钮被换掉，点了没反应、滚动会跳），内容没变也不重画
 let UI_HOLD = 0;
