@@ -11,20 +11,20 @@
 <style>
 /* 复盘：只看模拟盘的单。陈总 / 张主任 / 汇总三个视图，颜色和另外两个页面一致 */
 :root{
-  --bg:#f3f5f7; --card:#ffffff; --fg:#14181d; --fg2:#4f5862; --muted:#808a95; --line:#e1e5ea; --grid:#edf0f3;
-  --accent:#2a78d6; --rise-green:#0c8f0c; --fall-red:#d03b3b; --good:var(--rise-green); --bad:var(--fall-red); --warn:#c98500; --chip:#eef2f6;
-  --s1:#2a78d6; --s2:#c25ad1; --s3:#8a8f98;
+  --bg:#f4f5f7; --card:#ffffff; --fg:#16191d; --fg2:#4a525c; --muted:#7c8590; --line:#e3e6ea; --grid:#eef0f2;
+  --accent:#3b6fd4; --rise-green:#15925a; --fall-red:#d14949; --good:var(--rise-green); --bad:var(--fall-red); --warn:#b7791f; --chip:#f1f3f5; --shadow:0 1px 2px rgba(16,24,40,.05);
+  --s1:#3b6fd4; --s2:#c25ad1; --s3:#8a8f98;
   --f:"Noto Sans SC","PingFang SC",system-ui,sans-serif; --m:"IBM Plex Mono",ui-monospace,Menlo,monospace;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0f1214; --card:#181c20; --fg:#eceef0; --fg2:#b6bdc5; --muted:#87909a; --line:#2a3036; --grid:#22272c;
-  --accent:#4b93e8; --rise-green:#36c236; --fall-red:#e66767; --good:var(--rise-green); --bad:var(--fall-red); --warn:#f0b33a; --chip:#232930;
-  --s1:#4b93e8; --s2:#d07ade; --s3:#9aa1aa; color-scheme:dark}}
+  --bg:#0d1013; --card:#15191d; --fg:#e7e9ec; --fg2:#b0b7bf; --muted:#858e98; --line:#252b31; --grid:#1e2328;
+  --accent:#5b8def; --rise-green:#3fb27f; --fall-red:#e5646a; --good:var(--rise-green); --bad:var(--fall-red); --warn:#e0a643; --chip:#1d2227; --shadow:none;
+  --s1:#5b8def; --s2:#d07ade; --s3:#9aa1aa; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0f1214; --card:#181c20; --fg:#eceef0; --fg2:#b6bdc5; --muted:#87909a; --line:#2a3036; --grid:#22272c;
-  --accent:#4b93e8; --rise-green:#36c236; --fall-red:#e66767; --good:var(--rise-green); --bad:var(--fall-red); --warn:#f0b33a; --chip:#232930;
-  --s1:#4b93e8; --s2:#d07ade; --s3:#9aa1aa; color-scheme:dark}
+  --bg:#0d1013; --card:#15191d; --fg:#e7e9ec; --fg2:#b0b7bf; --muted:#858e98; --line:#252b31; --grid:#1e2328;
+  --accent:#5b8def; --rise-green:#3fb27f; --fall-red:#e5646a; --good:var(--rise-green); --bad:var(--fall-red); --warn:#e0a643; --chip:#1d2227; --shadow:none;
+  --s1:#5b8def; --s2:#d07ade; --s3:#9aa1aa; color-scheme:dark}
 :root[data-market-colors="red-up"]{--good:var(--fall-red);--bad:var(--rise-green)}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -48,8 +48,9 @@ a{color:var(--accent)}
 .lnk{font-size:13px;text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px;color:var(--fg);white-space:nowrap;background:none;cursor:pointer}
 .lnk[aria-current="page"]{border-color:var(--accent);color:var(--accent)}
 main{max-width:1180px;margin:0 auto;padding:14px 16px 40px;display:grid;gap:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
-.card h2{font-size:14.5px;margin:0 0 10px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.card h2 small{font-weight:400;color:var(--muted);font-size:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0;box-shadow:var(--shadow)}
+@media(max-width:600px){.card{padding:14px;border-radius:10px}}
+.card h2{font-size:15.5px;font-weight:600;margin:0 0 12px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.card h2 small{font-weight:400;color:var(--muted);font-size:12px}
 .note{color:var(--muted);font-size:12px;margin:8px 0 0}
 .status{font-size:12.5px;color:var(--fg2)}
 .kpis{display:grid;gap:10px}

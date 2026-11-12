@@ -11,17 +11,17 @@
 <style>
 /* 模拟合约交易：布局参照常见的 U 本位合约下单界面（K 线 · 订单簿 · 下单 · 仓位），颜色和面板一致 */
 :root{
-  --bg:#f3f5f7; --card:#ffffff; --fg:#14181d; --fg2:#4f5862; --muted:#808a95; --line:#e1e5ea; --grid:#edf0f3;
-  --accent:#2a78d6; --rise-green:#0c8f0c; --fall-red:#d03b3b; --good:var(--rise-green); --bad:var(--fall-red); --warn:#c98500; --chip:#eef2f6;
+  --bg:#f4f5f7; --card:#ffffff; --fg:#16191d; --fg2:#4a525c; --muted:#7c8590; --line:#e3e6ea; --grid:#eef0f2;
+  --accent:#3b6fd4; --rise-green:#15925a; --fall-red:#d14949; --good:var(--rise-green); --bad:var(--fall-red); --warn:#b7791f; --chip:#f1f3f5; --shadow:0 1px 2px rgba(16,24,40,.05);
   --f:"Noto Sans SC","PingFang SC",system-ui,sans-serif; --m:"IBM Plex Mono",ui-monospace,Menlo,monospace;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0f1214; --card:#181c20; --fg:#eceef0; --fg2:#b6bdc5; --muted:#87909a; --line:#2a3036; --grid:#22272c;
-  --accent:#4b93e8; --rise-green:#36c236; --fall-red:#e66767; --good:var(--rise-green); --bad:var(--fall-red); --warn:#f0b33a; --chip:#232930; color-scheme:dark}}
+  --bg:#0d1013; --card:#15191d; --fg:#e7e9ec; --fg2:#b0b7bf; --muted:#858e98; --line:#252b31; --grid:#1e2328;
+  --accent:#5b8def; --rise-green:#3fb27f; --fall-red:#e5646a; --good:var(--rise-green); --bad:var(--fall-red); --warn:#e0a643; --chip:#1d2227; --shadow:none; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0f1214; --card:#181c20; --fg:#eceef0; --fg2:#b6bdc5; --muted:#87909a; --line:#2a3036; --grid:#22272c;
-  --accent:#4b93e8; --rise-green:#36c236; --fall-red:#e66767; --good:var(--rise-green); --bad:var(--fall-red); --warn:#f0b33a; --chip:#232930; color-scheme:dark}
+  --bg:#0d1013; --card:#15191d; --fg:#e7e9ec; --fg2:#b0b7bf; --muted:#858e98; --line:#252b31; --grid:#1e2328;
+  --accent:#5b8def; --rise-green:#3fb27f; --fall-red:#e5646a; --good:var(--rise-green); --bad:var(--fall-red); --warn:#e0a643; --chip:#1d2227; --shadow:none; color-scheme:dark}
 :root[data-market-colors="red-up"]{--good:var(--fall-red);--bad:var(--rise-green)}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
