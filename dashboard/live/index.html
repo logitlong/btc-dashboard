@@ -3117,7 +3117,13 @@ function renderZhang() {
   S.zh = z;
   if (!z) return;
   const spec = (SPEC && SPEC.signals) || BTCModel.SIGNAL_DEFAULT;
-  const bias = x => `${fmt(x.ma)} <span class="${x.dir > 0 ? "good" : x.dir < 0 ? "bad" : "mut"}">${x.bias}</span><small>斜率 ${x.slope >= 0 ? "+" : ""}${x.slope.toFixed(1)}（${x.pct >= 0 ? "+" : ""}${x.pct.toFixed(2)}%）</small>`;
+  const side = x => {
+    if (!(x.ma > 0) || !Number.isFinite(x.price)) return "";
+    const d = (x.price / x.ma - 1) * 100, above = d >= 0;
+    const against = (x.dir > 0 && !above) || (x.dir < 0 && above);
+    return `<small class="${against ? "warn" : ""}">现价在均线${above ? "上" : "下"}方 ${Math.abs(d).toFixed(1)}%${against ? "，和斜率方向相反" : ""}</small>`;
+  };
+  const bias = x => `${fmt(x.ma)} <span class="${x.dir > 0 ? "good" : x.dir < 0 ? "bad" : "mut"}">${x.bias}</span><small>斜率 ${x.slope >= 0 ? "+" : ""}${x.slope.toFixed(1)}（${x.pct >= 0 ? "+" : ""}${x.pct.toFixed(2)}%）</small>${side(x)}`;
   const n1 = v => Number.isFinite(v) ? v.toFixed(1) : "—";
   const osc = (k) => `${n1(z.osc[k].rsi)} / ${n1(z.osc[k].j)}`;
   const list = xs => xs.map(x => `${x.on ? "●" : "○"}${x.name}`).join("  ");

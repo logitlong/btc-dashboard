@@ -284,7 +284,7 @@
     return "共振";
   }
   function directionPhrase(z) {
-    const one = (name, x) => `${name}MA99${x.bias}（斜率 ${x.slope >= 0 ? "+" : ""}${x.slope.toFixed(1)}，${x.pct >= 0 ? "+" : ""}${x.pct.toFixed(2)}%${x.flat ? "，走平，价格在均线" + (x.price > x.ma ? "上" : "下") : ""}）`;
+    const one = (name, x) => `${name}MA99${x.bias}（斜率 ${x.slope >= 0 ? "+" : ""}${x.slope.toFixed(1)}，${x.pct >= 0 ? "+" : ""}${x.pct.toFixed(2)}%${x.flat ? "，走平" : ""}，现价在均线${x.price >= x.ma ? "上" : "下"}方 ${Math.abs((x.price / x.ma - 1) * 100).toFixed(1)}%）`;
     let rel = "";
     if (z.daily.dir && z.h4.dir && z.daily.dir * z.h4.dir < 0) rel = " 冲突，以日线为准。";
     else if (z.daily.dir && z.daily.dir === z.h4.dir) rel = " 两层同向。";
