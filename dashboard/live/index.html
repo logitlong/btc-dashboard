@@ -97,10 +97,10 @@ body.lite .toctog{display:none !important}
 /* 分组标题：卡片流里的「第几步」和目录里的小标题 */
 .grp{grid-column:1/-1;display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;margin:14px 2px -2px;padding-bottom:6px;border-bottom:1px solid var(--line)}
 .wrap > .grp:first-child{margin-top:4px}
-/* 精简版（?lite=1）：只留结论卡、急动提醒、波动尺子、持仓和仓位计算，其余卡片、分组标题和目录都藏起来 */
+/* 精简版（?lite=1）：只留结论卡、急动提醒、持仓和下单前计算，其余卡片、分组标题和目录都藏起来 */
 #liteCard{display:none}
 body.lite #liteCard{display:flex}
-body.lite .wrap > section.card:not(#fastCard,#ampCard,#posCard,#calcCard),body.lite .wrap > .grp,body.lite .toc{display:none}
+body.lite .wrap > section.card:not(#fastCard,#posCard,#calcCard),body.lite .wrap > .grp,body.lite .toc{display:none}
 body.lite .wrap{max-width:1100px;margin-left:auto;margin-right:auto}
 .lite-go{border-left:4px solid var(--warn);background:var(--chip);border-radius:0 6px 6px 0;padding:10px 12px}
 .lite-go b{font-size:18px}.lite-go.good{border-color:var(--good)}.lite-go.bad{border-color:var(--bad)}
@@ -318,6 +318,9 @@ input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
 .pred div{background:var(--chip);border-radius:6px;padding:8px 10px;font-size:13.5px;min-width:0}
 .pred b{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-bottom:2px}
 #cone{width:100%;height:330px;display:block}
+.vdet summary{cursor:pointer;color:var(--fg2);font-size:13.5px}
+.vdet-in{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+#volForm{grid-template-columns:minmax(0,240px)}
 .list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;font-size:13.5px}
 .list li{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:baseline}
 .list .t{font-family:var(--m);font-size:12px;color:var(--muted);white-space:nowrap}
@@ -772,35 +775,9 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
     </details>
   </section>
 
-  <section data-grp="4" class="card span" id="volCard">
-    <h2>波动与扛单 <small>止损和仓位按现在的波动算，不按固定点数 · 不是投资建议</small></h2>
-    <div class="status" id="volState"></div>
-    <form id="volForm" onsubmit="return false">
-      <label for="volHold">打算持有<select id="volHold"><option>1 小时</option><option selected>4 小时</option><option>24 小时</option></select></label>
-      <label for="volFixed">对照：固定止损（美元）<input id="volFixed" inputmode="decimal" value="500"></label>
-    </form>
-    <div class="tablewrap"><table class="ma" id="volTbl"></table></div>
-    <div class="verdict" id="volSize"></div>
-    <div class="verdict badv" id="volFade"></div>
-    <p class="note">「逆向」= 进场后、不管最后对不对，价格先朝反方向走的最远距离。2021–2026 年的数据里，这个距离和「过去 24 小时 1 小时 K 线平均振幅」（ATR）成正比：无论行情平静还是剧烈，换算成 ATR 的倍数几乎一样。所以止损和仓位应该跟着 ATR 变，而不是沿用上周的固定点数。建议止损取所选持有时间的 P80 逆向（历史样本里约八成的最大逆向没超过这个距离；这是过去的统计，不代表这一单有八成概率不被扫），仓位 = 余额 × 每笔最多亏 % ÷ 止损幅度，余额和比例在「交易记录 · 风控与归因」里设置。</p>
-  </section>
-
-  <section data-grp="4" id="rulerCard" class="card span">
-    <h2>预期振幅 <small id="rulerTag">—</small></h2>
-    <div class="row" id="ruler"></div>
-    <p class="note">止损小于 1h 振幅中位数，被正常波动扫掉的概率很高。</p>
-  </section>
-
-  <section data-grp="4" id="ampCard" class="card span">
-    <h2>波动尺子 <small id="ampTag">模型预测未来振幅 · 只提供信息</small></h2>
-    <div class="row" id="ampHead"></div>
-    <div class="tablewrap"><table class="ma" id="ampEq"></table></div>
-    <div class="tablewrap"><table class="ma" id="ampLev"></table></div>
-    <p class="note" id="ampNote">正在读波动尺子…</p>
-  </section>
-
   <section data-grp="4" id="calcCard" class="card span">
-    <h2>我的持仓 · 推演 <small>只做计算，不会下单</small></h2>
+    <h2>下单前计算 <small id="vhTag">止损和仓位按现在的波动算 · 只做计算，不会下单 · 不是投资建议</small></h2>
+    <div class="status" id="volHead"></div>
     <form id="pos" onsubmit="return false">
       <label>方向
         <div class="seg" role="group" aria-label="方向">
@@ -808,6 +785,7 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
           <button type="button" class="short" id="b-short" aria-pressed="true">做空</button>
         </div>
       </label>
+      <label for="volHold">打算持有<select id="volHold"><option>1 小时</option><option selected>4 小时</option><option>24 小时</option></select></label>
       <label for="entry">进场价<input id="entry" inputmode="decimal"></label>
       <label for="stop">止损价<input id="stop" inputmode="decimal"></label>
       <label for="target">止盈价<input id="target" inputmode="decimal"></label>
@@ -815,11 +793,32 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
       <label for="lev">杠杆<input id="lev" inputmode="decimal" value="20"></label>
       <label for="ordtype">进场方式<select id="ordtype"><option value="maker">限价挂单</option><option value="taker">市价</option></select></label>
     </form>
+    <div class="jbtns">
+      <button type="button" class="btn" id="calcAtr">按波动填止损</button>
+      <button type="button" class="btn" id="calcRisk">按风险算保证金</button>
+      <button type="button" class="btn primary" id="calcRec">记成实盘</button>
+      <span class="note" id="calcMsg"></span>
+    </div>
     <div class="out" id="outs"></div>
-    <div class="pred" id="pred"></div>
     <div class="verdict" id="verdict"></div>
+    <div class="pred" id="pred"></div>
     <svg id="cone" role="img" aria-label="过去 24 小时价格与未来 4 小时概率区间"></svg>
     <p class="note">右侧扇形：未来 4 小时价格的 50%（深）和 80%（浅）区间，来自历史同等活跃度时段的实际分布。</p>
+    <details class="vdet"><summary>波动明细：各持有时间的逆向幅度、固定止损对照、逆势单历史、振幅模型</summary>
+      <div class="vdet-in">
+        <form id="volForm" onsubmit="return false">
+          <label for="volFixed">对照：固定止损（美元）<input id="volFixed" inputmode="decimal" value="500"></label>
+        </form>
+        <div class="tablewrap"><table class="ma" id="volTbl"></table></div>
+        <div class="verdict" id="volSize"></div>
+        <div class="verdict badv" id="volFade"></div>
+        <p class="note">「逆向」= 进场后、不管最后对不对，价格先朝反方向走的最远距离。2021–2026 年的数据里，这个距离和「过去 24 小时 1 小时 K 线平均振幅」（ATR）成正比：无论行情平静还是剧烈，换算成 ATR 的倍数几乎一样。所以止损和仓位应该跟着 ATR 变，而不是沿用上周的固定点数。建议止损取所选持有时间的 P80 逆向（历史样本里约八成的最大逆向没超过这个距离；这是过去的统计，不代表这一单有八成概率不被扫），仓位 = 余额 × 每笔最多亏 % ÷ 止损幅度，余额和比例在「交易记录 · 风控与归因」里设置。</p>
+        <h3 class="sub-h">振幅模型（波动尺子） <small id="ampTag" class="mut"></small></h3>
+        <div class="tablewrap"><table class="ma" id="ampEq"></table></div>
+        <div class="tablewrap"><table class="ma" id="ampLev"></table></div>
+        <p class="note" id="ampNote">正在读波动尺子…</p>
+      </div>
+    </details>
   </section>
 
   <section data-grp="4" class="card span" id="askCard">
@@ -894,7 +893,7 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
           <label for="jreason">依据<select id="jreason"><option>规则 A 信号</option><option>规则 B 信号</option><option>张主任判断</option><option selected>自己判断</option><option>其他</option></select></label>
           <label for="jwhy" class="full">为什么现在进，而不是继续等<input id="jwhy" placeholder="例如：5 分钟站上 MA7 且 MA7 拐头"></label>
           <label for="jinval" class="full">什么情况算判断错了<input id="jinval" placeholder="例如：1 小时收盘跌回 82,500 下方"></label>
-          <div class="jbtns full"><button type="button" class="btn sm" id="jsize">按风险算仓位</button><button type="button" class="btn sm" id="jfrom">从持仓推演带入</button></div>
+          <div class="jbtns full"><button type="button" class="btn sm" id="jsize">按风险算仓位</button><button type="button" class="btn sm" id="jfrom">从下单前计算带入</button></div>
         </fieldset>
       </form>
       <div class="verdict" id="cPreview" hidden></div>
@@ -1247,10 +1246,25 @@ function oiChange(minutes) {
 }
 function renderRuler(st) {
   if (!st) return;
-  $("rulerTag").textContent = `${st.sess} · 过去 24h ${["平静", "一般", "活跃"][st.tier]}（${st.p24.toFixed(2)}%）`;
-  const lo80 = S.price * (1 + CONE[240][0] / 100), hi80 = S.price * (1 + CONE[240][3] / 100);
-  $("ruler").innerHTML = [["未来 1h 振幅中位", `≈ ${fmt(st.h1)} 点`], ["未来 4h 振幅 P80", `≈ ${fmt(st.h4)} 点`], ["4h 后价格 80% 区间", `${fmt(lo80)} – ${fmt(hi80)}`], ["24h 高 / 低", `${fmt(st.hi24)} / ${fmt(st.lo24)}`]]
-    .map(([a, b]) => `<div class="chip"><span>${a}</span><b>${b}</b></div>`).join("");
+  S.rulerSt = st; renderVolHead();
+}
+// 下单前计算顶部的一排：现在多波动、接下来大概走多远（波动与扛单、预期振幅、波动尺子合成一处）
+function renderVolHead() {
+  const el = $("volHead"); if (!el) return;
+  let v = null; try { v = volNow(); } catch (e) { /* K 线还没读完 */ }
+  const st = S.rulerSt, P = S.price, a = S.amp, h4 = a && a.h4, h1 = a && a.h1;
+  const m4 = h4 && isFinite(+h4.pred_pct) ? +h4.pred_pct : NaN, m1 = h1 && isFinite(+h1.pred_pct) ? +h1.pred_pct : NaN;
+  const usd = x => isFinite(x) && isFinite(P) ? `约 ${fmt(P * x / 100)} 美元` : "";
+  const stCls = v ? { 扩张: "bad", 收缩: "good", 正常: "" }[v.state] : "";
+  const lo80 = st && isFinite(P) ? P * (1 + CONE[240][0] / 100) : NaN, hi80 = st && isFinite(P) ? P * (1 + CONE[240][3] / 100) : NaN;
+  el.innerHTML = [
+    ["现在的 ATR", v ? `${fmt(v.atr)} 美元` : "—", "", v && isFinite(P) ? `过去 24 小时 1h K 线平均振幅 · ${(v.atr / P * 100).toFixed(2)}%` : ""],
+    ["波动状态", v ? v.state : "—", stCls, v && isFinite(v.ratio) ? `最近 7 天 ÷ 之前 30 天 = ${v.ratio.toFixed(2)}` : ""],
+    ["未来 1 小时振幅", isFinite(m1) ? `${m1.toFixed(2)}%` : st ? `≈ ${fmt(st.h1)} 点` : "—", "", isFinite(m1) ? `${usd(m1)} · 模型预测${st ? ` · 历史同时段中位 ${fmt(st.h1)} 点` : ""}` : st ? "历史同时段中位" : ""],
+    ["未来 4 小时振幅", isFinite(m4) ? `${m4.toFixed(2)}%` : st ? `≈ ${fmt(st.h4)} 点` : "—", "", isFinite(m4) ? `${usd(m4)}${h4.quintile ? ` · 档位 ${h4.quintile}/5` : ""} · 模型预测` : st ? "历史同时段 P80" : ""],
+    ["4 小时后 80% 区间", isFinite(lo80) ? `${fmt(lo80)} – ${fmt(hi80)}` : "—", "", st ? `${st.sess} · 过去 24h ${["平静", "一般", "活跃"][st.tier]}` : ""],
+    ["24h 高 / 低", st ? `${fmt(st.hi24)} / ${fmt(st.lo24)}` : "—", "", "止损别正好放在这两个价上"],
+  ].map(([n, b, c, d]) => `<div class="chip"><span>${n}</span><b class="${c}">${esc(b)}</b><span>${esc(d)}</span></div>`).join("");
 }
 // 波动尺子：data 分支的 vol_ruler.json。权重和 R² 都是后台拟合写出来的，这里只展示。
 function fmtIso(s) { const t = Date.parse(s); return isFinite(t) ? fmtDT(t) : (s || "—"); }
@@ -1265,11 +1279,10 @@ async function pollAmp() {
   renderAmp();
 }
 function renderAmp() {
-  const head = $("ampHead");
-  if (!head) return;
+  if (!$("ampEq")) return;
+  renderVolHead();
   const a = S.amp, h4 = a && a.h4;
   if (!h4 || !isFinite(+h4.pred_pct)) {
-    head.innerHTML = `<div class="chip"><span>未来 4 小时振幅</span><b>—</b></div>`;
     $("ampEq").innerHTML = "";
     $("ampLev").innerHTML = "";
     $("ampNote").textContent = S.ampErr || "正在读波动尺子…";
@@ -1280,12 +1293,6 @@ function renderAmp() {
   const hist = ((h4.oos && h4.oos.quintiles) || []).find(x => x.q === h4.quintile);
   const r2 = (h4.oos && h4.oos.r2) || {}, r1 = (h1.oos && h1.oos.r2) || {};
   $("ampTag").textContent = `上次拟合 ${fmtIso(a.refit_at)} · 只提供信息`;
-  head.innerHTML = [
-    ["未来 4 小时振幅", stop.toFixed(2) + "%"],
-    ["换成美元", isFinite(usd) ? Math.round(usd).toLocaleString() + " 美元" : "—"],
-    ["档位", h4.quintile ? `${h4.quintile} / 5 · ${h4.quintile_label || ""}` : "—"],
-    ["未来 1 小时振幅", isFinite(+h1.pred_pct) ? `${(+h1.pred_pct).toFixed(2)}%` + (h1.quintile ? ` · 档位 ${h1.quintile}` : "") : "—"],
-  ].map(([n, v]) => `<div class="chip"><span>${esc(n)}</span><b>${esc(v)}</b></div>`).join("");
   const eq = h4.equation || [];
   $("ampEq").innerHTML = `<thead><tr><th>因子</th><th>权重</th><th>高 1 个标准差，振幅大约</th><th>此刻</th><th>这次贡献</th></tr></thead><tbody>`
     + eq.map(r => `<tr><td class="t">${esc(r.name)}</td><td>${fmtSigned(r.weight)}</td><td>×${isFinite(+r.amp_mult_per_std) ? (+r.amp_mult_per_std).toFixed(2) : "—"}</td><td class="t">${esc(r.now_text || "")}</td><td>${fmtSigned(r.contrib)}</td></tr>`).join("")
@@ -1302,7 +1309,7 @@ function renderAmp() {
     maxL ? `若希望这个距离小于强平距离的一半，杠杆大约要低于 ${maxL} 倍。` : "按这个振幅，上表这几档都放不进「小于强平距离的一半」。",
     `4 小时样本外 R²：只看过去振幅 ${r2.har ?? "—"}，加时段和成交量 ${r2.full ?? "—"}，再加 DVOL ${r2.full_dvol ?? "—"}。1 小时再加 DVOL ${r1.full_dvol ?? r1.full ?? "—"}。`,
     a.dvol_note || "",
-    "强平距离按 1/杠杆 − 0.4% 维持保证金估算，和本页持仓推演同一口径。20 / 40 / 50 / 100 倍只是对照。",
+    "强平距离按 1/杠杆 − 0.4% 维持保证金估算，和本卡的强平价同一口径。20 / 40 / 50 / 100 倍只是对照。",
   ];
   $("ampNote").textContent = bits.filter(Boolean).join("");
 }
@@ -1506,7 +1513,7 @@ function renderUS() {
 
 // ---------------- 波动与扛单（口径与 backtest/vol_regime.py 一致） ----------------
 function volNow() {
-  const b = S.b60.slice(0, -1), n = b.length, rng = x => x.h - x.l;
+  const b = (S.b60 || []).slice(0, -1), n = b.length, rng = x => x.h - x.l;
   if (n < 24) return null;
   const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
   const atr = mean(b.slice(n - 24).map(rng));
@@ -1533,13 +1540,7 @@ function renderVol() {
   const v = volNow(), P = S.price;
   if (!v || !isFinite(P) || typeof VOLSTAT === "undefined") return;
   const avg = a => a.length ? a.reduce((s, x) => s + x, 0) / a.length : NaN, M = VOLSTAT.mae_atr;
-  const stCls = { 扩张: "bad", 收缩: "good", 正常: "" }[v.state];
-  $("volState").innerHTML = [
-    ["现在的 ATR", `${fmt(v.atr)} 美元`, "", `过去 24 小时 1h K 线平均振幅 · ${(v.atr / P * 100).toFixed(2)}%`],
-    ["波动状态", v.state, stCls, `最近 7 天 ÷ 之前 30 天 = ${isFinite(v.ratio) ? v.ratio.toFixed(2) : "—"}`],
-    ["本周日均振幅", `${fmt(avg(v.thisWk))} 美元`, "", `最大 ${fmt(Math.max(...v.thisWk))} · 共 ${v.thisWk.length} 天（${tzName()}）`],
-    ["上周日均振幅", `${fmt(avg(v.lastWk))} 美元`, "", `最大 ${v.lastWk.length ? fmt(Math.max(...v.lastWk)) : "—"} · 共 ${v.lastWk.length} 天`],
-  ].map(([a, b, c, d]) => `<div class="chip"><span>${a}</span><b class="${c}">${esc(b)}</b><span>${esc(d)}</span></div>`).join("");
+  renderVolHead();
   const fixed = +$("volFixed").value || 0, hold = $("volHold").value;
   $("volTbl").innerHTML = `<thead><tr><th>持有</th><th>逆向中位</th><th>P80</th><th>P95（20 次里 1 次）</th><th>${fixed ? `${fmt(fixed)} 美元止损被扫概率` : "固定止损被扫概率"}</th></tr></thead><tbody>` +
     Object.entries(M).map(([k, q]) => `<tr${k === hold ? ' style="font-weight:600"' : ""}><td class="t">${k}</td><td>${fmt(q.p50 * v.atr)}</td><td>${fmt(q.p80 * v.atr)}</td><td>${fmt(q.p95 * v.atr)}</td><td>${fixed ? "约 " + Math.round(pExceed(fixed / v.atr, q) * 100) + "%" : "—"}</td></tr>`).join("") + "</tbody>";
@@ -2818,7 +2819,7 @@ function renderCalls() {
     $("cSum").className = "verdict";
     $("cSum").textContent = `${who === "@real" ? "实盘" : who === "@sim" ? "模拟盘" : who || "所有人"}已到期 ${done.length} 条：方向对 ${good.length} 条、错 ${bad.length} 条${dec >= 20 && !correlated ? `，准确率 ${acc.toFixed(0)}% ±${err.toFixed(0)}%${acc - err > 50 ? "，明显好于抛硬币" : "，还看不出比抛硬币好"}` : correlated ? "，含重复相关信号；准确率仅作描述，不作独立样本显著性判断" : "，样本还少（至少 20 条才看得出准确率）"}。` +
       (!correlated && best && hzRows.filter(r => r.n >= 5).length > 1 ? ` 按进场后的时间看，${best.name}的方向准确率最高（${best.a.toFixed(0)}%）${best.a - best.e > 50 ? (best.name === "1 小时" ? "，说明判断的优势很短，止盈应该放在 1 小时以内" : "") : `，但还在误差范围内${best.name === "1 小时" ? "；样本多了如果仍是 1 小时最准，止盈就应该放在 1 小时以内" : ""}`}。` : "") +
-      (good.length ? ` 方向对的 ${good.length} 条里，有 ${swept} 条到期前曾逆向 ${fmt(fixed)} 美元以上——用 ${fmt(fixed)} 美元的止损，这些对的单会先被扫掉（止损对照值在「波动与扛单」里改）。` : "");
+      (good.length ? ` 方向对的 ${good.length} 条里，有 ${swept} 条到期前曾逆向 ${fmt(fixed)} 美元以上——用 ${fmt(fixed)} 美元的止损，这些对的单会先被扫掉（止损对照值在「下单前计算 · 波动明细」里改）。` : "");
   }
   const fmtT = fmtDT;
   const dur = ms => ms > 36e5 ? (ms / 36e5).toFixed(1) + " 小时" : Math.max(0, Math.round(ms / 6e4)) + " 分钟";
@@ -3160,7 +3161,7 @@ function renderRulesDoc() {
       "它本质是「跌多了押反弹、涨多了押回落」。急跌超卖时标「超卖反弹倾向」、急涨超买时标「超买回落倾向」，并显示同类情况的历史结果：反弹比例只有 53–60%，而且通常先再逆向一段。",
       "结论按已收盘 K 线，盘中预估另列。",
     ]),
-    sec("波动与扛单", [
+    sec("下单前计算：波动、止损和仓位", [
       "ATR = 过去 24 小时 1 小时 K 线的平均振幅（最高减最低）。",
       `进场后价格先朝反方向走多远，和 ATR 成正比，平静和剧烈时期的倍数几乎一样${V ? `：持有 4 小时的中位 ${V["4 小时"].p50}、P80 ${V["4 小时"].p80}、P95 ${V["4 小时"].p95} 个 ATR` : ""}。所以止损和仓位按 ATR 定，不用固定点数。`,
       "波动状态 = 最近 7 天 ATR ÷ 之前 30 天 ATR：大于 1.3 算扩张，小于 0.77 算收缩。",
@@ -3170,7 +3171,7 @@ function renderRulesDoc() {
       FM && FM.all["5_1.0"] ? `历史上这时顺势追进去，30 分钟后继续同方向的只有 ${FM.all["5_1.0"].c30}%；「止盈 1 ATR、止损 0.5 ATR、最长 30 分钟」每笔 ${FM.all["5_1.0"].pnl}%（含 0.10% 往返手续费）。走得越猛越容易回吐。` : "历史上顺势追进去，之后继续同方向的不到一半，扣费后亏钱。",
       FM ? `大行情高发时段：美股开盘后 1 小时是平时的 ${FM.window.open} 倍，美东 8:30（多数美国数据公布）那一小时是 ${FM.window.data} 倍。` : "",
     ].filter(Boolean)),
-    sec("喊单记录、持仓与卖出", [
+    sec("交易记录、持仓与卖出", [
       "每一单（人工喊单、补录的历史单、模型自动记的单）进场时就写好卖出计划：止损价、止盈价、最长持有时间。",
       "进场两种：现价进（喊单那一刻就算买入）；到价再进（规定分钟内价格碰到进场价才算买入，最长持有从成交那一刻算，没碰到记「未成交」，可以撤单）。原话里有投入金额和杠杆就一起记，盈亏同时显示 U。",
       "此刻结论里每一边都有「按现价开多 / 开空」：按点击那一刻的实时价，把这一单记进喊单记录（谁喊的 =「我」），止损、止盈、最长持有用此刻结论当时给的方案，投入和杠杆按余额和每笔风险算（没填余额就用默认金额）。之后在「持仓与卖出」里盯着、到了提醒。只是记录，不会真的下单。",
@@ -3397,7 +3398,7 @@ function askSnapshot() {
     $("askMsg").textContent = ok ? `已复制${url ? "，在新打开的页面里粘贴（⌘V）发送" : ""}` : "复制失败：在上面的框里全选后手动复制";
   });
 })();
-// ---------------- 持仓推演 ----------------
+// ---------------- 下单前计算（原「我的持仓 · 推演」） ----------------
 function calc(st) {
   if (!st) return;
   const NOW = S.price, H1MED = st.h1;
@@ -3747,6 +3748,34 @@ function setSide(sd) { S.side = sd; $("b-long").setAttribute("aria-pressed", sd 
   everySecond(); }
 $("b-long").onclick = () => setSide("long"); $("b-short").onclick = () => setSide("short");
 ["entry", "stop", "target", "margin", "lev", "ordtype"].forEach(id => $(id).addEventListener("input", everySecond));
+["volHold", "volFixed"].forEach(id => $(id).addEventListener("input", everySecond));
+// 下单前计算的三个按钮：按波动填止损、按风险算保证金、把这单带进交易记录记成实盘
+const HOLD_MIN = { "1 小时": 60, "4 小时": 240, "24 小时": 1440 };
+$("calcAtr").onclick = () => {
+  const v = volNow(), hold = $("volHold").value, P = S.price;
+  if (!v || typeof VOLSTAT === "undefined") { $("calcMsg").textContent = "波动数据还没读到，稍等再点。"; return; }
+  const e = +$("entry").value || P, d = VOLSTAT.mae_atr[hold].p80 * v.atr, sgn = S.side === "long" ? 1 : -1;
+  if (!$("entry").value) $("entry").value = Math.round(e);
+  $("stop").value = Math.round(e - sgn * d);
+  $("calcMsg").textContent = `持有 ${hold} 的 P80 逆向约 ${fmt(d)} 美元（${(d / e * 100).toFixed(2)}%），止损放在 ${fmt(e - sgn * d)}。历史上约八成的单逆向没超过这个距离。`;
+  everySecond();
+};
+$("calcRisk").onclick = () => {
+  const bal = J.balance || 0, rp = J.riskPct || 2, e = +$("entry").value || S.price, st = +$("stop").value, L = +$("lev").value || 1;
+  if (!bal || !st) { $("calcMsg").textContent = "先在「交易记录 · 风控与归因」填账户余额，再填止损价。"; return; }
+  const dist = Math.abs(e - st) / e, notional = bal * rp / 100 / (dist + 0.0007), m = Math.round(notional / L * 100) / 100;
+  $("margin").value = m;
+  $("calcMsg").textContent = `止损距离 ${(dist * 100).toFixed(2)}%，每笔最多亏 ${rp}%（${(bal * rp / 100).toFixed(1)} U）→ 名义仓位约 ${fmt(notional)} U，按 ${L} 倍杠杆保证金 ${m} U${m > bal / 3 ? "，超过余额三分之一，要么提高杠杆要么放宽止损" : ""}。`;
+  everySecond();
+};
+$("calcRec").onclick = () => {
+  if (!$("entry").value) { $("calcMsg").textContent = "先填进场价。"; return; }
+  rTab("list"); cSrcUI("real"); cSetSide(S.side);
+  $("cRef").value = $("entry").value; $("cStop").value = $("stop").value; $("cTarget").value = $("target").value; $("cAmt").value = $("margin").value; $("cLev").value = $("lev").value;
+  const hz = HOLD_MIN[$("volHold").value]; if (hz) $("cHz").value = hz;
+  cPreview(); $("cParseMsg").textContent = "已从「下单前计算」带入，补上为什么进、失效条件，确认后点「记一笔实盘」。";
+  document.querySelector(".centry").scrollIntoView({ behavior: "smooth", block: "start" });
+};
 $("refresh").onclick = fullRefresh;
 document.addEventListener("visibilitychange", () => { if (!document.hidden && (!S.wsOk || !S.ws || S.ws.readyState !== 1)) fullRefresh(); });
 jInit();
