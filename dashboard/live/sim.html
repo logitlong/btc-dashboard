@@ -410,7 +410,7 @@ table.t{border-collapse:collapse;width:100%;font-size:12px}
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@5.1.0/dist/lightweight-charts.standalone.production.js"></script>
-<script src="review-core.js?v=20261102a"></script>
+<script src="review-core.js?v=20261114a"></script>
 <script src="ui.js?v=20261104a"></script>
 <script>
 "use strict";
@@ -859,7 +859,7 @@ function summarize(tr, kind, snap) {
   tr.rv = tr.rv || {};
   if (kind === "open") {
     const rsn = tr.rsn, chk = rsn ? RV.verify(rsn.tags, snap, tr) : [], flags = RV.openFlags(tr, snap, A.trades, A.wallet, TZOFF);
-    tr.rv.o = { chk, flags, sum: RV.openSummary(tr, snap, rsn, chk, flags), sess: snap.sess.name, trend: Object.fromEntries(["5m", "1h", "4h"].map(tf => [tf, snap.rd[tf] && snap.rd[tf].trend])), live: snap.live, at: Date.now() };
+    tr.rv.o = { chk, flags, sum: RV.openSummary(tr, snap, rsn, chk, flags), sess: snap.sess.name, trend: Object.fromEntries(["5m", "1h", "4h"].map(tf => [tf, snap.rd[tf] && snap.rd[tf].trend])), tv: snap.rd["1h"] && snap.rd["1h"].tv, live: snap.live, at: Date.now() };
   } else if (ai >= 0) {
     const ad = tr.adds[ai], chk = ad.tags && ad.tags.length ? RV.verify(ad.tags, snap, tr) : [];
     const flags = RV.openFlags({ id: "add", side: tr.side, t: ad.t, qty: ad.qty, entry: ad.px, lev: tr.lev }, snap, A.trades, A.wallet, TZOFF).filter(f => f[0] !== "many");

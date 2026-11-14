@@ -52,8 +52,10 @@ const RV = (() => {
     const bo = boll(c), bu = bo.U[i], bd = bo.D[i], pb = bu > bd ? (x - bd) / (bu - bd) : NaN;
     const kd = kdj(h, l, c), md = macd(c), atr = rma(trueRange(h, l, c), 14)[i];
     const vma = sma(v.slice(0, -1), 20).at(-1), vr = vma ? v[i - 1] / vma : NaN;   // 上一根走完的量 / 之前 20 根均量
-    const trend = !Number.isFinite(m99) ? "—" : order === "多头排列" && x > m99 ? "上涨" : order === "空头排列" && x < m99 ? "下跌" : "震荡";
-    return { c: x, ma7: r2(m7), ma25: r2(m25), ma99: r2(m99), order, trend, bu: r2(bu), bm: r2(bo.M[i]), bd: r2(bd), pb: r2(pb),
+    // 趋势和面板同一口径（2026-11-14 起，tv: 2）：按已收盘 K 线，收盘价在 MA25 上方且 MA25 比 6 根前高 = 上涨，反过来 = 下跌，其余 = 震荡
+    const cc = c.slice(0, -1), k = cc.length, m25c = sma(cc, 25), cl = cc[k - 1], a = m25c[k - 1], b6 = m25c[k - 7];
+    const trend = k < 40 || !Number.isFinite(a) || !Number.isFinite(b6) ? "—" : cl > a && a > b6 ? "上涨" : cl < a && a < b6 ? "下跌" : "震荡";
+    return { tv: 2, c: x, ma7: r2(m7), ma25: r2(m25), ma99: r2(m99), order, trend, bu: r2(bu), bm: r2(bo.M[i]), bd: r2(bd), pb: r2(pb),
       rsi6: r2(rsi(c, 6)[i]), rsi12: r2(rsi(c, 12)[i]), rsi24: r2(rsi(c, 24)[i]), k: r2(kd.K[i]), d: r2(kd.D[i]), j: r2(kd.J[i]), kdjX: crossOf(kd.K, kd.D),
       dif: r2(md.DIF[i]), dea: r2(md.DEA[i]), hist: r2(md.H[i]), macdX: crossOf(md.DIF, md.DEA), atr: r2(atr), atrPct: r2(atr / x * 100), volR: r2(vr) };
   }
@@ -203,7 +205,7 @@ const RV = (() => {
   }
 
   // ---------------- 总结文字 ----------------
-  const trendLine = snap => ["5m", "1h", "4h"].map(tf => { const r = snap.rd[tf]; return r ? `${TFN[tf]}${r.trend}（${r.order}，价格在 MA99 ${r.c >= r.ma99 ? "上" : "下"}方）` : null; }).filter(Boolean).join("；");
+  const trendLine = snap => ["5m", "1h", "4h"].map(tf => { const r = snap.rd[tf]; return r ? `${TFN[tf]}${r.trend}${r.tv ? "" : "（旧口径）"}（${r.order}，价格在 MA99 ${r.c >= r.ma99 ? "上" : "下"}方）` : null; }).filter(Boolean).join("；");
   const mktLine = snap => { const m = snap.mkt, a = [];
     if (Number.isFinite(m.fund)) a.push(`资金费率 ${pc(m.fund, 4)}`);
     if (Number.isFinite(m.oi1h)) a.push(`OI 1 小时 ${pc(m.oi1h)}`);

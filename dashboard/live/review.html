@@ -130,7 +130,7 @@ table.t{border-collapse:collapse;width:100%;font-size:12.5px}
 <div class="dlg" id="dlg" hidden><div id="dBox"></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@5.1.0/dist/lightweight-charts.standalone.production.js"></script>
-<script src="review-core.js?v=20261102a"></script>
+<script src="review-core.js?v=20261114a"></script>
 <script src="ui.js?v=20261104a"></script>
 <script>
 "use strict";
@@ -316,9 +316,12 @@ function renderFlags(xs) {
 }
 function renderCond(xs) {
   const c = xs.filter(x => x.closed && x.tr.rv && x.tr.rv.o);
-  const dirOK = x => { const t = x.tr.rv.o.trend && x.tr.rv.o.trend["1h"]; return t === "震荡" || !t ? "1 小时震荡" : (t === "上涨") === (x.tr.side === "long") ? "顺 1 小时趋势" : "逆 1 小时趋势"; };
+  // 2026-11-14 起趋势和面板同一口径（rv.o.tv = 2）；之前的单是旧口径（均线排列 + MA99），存的数据不够重算，单独放一行
+  const OLDT = "1 小时趋势：旧口径（11/14 前的单）";
+  const dirOK = x => { const o = x.tr.rv.o, t = o.trend && o.trend["1h"]; if (!o.tv) return OLDT; return t === "震荡" || !t || t === "—" ? "1 小时震荡" : (t === "上涨") === (x.tr.side === "long") ? "顺 1 小时趋势" : "逆 1 小时趋势"; };
   const rows = [...["亚盘", "欧盘", "美盘", "周末"].map(s => [`时段：${s}`, c.filter(x => x.tr.rv.o.sess === s)]),
     ...["顺 1 小时趋势", "1 小时震荡", "逆 1 小时趋势"].map(s => [s, c.filter(x => dirOK(x) === s)]),
+    ...(c.some(x => dirOK(x) === OLDT) ? [[OLDT, c.filter(x => dirOK(x) === OLDT)]] : []),
     ["做多", c.filter(x => x.tr.side === "long")], ["做空", c.filter(x => x.tr.side === "short")],
     ...[["持仓 <30 分", 0, 18e5], ["30 分–2 小时", 18e5, 72e5], ["2 小时以上", 72e5, Infinity]].map(([n, a, b]) => [n, c.filter(x => { const h = x.tr.exit.t - x.tr.t; return h >= a && h < b; })])];
   $("condT").innerHTML = c.length ? groupRows(rows) : `<tbody><tr><td class="empty">还没有带盘面快照的平仓单</td></tr></tbody>`;
@@ -391,7 +394,7 @@ function renderSnapTables(so, sc) {
   const rd = (s, tf) => s && s.rd && s.rd[tf];
   const v = (r, f) => r ? f(r) : "—";
   const rows = ["5m", "15m", "1h", "4h", "1m"].flatMap(tf => [
-    [`${RV.TFN[tf]} 趋势`, r => `${r.trend}（${r.order}）`], [`${RV.TFN[tf]} RSI6`, r => r.rsi6], [`${RV.TFN[tf]} KDJ`, r => `${r.k}/${r.d}/${r.j}${r.kdjX ? " " + r.kdjX : ""}`],
+    [`${RV.TFN[tf]} 趋势`, r => `${r.trend}${r.tv ? "" : "·旧口径"}（${r.order}）`], [`${RV.TFN[tf]} RSI6`, r => r.rsi6], [`${RV.TFN[tf]} KDJ`, r => `${r.k}/${r.d}/${r.j}${r.kdjX ? " " + r.kdjX : ""}`],
     [`${RV.TFN[tf]} MACD 柱`, r => `${r.hist}${r.macdX ? " " + r.macdX : ""}`], [`${RV.TFN[tf]} 布林位置`, r => Number.isFinite(r.pb) ? Math.round(r.pb * 100) + "%" : "—"],
     [`${RV.TFN[tf]} 量比 / ATR%`, r => `${r.volR ?? "—"} / ${r.atrPct}%`]].map(([n, f]) => [n, v(rd(so, tf), f), v(rd(sc, tf), f), tf]));
   $("dRd").innerHTML = so || sc ? `<thead><tr><th></th><th>开仓</th><th>平仓</th></tr></thead><tbody>${rows.map(r => `<tr${r[3] === "1m" ? ' class="dim"' : ""}><td>${r[0]}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("")}</tbody>` : `<tbody><tr><td class="empty">没有快照</td></tr></tbody>`;
