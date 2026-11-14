@@ -277,7 +277,23 @@ body.lite .wrap{max-width:1100px;margin-left:auto;margin-right:auto}
 form{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
 label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
 label[hidden]{display:none}
-#cform{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+#cform{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:1500px){#cform{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:640px){#cform{grid-template-columns:minmax(0,1fr)}}
+#cform fieldset{margin:0;min-width:0;border:1px solid var(--line);border-radius:8px;padding:6px 10px 10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start}
+#cform legend{padding:0 4px;font-size:12px;color:var(--fg2)}
+#cform .full{grid-column:1/-1}
+#cform fieldset:nth-child(3){grid-template-columns:repeat(2,minmax(0,1fr))}
+#cform fieldset:nth-child(3) label:last-child{grid-column:1/-1}
+.centry{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--chip)}
+.centry h3{margin:0;font-size:14px;font-weight:600;color:var(--fg)}
+.centry #cParseMsg:empty{display:none}
+.cpaste{display:flex;gap:8px;align-items:stretch}
+.cpaste textarea{flex:1;min-height:64px}
+.cpaste .btn{flex:none;align-self:stretch}
+.cbar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:end;justify-content:space-between}
+.cbar>label{min-width:220px}
+@media(max-width:520px){.cpaste{flex-direction:column}.cbar>label{min-width:0;flex:1}}
 input,select{font:inherit;font-family:var(--m);font-size:15px;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);width:100%}
 input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
 .seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
@@ -812,6 +828,10 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
       <label for="cDefAmt">没写金额时每单按投入（U）<input id="cDefAmt" inputmode="decimal" value="100"></label>
       <label for="cDefLev">没写杠杆时按（倍）<input id="cDefLev" inputmode="numeric" value="10"></label>
     </form>
+    <div class="cbar">
+      <label for="cFilter">统计范围<select id="cFilter"><option value="">全部人（统计不含模拟盘）</option></select></label>
+      <div class="jbtns"><button type="button" class="btn" id="cExport">导出</button><label class="btn" for="cImport">导入<input type="file" id="cImport" accept="application/json" hidden></label></div>
+    </div>
     <h3 class="sub-h">方向成绩 <small class="mut">（到时间涨了还是跌了，和有没有成交、赚没赚钱无关）</small></h3>
     <div class="status" id="cStats"></div>
     <p class="note">盈亏同时显示未扣手续费和扣手续费后的估算；收益率均为盈亏 U ÷ 投入保证金 U × 100%。手续费沿用开平合计名义仓位的 0.1%，持有中也预估完整开平手续费，未计资金费和滑点。强平时沿用亏光保证金的简化估算。</p>
@@ -820,32 +840,45 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
     <div class="verdict" id="cPaper">严格执行成绩读取中…</div>
     <div class="tablewrap"><table class="ma" id="cHzTbl"></table></div>
     <div class="verdict" id="cSum">还没有记录。把张主任（或任何人、包括你自己）的喊单原话贴进来，识别后确认保存，到期面板会自动核对。</div>
-    <label for="cText" class="wide">粘贴喊单原话<textarea id="cText" placeholder="例如：现价空 100U 20倍，止损 84800，目标 83000，今晚看 · 或：30 分钟内回踩 82500 再多，到 83300 卖"></textarea></label>
-    <div class="jbtns"><button type="button" class="btn" id="cParse">识别</button><span class="note" id="cParseMsg"></span></div>
-    <form id="cform" onsubmit="return false">
-      <label for="cWho">谁喊的<input id="cWho" list="cWhoList" value="张主任"><datalist id="cWhoList"></datalist></label>
-      <label for="cTime">喊单时间（<span class="tzn">东京时间</span>）<input id="cTime" type="datetime-local" step="1"></label>
-      <label>方向
-        <div class="seg" role="group" aria-label="喊单方向">
-          <button type="button" class="long" id="c-long" aria-pressed="false">看多</button>
-          <button type="button" class="short" id="c-short" aria-pressed="false">看空</button>
-        </div>
-      </label>
-      <label for="cEntry">怎么进场<select id="cEntry"><option value="market">现价进（喊单时就算买入）</option><option value="limit">到价再进（价格到了才买）</option></select></label>
-      <label for="cRef" id="cRefL">进场价（空着 = 喊单时的市价）<input id="cRef" inputmode="decimal"></label>
-      <label for="cValid" id="cValidL" hidden>多少分钟内到价有效<input id="cValid" inputmode="numeric" value="60"></label>
-      <label for="cTarget">止盈价（到这个价卖）<input id="cTarget" inputmode="decimal"></label>
-      <label for="cStop">止损价<input id="cStop" inputmode="decimal"></label>
-      <label for="cAmt">投入（保证金 U，没说就空着）<input id="cAmt" inputmode="decimal"></label>
-      <label for="cLev">杠杆（倍，没说就空着）<input id="cLev" inputmode="numeric"></label>
-      <label for="cHz">最长持有<select id="cHz"><option value="15">15 分钟</option><option value="60">1 小时</option><option value="120">2 小时</option><option value="240" selected>4 小时</option><option value="720">12 小时</option><option value="1440">24 小时</option><option value="4320">3 天</option><option value="10080">7 天</option></select></label>
-      <label for="cFilter">统计范围<select id="cFilter"><option value="">全部人（统计不含模拟盘）</option></select></label>
-    </form>
-    <div class="verdict" id="cPreview" hidden></div>
-    <div class="jbtns">
-      <button type="button" class="btn primary" id="cAdd">保存这条喊单</button>
-      <button type="button" class="btn" id="cExport">导出</button>
-      <label class="btn" for="cImport">导入<input type="file" id="cImport" accept="application/json" hidden></label>
+    <div class="centry">
+      <h3>记一条喊单</h3>
+      <div class="cpaste">
+        <textarea id="cText" aria-label="粘贴喊单原话" placeholder="粘贴喊单原话，例如：现价空 100U 20倍，止损 84800，目标 83000，今晚看 · 或：30 分钟内回踩 82500 再多，到 83300 卖"></textarea>
+        <button type="button" class="btn" id="cParse">识别填入</button>
+      </div>
+      <p class="note" id="cParseMsg" aria-live="polite"></p>
+      <form id="cform" onsubmit="return false">
+        <fieldset>
+          <legend>谁 · 什么时候 · 方向</legend>
+          <label for="cWho">谁喊的<input id="cWho" list="cWhoList" value="张主任"><datalist id="cWhoList"></datalist></label>
+          <label>方向
+            <div class="seg" role="group" aria-label="喊单方向">
+              <button type="button" class="long" id="c-long" aria-pressed="false">看多</button>
+              <button type="button" class="short" id="c-short" aria-pressed="false">看空</button>
+            </div>
+          </label>
+          <label for="cTime" class="full"><span>喊单时间 · <span class="tzn">东京时间</span></span><input id="cTime" type="datetime-local" step="1"></label>
+        </fieldset>
+        <fieldset>
+          <legend>进场</legend>
+          <label for="cEntry">怎么进<select id="cEntry"><option value="market">现价进</option><option value="limit">到价再进</option></select></label>
+          <label for="cRef" id="cRefL">进场价<input id="cRef" inputmode="decimal" placeholder="空着 = 市价"></label>
+          <label for="cValid" id="cValidL" hidden>几分钟内到价有效<input id="cValid" inputmode="numeric" value="60"></label>
+        </fieldset>
+        <fieldset>
+          <legend>卖出计划</legend>
+          <label for="cTarget">止盈价<input id="cTarget" inputmode="decimal" placeholder="到这个价卖"></label>
+          <label for="cStop">止损价<input id="cStop" inputmode="decimal"></label>
+          <label for="cHz">最长持有<select id="cHz"><option value="15">15 分钟</option><option value="60">1 小时</option><option value="120">2 小时</option><option value="240" selected>4 小时</option><option value="720">12 小时</option><option value="1440">24 小时</option><option value="4320">3 天</option><option value="10080">7 天</option></select></label>
+        </fieldset>
+        <fieldset>
+          <legend>仓位 · 没说就空着</legend>
+          <label for="cAmt">投入 U<input id="cAmt" inputmode="decimal" placeholder="保证金"></label>
+          <label for="cLev">杠杆 倍<input id="cLev" inputmode="numeric"></label>
+        </fieldset>
+      </form>
+      <div class="verdict" id="cPreview" hidden></div>
+      <div class="jbtns"><button type="button" class="btn primary" id="cAdd">保存这条喊单</button></div>
     </div>
     <h3 class="sub-h">规则 A · 重复假设分组 <small>反弹 / 回落实验，不是独立的买入确认</small></h3>
     <p class="note">多单在检验反弹假设，空单在检验回落假设，并非已确认止跌或见顶。同方向相邻信号间隔不超过 6 小时且中间没有反向 A 信号，归为同组；这只是固定时间分组，不代表识别出真实行情阶段。原始记录、盈亏和策略均保留。组内信号相关，不能当作独立样本计算置信度。只有假设或执行条件改变才另立策略版本，不能覆盖旧成绩。</p>
@@ -2449,7 +2482,7 @@ function cPreview() {
     (e.sl && e.sl.liqHit ? ` 注意：${z.lev} 倍杠杆在碰到止损之前就会强平，最多亏掉整份保证金 ${fmt(z.amt)} U。` : "") +
     (e.tp && e.tp.pct < 0 ? " 注意：止盈价在进场价的亏损一侧，检查一下方向。" : "") + (e.sl && e.sl.pct > 0 ? " 注意：止损价在进场价的盈利一侧，检查一下方向。" : "");
 }
-function cEntryUI() { const lim = $("cEntry").value === "limit"; $("cValidL").hidden = !lim; $("cRefL").firstChild.textContent = lim ? "到这个价再进场" : "进场价（空着 = 喊单时的市价）"; }
+function cEntryUI() { const lim = $("cEntry").value === "limit"; $("cValidL").hidden = !lim; $("cRefL").firstChild.textContent = lim ? "到这个价再进" : "进场价"; $("cRef").placeholder = lim ? "必填" : "空着 = 市价"; }
 // 逐根 K 线核对一条喊单（到期前也会算，用来显示进行中的状态）
 // 某个时刻有效的止损 / 止盈：开仓时的值，再按修改记录依次覆盖（修改之前的 K 线仍按旧值判断）
 function lvAt(c, t) {
