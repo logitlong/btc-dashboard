@@ -294,6 +294,8 @@ label[hidden]{display:none}
 .rtabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent);font-weight:600}
 .rpanel{display:flex;flex-direction:column;gap:10px}
 .rpanel[hidden]{display:none}
+.spsub{margin:0}
+.stabs{margin-top:2px}
 .rset{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
 .rnote summary{cursor:pointer;color:var(--muted);font-size:13px}
 #cform fieldset:nth-child(3){grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -548,7 +550,7 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
         <div class="tm-sec"><h3>最近提醒</h3><div data-k="alc"></div></div>
       </div>
     </div>
-    <details class="notebox"><summary>说明</summary><p class="note">K 线来自币安 BTCUSDT 永续，和面板其他部分用的是同一份实时数据，跟着最新成交价跳。左边每个周期一行：当前这根 K 线的涨跌、RSI6，以及趋势（价格在 MA25 上方且 MA25 向上 = 上，反过来 = 下，其余 = 震荡），和「张主任多周期信号」里看阶段的口径一样。K 线上的横线是还没卖的单：实线是进场价，虚线分别是止损和止盈。右边是精简版的同一套内容（能不能开、资金费率和持仓、事件、大环境、张主任信号），加上持仓和最近 3 条提醒。这些都只是描述和提醒，不是开仓信号。周期和指标的选择只存在这台设备。</p></details>
+    <details class="notebox"><summary>说明</summary><p class="note">K 线来自币安 BTCUSDT 永续，和面板其他部分用的是同一份实时数据，跟着最新成交价跳。左边每个周期一行：当前这根 K 线的涨跌、RSI6，以及趋势（价格在 MA25 上方且 MA25 向上 = 上，反过来 = 下，其余 = 震荡），和「此刻结论 · 张主任信号」里看阶段的口径一样。K 线上的横线是还没卖的单：实线是进场价，虚线分别是止损和止盈。右边是精简版的同一套内容（能不能开、资金费率和持仓、事件、大环境、张主任信号），加上持仓和最近 3 条提醒。这些都只是描述和提醒，不是开仓信号。周期和指标的选择只存在这台设备。</p></details>
   </section>
 
   <section data-grp="1" class="card span" id="battleCard">
@@ -584,17 +586,55 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
       <label>名义仓位 · 强平距离<span class="levinfo" id="sinfo">—</span></label>
     </form>
     <div class="sum-sides" id="sumSides"></div>
-    <p class="note">判断顺序：先看硬性禁止（重大数据前 60 分钟、今日亏损超 15%、保证金占用超三分之一），再看规则 A / B，以及共振第 3 档及以上并且顺着日线 MA99 的提示，最后看是不是在急涨急跌后逆势进场。规则 A / B 在扣手续费的回测里没有稳定赚钱；共振提示只是提醒，不会下单。所以即使出现也只叫「有参考信号」，仅供模拟验证。仓位按上面填的买入金额 × 杠杆算（名义仓位），每一边显示打到止损亏多少、打到止盈赚多少（都扣了约 0.1% 的开平手续费）和强平价；强平价比止损还近会标红，并给出这个止损下建议的最高杠杆（强平距离至少是止损距离的 2 倍，按 1 ÷ 杠杆 − 0.4% 估算）。买入金额和杠杆会同步到云端，也是喊单记录里没写金额时的默认值。</p>
-  </section>
-
-  <section data-grp="1" class="card span" id="zhangCard">
-    <h2>张主任多周期信号 <small>日线定调 → 4 小时作日内参考 → 1 小时 / 30 分看阶段 → 15 分 / 5 分找触发 · 含未收盘 K 线</small></h2>
-    <div class="verdict bad" id="zhExtreme" hidden></div>
-    <div class="verdict" id="zhVerdict">正在读取行情…</div>
-    <div class="tablewrap"><table class="jt" id="zhTable"></table></div>
-    <p class="sum-line" id="zhRec"></p>
-    <p class="note">现行规格（2026-11-03），阈值在 rules_spec.json，和后台是同一套。大大方向是日线 MA99 相对 7 天前，冲突时以日线为准；4 小时 MA99 相对 24 小时前，只作日内参考。1 小时和 30 分看价格在 MA25 的哪一侧、以及 MA25 的斜率，分成上涨、下跌或过渡震荡。5 分钟做空六维、做多六维、自定义 6 项，只要从没有变成有就在后台记一条背景（哪怕 1/6），一直满足不重复，失效后再出现可以再报。这些单项只是背景，不会写成「提示做多 / 做空」。<br>
-    共振只看 RSI 和 KDJ，RSI 优先，跨指标拼在一起不算：① 5 分钟严格档（超买 RSI&gt;80 或 J&gt;110，超卖 RSI&lt;20 或 J&lt;-5）= 观察；② 5 分钟和 15 分钟同一个指标同时出区间（15 分钟超买 RSI&gt;70 或 J&gt;100，超卖 RSI&lt;20 或 J&lt;0）= 配对观察；③ 两边都到严格档才写「提示做空 / 提示做多」；④ 再叠加严格量价背离 = 强烈提示；⑤ 同一个指标在 5 分、15 分、30 分、1 小时都出各自的区间 = 「大仓位做空信号」或「大仓位买入信号」，4 小时也出再升一级。邮件只在档位升高时发，回落或失效会说明，但不发邮件。量能背离：48 根里的真新高或真新低，而且这根的量低于近期高点或低点量的中位数的 90%。反常异动（出了区间还在放量创新高或新低）仍然单独标出来。开了浏览器提醒的话，只在状态变化时弹一次。</p>
+    <h3 class="sub-h">依据 <small class="mut">（上面的结论从这些来；只有规则 A / B 和共振第 3 档以上顺日线才算参考信号）</small></h3>
+    <div class="rtabs stabs" role="tablist" aria-label="结论依据">
+      <button type="button" role="tab" data-stab="zhangCard" aria-selected="true">张主任信号</button>
+      <button type="button" role="tab" data-stab="mirrorCard" aria-selected="false">交易原则</button>
+      <button type="button" role="tab" data-stab="planCard" aria-selected="false">规则 A / B</button>
+      <button type="button" role="tab" data-stab="fcCard" aria-selected="false">方向模型</button>
+      <button type="button" role="tab" data-stab="maCard" aria-selected="false">均线与趋势</button>
+    </div>
+    <div class="rpanel spanel" id="zhangCard" data-spanel="zhangCard">
+      <p class="note spsub"><small>日线定调 → 4 小时作日内参考 → 1 小时 / 30 分看阶段 → 15 分 / 5 分找触发 · 含未收盘 K 线</small></p>
+      <div class="verdict bad" id="zhExtreme" hidden></div>
+      <div class="verdict" id="zhVerdict">正在读取行情…</div>
+      <div class="tablewrap"><table class="jt" id="zhTable"></table></div>
+      <p class="sum-line" id="zhRec"></p>
+      <p class="note">现行规格（2026-11-03），阈值在 rules_spec.json，和后台是同一套。大大方向是日线 MA99 相对 7 天前，冲突时以日线为准；4 小时 MA99 相对 24 小时前，只作日内参考。1 小时和 30 分看价格在 MA25 的哪一侧、以及 MA25 的斜率，分成上涨、下跌或过渡震荡。5 分钟做空六维、做多六维、自定义 6 项，只要从没有变成有就在后台记一条背景（哪怕 1/6），一直满足不重复，失效后再出现可以再报。这些单项只是背景，不会写成「提示做多 / 做空」。<br>
+      共振只看 RSI 和 KDJ，RSI 优先，跨指标拼在一起不算：① 5 分钟严格档（超买 RSI&gt;80 或 J&gt;110，超卖 RSI&lt;20 或 J&lt;-5）= 观察；② 5 分钟和 15 分钟同一个指标同时出区间（15 分钟超买 RSI&gt;70 或 J&gt;100，超卖 RSI&lt;20 或 J&lt;0）= 配对观察；③ 两边都到严格档才写「提示做空 / 提示做多」；④ 再叠加严格量价背离 = 强烈提示；⑤ 同一个指标在 5 分、15 分、30 分、1 小时都出各自的区间 = 「大仓位做空信号」或「大仓位买入信号」，4 小时也出再升一级。邮件只在档位升高时发，回落或失效会说明，但不发邮件。量能背离：48 根里的真新高或真新低，而且这根的量低于近期高点或低点量的中位数的 90%。反常异动（出了区间还在放量创新高或新低）仍然单独标出来。开了浏览器提醒的话，只在状态变化时弹一次。</p>
+    </div>
+    <div class="rpanel spanel" id="mirrorCard" data-spanel="mirrorCard" hidden>
+      <p class="note spsub"><small>完全镜像 · 5 分钟 / 15 分钟 / 1 小时同时看</small></p>
+      <div class="mirror" id="mirror"></div>
+      <details class="rules"><summary>为什么结论不只看交易原则</summary>
+        <p>结论只看已收盘的 K 线，过滤条件和回测、模型严格执行完全一致。用 2020 年以来的全部数据检验：只看 5 分钟信号，做多做空都显著亏损（t 值 -3.8 / -4.7，7 年里最多 1 年为正）；加 1 小时趋势过滤、三周期共振、排除周末低量，或者把信号放到 15 分钟 / 1 小时 / 4 小时 K 线上，都没有变成稳定盈利。按真实挂单执行回测，规则 A（4 小时反弹 / 回落假设实验）和规则 B（交易原则完整信号 + 过滤）也都没有通过，所以这里出现的只是「参考信号」，由模型严格执行继续验证。</p>
+      </details>
+    </div>
+    <div class="rpanel spanel" id="planCard" data-spanel="planCard" hidden>
+      <p class="note spsub"><small id="planBasis">按已收盘 K 线判断 · 不是投资建议</small></p>
+      <div class="plan-now" id="planNow"></div>
+      <div class="plans" id="plans"></div>
+      <details class="rules"><summary>规则和回测结果（与模型严格执行、回测同一份参数）</summary>
+        <ol id="ruleText"></ol>
+      </details>
+    </div>
+    <div class="rpanel spanel" id="fcCard" data-spanel="fcCard" hidden>
+      <p class="note spsub"><small>结论按已收盘 K 线 · 盘中预估另列 · 准确率来自模型没见过的数据</small></p>
+      <div class="moved" id="moved"></div>
+      <div class="fc" id="fc"></div>
+      <div class="verdict" id="fcsum"></div>
+      <p class="note">上面一行是<b>已经走出来的行情</b>；下面的格子是<b>接下来</b>那段时间收盘比现在高的概率，两者不是一回事。这个模型的主要依据是 RSI、KDJ 和 24 小时高低位置，本质是「跌多了押反弹、涨多了押回落」，所以急跌时它会偏涨、急涨时会偏跌，这时面板会改标为「超卖反弹倾向 / 超买回落倾向」，并给出同类情况的历史结果。「上涨概率」越偏离 50%，模型把握越大。「历史准确率」减去「±」误差后仍高于 50%，才算这个周期真的有效。大字是收盘结论，只在 K 线收盘时变化；「盘中预估」用最新成交价补全正在走的那根，会来回跳，只作参考。</p>
+    </div>
+    <div class="rpanel spanel" id="maCard" data-spanel="maCard" hidden>
+      <p class="note spsub"><small>MA7 / MA25 / MA99 · 均线按已收盘 K 线计算，现价实时</small></p>
+      <div class="tablewrap"><table class="ma" id="ma"></table></div>
+      <div class="verdict" id="maSum"></div>
+      <p class="note">「趋势」全面板同一个口径：按已收盘 K 线，收盘价在 MA25 上方且 MA25 比 6 根前高 = 上涨，反过来 = 下跌，其余 = 震荡（和规则 B 的 1 小时趋势过滤一样）。看盘左侧周期列表、当前状态里的 4 小时趋势都用它。张主任的「大方向」看 MA99、「阶段」按他的规格算，是另一套，不叫趋势。</p>
+      <p class="note">日线按 UTC 收盘（<span class="tzn">东京时间</span>每天 <span class="tzdc">09:00</span>）。均线排列在回测里没有单独的预测力（加 1 小时趋势过滤并没有让信号变成稳定盈利），这里用来看各周期的趋势是否一致。</p>
+    </div>
+    <details class="rnote"><summary>说明</summary>
+      <p class="note">判断顺序：先看硬性禁止（重大数据前 60 分钟、今日亏损超 15%、保证金占用超三分之一），再看规则 A / B，以及共振第 3 档及以上并且顺着日线 MA99 的提示，最后看是不是在急涨急跌后逆势进场。规则 A / B 在扣手续费的回测里没有稳定赚钱；共振提示只是提醒，不会下单。所以即使出现也只叫「有参考信号」，仅供模拟验证。仓位按上面填的买入金额 × 杠杆算（名义仓位），每一边显示打到止损亏多少、打到止盈赚多少（都扣了约 0.1% 的开平手续费）和强平价；强平价比止损还近会标红，并给出这个止损下建议的最高杠杆（强平距离至少是止损距离的 2 倍，按 1 ÷ 杠杆 − 0.4% 估算）。买入金额和杠杆会同步到云端，也是喊单记录里没写金额时的默认值。</p>
+      </details>
   </section>
 
   <section data-grp="1" class="card span" id="fastCard">
@@ -632,21 +672,6 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
   <section data-grp="2" id="statusCard" class="card span">
     <h2>当前状态 <small id="stUpd">—</small></h2>
     <div class="status" id="status"></div>
-  </section>
-
-  <section data-grp="2" class="card span" id="maCard">
-    <h2>多周期均线 <small>MA7 / MA25 / MA99 · 均线按已收盘 K 线计算，现价实时</small></h2>
-    <div class="tablewrap"><table class="ma" id="ma"></table></div>
-    <div class="verdict" id="maSum"></div>
-    <p class="note">日线按 UTC 收盘（<span class="tzn">东京时间</span>每天 <span class="tzdc">09:00</span>）。均线排列在回测里没有单独的预测力（加 1 小时趋势过滤并没有让信号变成稳定盈利），这里用来看各周期的趋势是否一致。</p>
-  </section>
-
-  <section data-grp="2" id="fcCard" class="card span">
-    <h2>方向判断 <small>结论按已收盘 K 线 · 盘中预估另列 · 准确率来自模型没见过的数据</small></h2>
-    <div class="moved" id="moved"></div>
-    <div class="fc" id="fc"></div>
-    <div class="verdict" id="fcsum"></div>
-    <p class="note">上面一行是<b>已经走出来的行情</b>；下面的格子是<b>接下来</b>那段时间收盘比现在高的概率，两者不是一回事。这个模型的主要依据是 RSI、KDJ 和 24 小时高低位置，本质是「跌多了押反弹、涨多了押回落」，所以急跌时它会偏涨、急涨时会偏跌，这时面板会改标为「超卖反弹倾向 / 超买回落倾向」，并给出同类情况的历史结果。「上涨概率」越偏离 50%，模型把握越大。「历史准确率」减去「±」误差后仍高于 50%，才算这个周期真的有效。大字是收盘结论，只在 K 线收盘时变化；「盘中预估」用最新成交价补全正在走的那根，会来回跳，只作参考。</p>
   </section>
 
   <section data-grp="2" id="tvTaCard" class="card span">
@@ -735,7 +760,7 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
     <div class="note">
       <p><b>Coinbase 溢价是什么：</b>Coinbase 上 BTC 的美元价格，比币安上 BTC 的 USDT 价格贵还是便宜（已按 Coinbase 上的 USDT 美元价换算，去掉 USDT 本身的偏差）。美国现货 ETF 大多把 BTC 托管在 Coinbase，美国机构也主要在 Coinbase 买卖，所以溢价为正，通常说明美国资金买得更积极；为负，说明美国资金在卖。两边都用买一卖一的中间价，每秒更新。</p>
       <p><b>怎么用：</b>看方向和持续时间，不看一两秒的跳动。溢价持续为正，说明美国资金在持续买入；当晚公布的 ETF 资金流向可以核对这个判断。「明显」指超出过去 24 小时 80% 的时间所在的区间。</p>
-      <p><b>回测结果（2021-05 至 2026-10 的 1 小时数据，最近 400 天另用 5 分钟数据复核）：</b>溢价和之后 15 分钟、1 小时、4 小时的涨跌都是正相关，6 年每年同方向，统计上显著，但很弱（秩相关约 0.02）。溢价比过去 7 天平均高 2 个标准差以上时，之后 4 小时平均只多涨约 0.07–0.09%，上涨的比例仍在 50% 上下。美股盘中并没有比其他时段更准。直接按它做单（美股盘中偏高做多、偏低做空、持有 4 小时）：不扣手续费每笔 +0.08%，按吃单手续费算每笔 −0.02%，挂单 +0.04% 但 2024、2026 年亏钱。结论：有一点信息，但不够单独做单，适合和「方向判断」一起看。24 小时以上没有预测作用。</p>
+      <p><b>回测结果（2021-05 至 2026-10 的 1 小时数据，最近 400 天另用 5 分钟数据复核）：</b>溢价和之后 15 分钟、1 小时、4 小时的涨跌都是正相关，6 年每年同方向，统计上显著，但很弱（秩相关约 0.02）。溢价比过去 7 天平均高 2 个标准差以上时，之后 4 小时平均只多涨约 0.07–0.09%，上涨的比例仍在 50% 上下。美股盘中并没有比其他时段更准。直接按它做单（美股盘中偏高做多、偏低做空、持有 4 小时）：不扣手续费每笔 +0.08%，按吃单手续费算每笔 −0.02%，挂单 +0.04% 但 2024、2026 年亏钱。结论：有一点信息，但不够单独做单，适合和「此刻结论 · 方向模型」一起看。24 小时以上没有预测作用。</p>
       <p><b>注意：</b>Coinbase 溢价和 ETF 资金流向反映的是同一件事（美国资金的动向），两边一致不是两个独立的信号。ETF 资金流向来自 <a href="https://www.tftc.io/bitcoin-etf-flows" target="_blank" rel="noopener">The Commoner Bitcoin ETF Tracker by TFTC</a>（CC BY 4.0，整理自 SoSoValue 和 Farside），通常隔天更新，最新一天之后可能修正；某只基金显示 0 可能是还没公布，不一定是没有进出。</p>
     </div>
   </section>
@@ -756,23 +781,6 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
     <h2>头条新闻 <small>TradingView 编辑部 · 英文 · 看大方向</small></h2>
     <div class="tvw" data-tv="timeline" style="--tvh:520px"></div>
     <p class="note">TradingView 自己写的 BTC 行情评论，英文，大约一周一两篇，免费小工具只给这一类，不是快讯（在 TradingView 网站上看到的路透社、CoinDesk 等快讯没法嵌进来）。适合回头看这几周大家在讨论什么（ETF 流入流出、关键价位、宏观数据）；盯盘时的突发消息仍然看上面的「新闻与异动」。没有利多 / 利空标注，也不进事件日志。</p>
-  </section>
-
-  <section data-grp="4" class="card span" id="planCard">
-    <h2>交易计划 <small id="planBasis">按已收盘 K 线判断 · 不是投资建议</small></h2>
-    <div class="plan-now" id="planNow"></div>
-    <div class="plans" id="plans"></div>
-    <details class="rules"><summary>规则和回测结果（与模型严格执行、回测同一份参数）</summary>
-      <ol id="ruleText"></ol>
-    </details>
-  </section>
-
-  <section data-grp="4" id="mirrorCard" class="card span">
-    <h2>做多信号 / 做空信号 <small>完全镜像 · 5 分钟 / 15 分钟 / 1 小时同时看</small></h2>
-    <div class="mirror" id="mirror"></div>
-    <details class="rules"><summary>为什么结论不只看交易原则</summary>
-      <p>结论只看已收盘的 K 线，过滤条件和回测、模型严格执行完全一致。用 2020 年以来的全部数据检验：只看 5 分钟信号，做多做空都显著亏损（t 值 -3.8 / -4.7，7 年里最多 1 年为正）；加 1 小时趋势过滤、三周期共振、排除周末低量，或者把信号放到 15 分钟 / 1 小时 / 4 小时 K 线上，都没有变成稳定盈利。按真实挂单执行回测，规则 A（4 小时反弹 / 回落假设实验）和规则 B（交易原则完整信号 + 过滤）也都没有通过，所以这里出现的只是「参考信号」，由模型严格执行继续验证。</p>
-    </details>
   </section>
 
   <section data-grp="4" id="calcCard" class="card span">
@@ -1117,6 +1125,7 @@ const ALC = (() => {
     const li = e.target.closest("li[data-i]"), a = li && list[+li.dataset.i];
     if (!a || !a.card) return;
     const el = document.getElementById(a.card);
+    if (el) revealTab(el);
     if (el && el.offsetParent) { $("alc").open = false; el.scrollIntoView({ behavior: "smooth" }); }
   });
   $("alc").addEventListener("toggle", () => { if (!$("alc").open) { seen = Date.now(); sv(SEEN, seen); render(); } });
@@ -1554,7 +1563,7 @@ function renderVol() {
   const R = VOLSTAT.regime, d = R.drop[v.state] && R.drop[v.state]["1 小时"], r = R.rally[v.state] && R.rally[v.state]["1 小时"];
   const line = (x, what, rev, dir) => x ? `${what}：1 小时后${rev} ${x.rev}% ±${x.err}${x.rev - x.err > 50 ? "" : "（不显著）"}，期间先再${dir}中位 ${x.adv50}%（约 ${fmt(x.adv50 / 100 * P)} 美元），五分之一超过 ${x.adv80}%（约 ${fmt(x.adv80 / 100 * P)} 美元）` : "";
   $("volFade").textContent = `「跌多了买、涨多了空」在${v.state}波动下的历史结果——` + [line(d, "急跌超卖后买", "收高", "跌"), line(r, "急涨超买后空", "收低", "涨")].filter(Boolean).join("；") +
-    "。也就是说，逆势进场接近抛硬币，而且进场后通常还要先扛一段。要么等扳机确认（见「做多 / 做空信号」：跌破或站上 MA7、MA7 拐头）再进，要么按上面的止损距离把仓位降下来，否则很容易在反转前被迫割肉。";
+    "。也就是说，逆势进场接近抛硬币，而且进场后通常还要先扛一段。要么等扳机确认（见「此刻结论 · 交易原则」：跌破或站上 MA7、MA7 拐头）再进，要么按上面的止损距离把仓位降下来，否则很容易在反转前被迫割肉。";
 }
 
 function computeProbs() {
@@ -1604,8 +1613,7 @@ function dataStatus(now) {
   ];
 }
 function renderStatus(st) {
-  const tr = S.f5 ? S.f5.trend4h * 100 : NaN, nowMs = Date.now();
-  const regime = !isFinite(tr) ? ["—", ""] : tr > 1 ? ["偏上涨", "good"] : tr < -1 ? ["偏下跌", "bad"] : ["震荡", "warn"];
+  const T4 = trendTf((S.b240 || []).slice(0, -1)), nowMs = Date.now();
   const evs = calendar(nowMs);
   const fmtIn = ms => { const m = Math.round((ms - nowMs) / 60e3); return m <= 0 ? "进行中" : m < 90 ? `${m} 分钟后` : `${(m / 60).toFixed(1)} 小时后`; };
   const fmtJ = fmtDT;
@@ -1626,7 +1634,7 @@ function renderStatus(st) {
   const crossHot = cross && Object.values(cross).some(v => v && Math.abs(v.ch15) >= 0.5);
   const ev0 = evs[0], ev1 = evs.find(e => e[0] !== "美股开盘");
   const items = [
-    ["大结构（4h 均线）", regime[0], regime[1], `价格相对 4h MA25 ${pct(tr)} · 短线涨跌看「方向判断」`],
+    ["趋势 · 4 小时", T4.name, T4.cls, "收盘价相对 MA25 和 MA25 方向 · 全面板同一口径"],
     ["下一个事件", ev0 ? ev0[0] : "—", ev0 && ev0[1] - nowMs < 3600e3 ? "bad" : "", ev0 ? `${fmtJ(ev0[1])} · ${fmtIn(ev0[1])}` : ""],
     ["重大数据", ev1 ? ev1[0] : "本周暂无", ev1 && ev1[1] - nowMs < 3600e3 ? "bad" : "", ev1 ? `${fmtJ(ev1[1])} · ${fmtIn(ev1[1])}` : "来自 ForexFactory 日历"],
     ["挤压雷达（未验证）", squeeze[0], squeeze[1], `1h 价格 ${pct(p1h)} · 持仓 ${pct(o60)} · 多空比 ${ls1h ? ls1h.toFixed(2) : "—"}→${lsNow ? lsNow.toFixed(2) : "—"}`],
@@ -1695,6 +1703,14 @@ function trend1h(b) {
   const c = b.map(x => x.c), n = c.length, ma = (i, k) => c.slice(i - k + 1, i + 1).reduce((s, x) => s + x, 0) / k;
   if (n < 40) return { up: false, dn: false };
   return { up: c[n - 1] > ma(n - 1, 25) && ma(n - 1, 25) > ma(n - 7, 25), dn: c[n - 1] < ma(n - 1, 25) && ma(n - 1, 25) < ma(n - 7, 25) };
+}
+// 面板上所有「趋势」标签共用这一个口径（和规则 B 的 1 小时趋势过滤一样，按已收盘 K 线）：
+// 收盘价在 MA25 上方、且 MA25 比 6 根前高 = 上涨；反过来 = 下跌；其余 = 震荡。张主任的 MA99 方向和阶段按他的规格另算，不叫「趋势」。
+function trendTf(closed) {
+  const b = closed || [];
+  if (b.length < 40) return { k: "—", cls: "", name: "—" };
+  const t = trend1h(b);
+  return t.up ? { k: "上", cls: "good", name: "上涨" } : t.dn ? { k: "下", cls: "bad", name: "下跌" } : { k: "震荡", cls: "mut", name: "震荡" };
 }
 function filters(nowMs) {
   const c5 = S.b5.slice(0, -1), n5 = c5.length, v5 = c5.slice(n5 - 288).map(x => x.v).sort((a, b) => a - b);
@@ -2956,6 +2972,23 @@ function syncSim(sim, render = true) {
 }
 const simLocal = () => { try { return JSON.parse(localStorage.getItem(AK("btc_sim_v1"))); } catch (e) { return null; } };
 addEventListener("storage", e => { if (e.key === AK("btc_sim_v1")) syncSim(simLocal()); });
+// 此刻结论的「依据」页签
+function sTab(k) {
+  if (!document.querySelector(`[data-spanel="${k}"]`)) k = "zhangCard";
+  document.querySelectorAll("[data-stab]").forEach(b => b.setAttribute("aria-selected", b.dataset.stab === k));
+  document.querySelectorAll("[data-spanel]").forEach(p => p.hidden = p.dataset.spanel !== k);
+  try { localStorage.setItem("btc_stab", k); } catch (e) { /* 只在本次有效 */ }
+}
+// 跳到某个元素前，先打开它所在的页签
+function revealTab(el) {
+  const sp = el.closest("[data-spanel]"); if (sp && sp.hidden) sTab(sp.dataset.spanel);
+  const rp = el.closest("[data-rpanel]"); if (rp && rp.hidden) rTab(rp.dataset.rpanel);
+}
+(function sTabInit() {
+  document.querySelectorAll("[data-stab]").forEach(b => b.onclick = () => sTab(b.dataset.stab));
+  let k = "zhangCard"; try { k = localStorage.getItem("btc_stab") || k; } catch (e) { /* 默认张主任 */ }
+  sTab(k);
+})();
 // 记一笔：喊单 / 我的实盘
 function cSrcUI(src) {
   C.src = src === "real" ? "real" : "call"; const real = C.src === "real";
@@ -3199,11 +3232,11 @@ function renderMA() {
   const P = S.price, res = [];
   const rows = TFS.map(([name, bars, flat]) => {
     const b = (bars || []).slice(0, -1), c = b.map(x => x.c), i = c.length - 1;
-    if (i < 104) return `<tr><td class="t">${name}</td><td colspan="7" class="t">数据加载中…</td></tr>`;
+    if (i < 104) return `<tr><td class="t">${name}</td><td colspan="8" class="t">数据加载中…</td></tr>`;
     const ma = (j, n) => { let t = 0; for (let k = j - n + 1; k <= j; k++) t += c[k]; return t / n; };
     const m7 = ma(i, 7), m25 = ma(i, 25), m99 = ma(i, 99), slope = (m7 / ma(i - 1, 7) - 1) * 100;
     const arr = m7 > m25 && m25 > m99 ? ["多头排列", "good", 1] : m7 < m25 && m25 < m99 ? ["空头排列", "bad", -1] : ["交织", "mut", 0];
-    const dir = slope > flat ? ["↑ 向上", "good"] : slope < -flat ? ["↓ 向下", "bad"] : ["→ 走平", "mut"];
+    const dir = slope > flat ? ["↑ 向上", "good"] : slope < -flat ? ["↓ 向下", "bad"] : ["→ 走平", "mut"], T = trendTf(b);
     let cross = "";
     for (let k = 0; k < 3 && !cross; k++) {
       const d0 = ma(i - k, 7) - ma(i - k, 25), d1 = ma(i - k - 1, 7) - ma(i - k - 1, 25);
@@ -3214,11 +3247,11 @@ function renderMA() {
     const pos = above === 3 ? ["三线之上", "good"] : above === 0 ? ["三线之下", "bad"] : [`${above} 条之上`, "mut"];
     res.push({ name, a: arr[2], dir: dir[0], arr: arr[0], pos: pos[0] });
     const cell = m => `${fmt(m)}<small>${pct((P / m - 1) * 100)}</small>`;
-    return `<tr><td class="t">${name}</td><td>${cell(m7)}</td><td>${cell(m25)}</td><td>${cell(m99)}</td>
+    return `<tr><td class="t">${name}</td><td class="t"><b class="${T.cls}">${T.name}</b></td><td>${cell(m7)}</td><td>${cell(m25)}</td><td>${cell(m99)}</td>
       <td class="t"><span class="${arr[1]}">${arr[0]}</span></td><td class="t"><span class="${dir[1]}">${dir[0]}</span><small>MA7 ${pct(slope, 3)}</small></td>
       <td class="t">${cross || '<span class="mut">—</span>'}</td><td class="t"><span class="${pos[1]}">${pos[0]}</span></td></tr>`;
   });
-  $("ma").innerHTML = `<thead><tr><th>周期</th><th>MA7<br>现价偏离</th><th>MA25<br>现价偏离</th><th>MA99<br>现价偏离</th><th class="t">排列</th><th class="t">MA7 方向</th><th class="t">近 3 根交叉</th><th class="t">现价位置</th></tr></thead><tbody>${rows.join("")}</tbody>`;
+  $("ma").innerHTML = `<thead><tr><th>周期</th><th class="t">趋势</th><th>MA7<br>现价偏离</th><th>MA25<br>现价偏离</th><th>MA99<br>现价偏离</th><th class="t">排列</th><th class="t">MA7 方向</th><th class="t">近 3 根交叉</th><th class="t">现价位置</th></tr></thead><tbody>${rows.join("")}</tbody>`;
   if (res.length === 6) {
     const bull = res.filter(x => x.a > 0).map(x => x.name), bear = res.filter(x => x.a < 0).map(x => x.name);
     const short = res.slice(0, 4).reduce((t, x) => t + x.a, 0), long = res.slice(4).reduce((t, x) => t + x.a, 0);
@@ -3820,9 +3853,9 @@ const LKEY = "btc_layout_v2";
 // 分组：卡片跟着自己的组走，自定义顺序里组被打散时就多出几条分组标题
 const GRPS = {
   1: ["先看结论", "每次打开先看这里：现在能不能开仓、有没有急涨急跌、手上的单到没到该卖的时候。"],
-  2: ["看行情", "价格现在在哪、各周期趋势往哪边、接下来涨的概率有多大。"],
+  2: ["看行情", "大环境水温、盘面状态和历年月度涨跌。各周期趋势和方向模型在「此刻结论」的依据里。"],
   3: ["看原因", "为什么在动：新闻、数据公布、市场情绪，美股和其他币有没有一起动。"],
-  4: ["准备下单", "真想开仓时再看：进场价、止损止盈放哪、用多大仓位、最多亏多少。"],
+  4: ["准备下单", "真想开仓时再看：止损按波动放多远、用多大仓位、最多亏多少，算完可以直接记成实盘。"],
   5: ["记录与复盘", "每一单都记下来，到期自动核对对错，看自己的方法到底准不准。"],
   6: ["说明", "面板上每个结论是怎么算出来的，看不懂某张卡片时来这里查。"],
 };
@@ -4310,13 +4343,8 @@ const TM = (() => {
   const macd = c => { const f = ewm(c, 2 / 13), s2 = ewm(c, 2 / 27), dif = f.map((x, i) => x - s2[i]), dea = ewm(dif, 2 / 10); return { dif, dea, hist: dif.map((x, i) => (x - dea[i]) * 2) }; };
   const bars = () => { const a = S[TFS.find(x => x[0] === tf)[2]] || []; return a.length ? live(a) : a; };
   const sh = ms => Math.floor(ms / 1000) + TZOFF[TZ] * 60;
-  // 周期列表：当根涨跌、RSI6、趋势（MA25 上下 + 斜率）
-  function trend(b) {
-    const c = b.map(x => x.c), m = sma(c, 25), i = c.length - 1;
-    if (!isFinite(m[i]) || !isFinite(m[i - 3])) return ["—", ""];
-    const up = c[i] > m[i] && m[i] > m[i - 3], dn = c[i] < m[i] && m[i] < m[i - 3];
-    return up ? ["上", "good"] : dn ? ["下", "bad"] : ["震荡", "mut"];
-  }
+  // 周期列表：当根涨跌、RSI6、趋势（已收盘：MA25 上下 + MA25 比 6 根前，见 trendTf）
+  function trend(b) { const t = trendTf(b.slice(0, -1)); return [t.k, t.cls]; }   // 全面板同一口径，见 trendTf
   function renderList() {
     const box = $("tmTf"); if (!box) return;
     const html = TFS.map(([k, name, arr]) => {
