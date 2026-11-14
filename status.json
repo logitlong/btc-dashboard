@@ -1,0 +1,986 @@
+{
+ "updated": "11-14 16:46",
+ "tz": "Asia/Tokyo",
+ "price": 67041.0,
+ "market": {
+  "price": 67041.0,
+  "range5": 0.12371742689220859,
+  "base5": 0.17652277857048992,
+  "move15": -0.3167246086887565,
+  "prev24": 5.462020001726539,
+  "vol_ratio": 0.9043949280911887,
+  "oi": 33679.38740000013,
+  "funding": -0.00087298990459,
+  "ls": 3.0,
+  "ls_chg15": -0.009999999999999787,
+  "ma7_slope": -0.07529827548231616,
+  "ma7_mode": "idle",
+  "cross": {
+   "美债10年收益率": null,
+   "纳指期货": null,
+   "美元指数": null,
+   "原油期货": null,
+   "黄金期货": null,
+   "美元兑日元": null
+  },
+  "stocks": {
+   "updated_ms": 1794642361298,
+   "data": {
+    "QQQ": {
+     "regular": 679.89,
+     "regular_at_ms": 1794603600000,
+     "prev_close": 688.17,
+     "ext": {
+      "price": 674.2585,
+      "at_ms": 1794617998000,
+      "session": "盘后"
+     },
+     "fullday": 679.89
+    },
+    "SPY": {
+     "regular": 754.37,
+     "regular_at_ms": 1794603600000,
+     "prev_close": 757.41,
+     "ext": {
+      "price": 749.6,
+      "at_ms": 1794617997000,
+      "session": "盘后"
+     },
+     "fullday": 754.37
+    },
+    "IWM": {
+     "regular": 277.54,
+     "regular_at_ms": 1794603600000,
+     "prev_close": 278.44,
+     "ext": {
+      "price": 275.56,
+      "at_ms": 1794617998000,
+      "session": "盘后"
+     },
+     "fullday": 277.54
+    },
+    "NVDA": {
+     "regular": 162.85,
+     "regular_at_ms": 1794603601000,
+     "prev_close": 166.19,
+     "ext": {
+      "price": 161.01,
+      "at_ms": 1794617996000,
+      "session": "盘后"
+     },
+     "fullday": 162.85
+    },
+    "MSTR": {
+     "regular": 111.62,
+     "regular_at_ms": 1794603600000,
+     "prev_close": 114.41,
+     "ext": {
+      "price": 109.7261,
+      "at_ms": 1794617977000,
+      "session": "盘后"
+     },
+     "fullday": 111.62
+    },
+    "COIN": {
+     "regular": 127.645,
+     "regular_at_ms": 1794603600000,
+     "prev_close": 130.67,
+     "ext": {
+      "price": 126.05,
+      "at_ms": 1794617903000,
+      "session": "盘后"
+     },
+     "fullday": 127.645
+    },
+    "BMNR": {
+     "regular": 17.58,
+     "regular_at_ms": 1794603602000,
+     "prev_close": 18.45,
+     "ext": {
+      "price": 17.27,
+      "at_ms": 1794617995000,
+      "session": "盘后"
+     },
+     "fullday": 17.58
+    },
+    "CRCL": {
+     "regular": 62.2,
+     "regular_at_ms": 1794603602000,
+     "prev_close": 63.82,
+     "ext": {
+      "price": 61.39,
+      "at_ms": 1794617991000,
+      "session": "盘后"
+     },
+     "fullday": 62.2
+    },
+    "HOOD": {
+     "regular": 77.86,
+     "regular_at_ms": 1794603601000,
+     "prev_close": 81.35,
+     "ext": {
+      "price": 76.6239,
+      "at_ms": 1794617981000,
+      "session": "盘后"
+     },
+     "fullday": 77.86
+    },
+    "MARA": {
+     "regular": 6.99,
+     "regular_at_ms": 1794603601000,
+     "prev_close": 7.2,
+     "ext": {
+      "price": 6.8303,
+      "at_ms": 1794617928000,
+      "session": "盘后"
+     },
+     "fullday": 6.99
+    },
+    "IREN": {
+     "regular": 18.17,
+     "regular_at_ms": 1794603600000,
+     "prev_close": 19.48,
+     "ext": {
+      "price": 17.675,
+      "at_ms": 1794617998000,
+      "session": "盘后"
+     },
+     "fullday": 18.17
+    },
+    "BITO": {
+     "regular": 9.15,
+     "regular_at_ms": 1794603600000,
+     "prev_close": 9.49,
+     "ext": {
+      "price": 9.1,
+      "at_ms": 1794617890000,
+      "session": "盘后"
+     },
+     "fullday": 9.15
+    }
+   }
+  },
+  "taker": {
+   "sell": 83761545.8801,
+   "buy": 85993514.221
+  },
+  "oi_coin": 12013.97041332144,
+  "oi_chg1h": 0.05133983646432583,
+  "px_chg1h": -0.25233016915070516,
+  "ls_1h": 3.01,
+  "ls_chg1h": -0.03000000000000025,
+  "liq_1h": [
+   {
+    "long": 862293.0,
+    "short": 50560.0,
+    "source": "全网（Coinalyze）"
+   },
+   {
+    "long": 41672.236560000005,
+    "short": 26177.57563,
+    "source": "OKX"
+   }
+  ],
+  "oi_chg15": 0.09235589808735956
+ },
+ "ruler": {
+  "session": "周末",
+  "activity": "活跃",
+  "h1_median_pct": 0.65,
+  "h4_p80_pct": 2.22,
+  "h1_median_pts": 436,
+  "h4_p80_pts": 1488
+ },
+ "upcoming": [
+  {
+   "title": "美股开盘",
+   "at": "11-16 23:30",
+   "at_ms": 1794839400000,
+   "in_min": 3284
+  }
+ ],
+ "alerts": [
+  {
+   "time": "2026-11-14T07:46:07.915908+00:00",
+   "time_local": "11-14 16:46",
+   "level": "yellow",
+   "kind": "共振",
+   "title": "共振观察 · 日线MA99偏多 · 4小时MA99偏空",
+   "body": "观察：5 分钟严格超卖（KDJ）。只是观察，不是提示做多。现价 67,045。日线MA99偏多（斜率 +574.9，+0.74%）；4小时MA99偏空（斜率 -780.1，-1.02%）。 冲突，以日线为准。1 小时下跌，30 分下跌（都看价格和 MA25）。5 分 RSI 27.6 / J -7.5；15 分 RSI 35.5 / J 24.3；30 分 RSI 32.8 / J 69.0；1 小时 RSI 28.6 / J 34.6；4 小时 RSI 18.2 / J 5.9。只是提醒，不会下单。",
+   "email": true,
+   "subject": "[BTC信号] 共振观察 · 日线MA99偏多 · 4小时MA99偏空"
+  },
+  {
+   "time": "2026-11-14T07:46:07.915675+00:00",
+   "time_local": "11-14 16:46",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做多六维 1/6",
+   "body": "刚满足「RSI6触及30」。现在满足的是：RSI6触及30。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做多六维 1/6"
+  },
+  {
+   "time": "2026-11-14T07:42:07.542158+00:00",
+   "time_local": "11-14 16:42",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 1/6",
+   "body": "刚满足「近3根量连续递减」。现在满足的是：近3根量连续递减。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 1/6"
+  },
+  {
+   "time": "2026-11-14T07:42:02.371266+00:00",
+   "time_local": "11-14 16:42",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·宏观] US Fintech Weekly: Coinbase Secures Federal Trust Charter, While Hot CPI Pressures Rate-Se",
+   "body": "直接相关 中性 · 来源：Stocktwits · 发布 11-14 16:42\nUS Fintech Weekly: Coinbase Secures Federal Trust Charter, While Hot CPI Pressures Rate-Sensitive Lenders - Stocktwits\n\nhttps://news.google.com/rss/articles/CBMi-wFBVV95cUxQNlBSVlJMVW41TjNKYlA3QXpmUHdZcVZLcXVnVHMxODJhWVZIY3NvSHp0cUpRTkt5enpVSW5oazFDdGNBWUhfNVBwaE9nbTcwS3NxRWpfZklCQUljQ29vYnhxUnhacWNfeHNPZ3JJMm1WdnRZQkozMXlqcVFXQVltZ2dFanZQN2dDdGRYVUZwSnJYVWRzMTRWOUgtTVNDT0l4S29rTDVkamZqU3ltN1FLbEFjYmpqMDdoMnpPcnQtay0tczFaX00wVDNmTVhUU3k4VmNOc29nNHY4eThrZjZlRG8wRVlTY2NuOW9Ua25oakNITjRuWUhFcERUWQ?oc=5\nBTC 当时 67,112",
+   "email": false,
+   "subject": "[Google新闻·宏观] US Fintech Weekly: Coinbase Secures Federal Trust Charter, While Hot CPI Pressures Rate-Se"
+  },
+  {
+   "time": "2026-11-14T07:41:01.602050+00:00",
+   "time_local": "11-14 16:41",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Strive CEO Says Bitcoin Could ‘Go To A Penny’ And The Company Would Still Survive Because ",
+   "body": "直接相关 中性 · 来源：Stocktwits、TradingView、Yahoo Finance · 发布 11-14 16:41（3 家来源报道）\nStrive CEO Says Bitcoin Could ‘Go To A Penny’ And The Company Would Still Survive Because It Has No Debt - Stocktwits\n\nhttps://news.google.com/rss/articles/CBMi-gFBVV95cUxPMHl1V2RJRUVaZVZrWExFcmFsYlhiMERRWmt5UEpSdG1iVEU1aVBobmRwZHM2NlVsc2IyRUFBNUd4amJENTVoM09UV1p6a1N1WDdpaElyUE5ZMUpBcXBrQm9ONzBHaE9QTGhUYUhMMDVvakNPY18tVnktdHpYdzRFSTVlQWhtY0JBdFZRS2RXX3V4cGEzNzRHa2dJVWpJQ0VWU296NFRWc3ktMTdBZGR4RUpsVllxVDhXUm55UW5TWU9HdEE2V3p6aXVEWndpb0hPbk95ZmFuQVRUUmhFM3VOODFVRHdING1kY1lOY3ZoS3RmNkx0Q1BSREV3?oc=5\nBTC 当时 67,072",
+   "email": false,
+   "subject": "[Google新闻·比特币] Strive CEO Says Bitcoin Could ‘Go To A Penny’ And The Company Would Still Survive Because "
+  },
+  {
+   "time": "2026-11-14T07:34:07.606580+00:00",
+   "time_local": "11-14 16:34",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做多六维 1/6",
+   "body": "刚满足「MACD负柱向零收敛」。现在满足的是：MACD负柱向零收敛。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做多六维 1/6"
+  },
+  {
+   "time": "2026-11-14T07:34:02.900706+00:00",
+   "time_local": "11-14 16:34",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·中文] 美联储重磅报告：“AI热”正推高资产估值 或对金融系统构成风险 - 中金在线",
+   "body": "间接相关 中性 · 来源：中金在线、凤凰网 · 发布 11-14 16:34（2 家来源报道）\n美联储重磅报告：“AI热”正推高资产估值 或对金融系统构成风险 - 中金在线\n\nhttps://news.google.com/rss/articles/CBMiakFVX3lxTE1IYjZmSnRYNjBuNGFRSWlreGRrS0V4UEJmb2ZDZXd4cE1QaDJwbVJOSzBtYmdmNzBNWFpta0dOTENzR3NrRE9HdTF1ZDZ3UWZmbUhQbGlsVGFzbVhhbVVydi10c2RScjNqcmc?oc=5\nBTC 当时 67,288",
+   "email": false,
+   "subject": "[Google新闻·中文] 美联储重磅报告：“AI热”正推高资产估值 或对金融系统构成风险 - 中金在线"
+  },
+  {
+   "time": "2026-11-14T07:30:08.149537+00:00",
+   "time_local": "11-14 16:30",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 1/6",
+   "body": "刚满足「近3根量连续递减」。现在满足的是：近3根量连续递减。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 1/6"
+  },
+  {
+   "time": "2026-11-14T07:24:55.054407+00:00",
+   "time_local": "11-14 16:24",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] US PPI Hits 6.5% as Bitcoin and Ether Edge Higher - The Defiant",
+   "body": "直接相关 中性 · 来源：The Defiant · 发布 11-14 16:24\nUS PPI Hits 6.5% as Bitcoin and Ether Edge Higher - The Defiant\n\nhttps://news.google.com/rss/articles/CBMiiwFBVV95cUxNYVRDcmVVUWo5TnFqUUVZckJuSjJiTWVaaXNYZzZNWlQ2bDdjYzFjS01sby04MlJzTWlXaWRiWFljNjVzOVNqUW5wdVZadUJfTko5cjlkUFFSUlFYNzZ2eHNZMHdNUEtfRDdoX2psS0FDNExpaDhkOXN3T1lzV1pFQUFsQV9xQ1pmSnBV?oc=5\nBTC 当时 67,200",
+   "email": false,
+   "subject": "[Google新闻·比特币] US PPI Hits 6.5% as Bitcoin and Ether Edge Higher - The Defiant"
+  },
+  {
+   "time": "2026-11-14T07:23:00.906075+00:00",
+   "time_local": "11-14 16:23",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做多六维 2/6",
+   "body": "刚满足「底部长下影+十字星」。现在满足的是：RSI6触及30、底部长下影+十字星。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做多六维 2/6"
+  },
+  {
+   "time": "2026-11-14T07:23:00.905972+00:00",
+   "time_local": "11-14 16:23",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做多六维 2/6",
+   "body": "刚满足「RSI6触及30」。现在满足的是：RSI6触及30、底部长下影+十字星。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做多六维 2/6"
+  },
+  {
+   "time": "2026-11-14T07:23:00.905765+00:00",
+   "time_local": "11-14 16:23",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做空六维 1/6",
+   "body": "刚满足「MA7上穿后拐头准备下穿」。现在满足的是：MA7上穿后拐头准备下穿。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做空六维 1/6"
+  },
+  {
+   "time": "2026-11-14T07:21:55.423974+00:00",
+   "time_local": "11-14 16:21",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Crypto ETF Outflows Today: BTC, XRP, SOL Bleed as ETH Turns Green - Coin Gabbar",
+   "body": "直接相关 利空 · 来源：Coin Gabbar · 发布 11-14 16:21\nCrypto ETF Outflows Today: BTC, XRP, SOL Bleed as ETH Turns Green - Coin Gabbar\n\nhttps://news.google.com/rss/articles/CBMiggFBVV95cUxOemhsTjA4SnYwSU9jbHhoejEzb0dGZzNsVFBMYVJIZEwtRFpzbEJkSGw2Ym56U1lRdXNWLXRITnUwMTNyR0pydWp5TUotMEYzWFJZS1h6UlhacVpaX2RUUXpUSlBSeURmZ2JhUmkwMkI4VWQxV1htd0lBVFFxY1NOWTdR?oc=5\nBTC 当时 67,118",
+   "email": false,
+   "subject": "[Google新闻·比特币] Crypto ETF Outflows Today: BTC, XRP, SOL Bleed as ETH Turns Green - Coin Gabbar"
+  },
+  {
+   "time": "2026-11-14T07:21:55.418425+00:00",
+   "time_local": "11-14 16:21",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] US Regulators Advance Crypto Trust Charters As Senate Review Ramps Up - Menafn",
+   "body": "直接相关 中性 · 来源：Menafn · 发布 11-14 16:21\nUS Regulators Advance Crypto Trust Charters As Senate Review Ramps Up - Menafn\n\nhttps://news.google.com/rss/articles/CBMioAFBVV95cUxQNnhkMmEzMW03cHlJc2tyVERMbnE4TVZvd2NDcXc2bUNld3ZkejIxbTZEZ0F5TFI3NHJTNzJFVmZUS2ZaR1RQVW5LdmdKNHkxYnBvaHlUQ1RaZ094S1ZBOXIxVWNKdnMzazRhNktDTWkzeXN1ck93R3VwTHI1c0NfVnAtNkxLUzZUSEtoVXN1em1YTmwzS3B2UVQxQnpxd0lo?oc=5\nBTC 当时 67,118",
+   "email": false,
+   "subject": "[Google新闻·比特币] US Regulators Advance Crypto Trust Charters As Senate Review Ramps Up - Menafn"
+  },
+  {
+   "time": "2026-11-14T07:21:55.413419+00:00",
+   "time_local": "11-14 16:21",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Bitcoin (BTC) ETFs Lose $2.35 Billion in Two Weeks as IBIT Outflows Hit 11 Sessions - www.",
+   "body": "直接相关 利空 · 来源：www.tokenpost.com · 发布 11-14 16:21\nBitcoin (BTC) ETFs Lose $2.35 Billion in Two Weeks as IBIT Outflows Hit 11 Sessions - www.tokenpost.com\n\nhttps://news.google.com/rss/articles/CBMiWkFVX3lxTE9PbkRHRWRIdHFscjBIajVvWUdfeFZTQUxqSjM2QlphOVRzUjFjR0hObFAxV3BzU2d1VWtSdjZWTWxEWWhaSDh3YkRSeVBqZEZPdjN3VTU3Vk1BQQ?oc=5\nBTC 当时 67,118",
+   "email": false,
+   "subject": "[Google新闻·比特币] Bitcoin (BTC) ETFs Lose $2.35 Billion in Two Weeks as IBIT Outflows Hit 11 Sessions - www."
+  },
+  {
+   "time": "2026-11-14T07:21:55.411276+00:00",
+   "time_local": "11-14 16:21",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Bitcoin trades near $67K; key liquidation levels at $65K and $69K signal potential market ",
+   "body": "直接相关 利空 · 来源：Pluang · 发布 11-14 16:21\nBitcoin trades near $67K; key liquidation levels at $65K and $69K signal potential market moves. - Pluang\n\nhttps://news.google.com/rss/articles/CBMijAFBVV95cUxPZUV0a2ZwdEhpS1NCNmx0YmRLcllERlV0cTFOcEpWSW83cGZ5TGpTNGQtMDhnaDVENFF3QjBuQ3dyczQzbHV6RGlWdVlGLXZHaDE3cFk2a3R6NW1NSWYtS0hBRDFuak04Wm1QUmYtWklTQlBwZW13YkpTSHVmWmZFUXNhdlpyMkhkTVRBdg?oc=5\nBTC 当时 67,118",
+   "email": false,
+   "subject": "[Google新闻·比特币] Bitcoin trades near $67K; key liquidation levels at $65K and $69K signal potential market "
+  },
+  {
+   "time": "2026-11-14T07:21:55.409469+00:00",
+   "time_local": "11-14 16:21",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Bitcoin ETFs saw $185M outflows led by BlackRoc... - Pluang",
+   "body": "直接相关 利空 · 来源：Pluang · 发布 11-14 16:21\nBitcoin ETFs saw $185M outflows led by BlackRoc... - Pluang\n\nhttps://news.google.com/rss/articles/CBMiowFBVV95cUxQY0sxY3o3dTNuVko2MnBqakIxSjBqLTA0dzZHVXFLOUhwemRncHA0QmF2VjlFdFZIRFdzWTF0RmxGS2xyM1FGRl9UR2ZyRkExOURZTGhNX3RMS0RGQ0VEbXJscEhvRXVsUzdocWx2aHNTVlRYNS01bVJUZ2FaLUZBVmJacF9yaXJpX0FNYWdjbTZPbTAxaTRmTmJibzM1ano3aE9z?oc=5\nBTC 当时 67,118",
+   "email": false,
+   "subject": "[Google新闻·比特币] Bitcoin ETFs saw $185M outflows led by BlackRoc... - Pluang"
+  },
+  {
+   "time": "2026-11-14T07:21:55.406524+00:00",
+   "time_local": "11-14 16:21",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Bitcoin drops below $70K amid $1.47B liquidatio... - Pluang",
+   "body": "直接相关 利空 · 来源：Pluang · 发布 11-14 16:21\nBitcoin drops below $70K amid $1.47B liquidatio... - Pluang\n\nhttps://news.google.com/rss/articles/CBMirAFBVV95cUxQZHNRc1c5VWpHM1V4ZW1Db21ZQWt4RWZYVlJmMm5qWkotbVE0RTdIQzVEMnVQQVRuNmRaWEtUQXJ0TDR0VXNXemRDOC1Wc0htTjlDRHhBMWJ3OC1SOUxOcU5nQk9Ma3B0ay1nLVJNTHB1blgxNGFoZlNLTDVaYnJlOEM5MVA4end3LXltczJKUjZLd0FKTlBWay1heUFHRm1rUk41STJkUVZ2WVYy?oc=5\nBTC 当时 67,118",
+   "email": false,
+   "subject": "[Google新闻·比特币] Bitcoin drops below $70K amid $1.47B liquidatio... - Pluang"
+  },
+  {
+   "time": "2026-11-14T07:21:55.405591+00:00",
+   "time_local": "11-14 16:21",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] U.S. Bitcoin ETFs see $1.07B outflows in a week, extending two-week total to $2.35B amid B",
+   "body": "直接相关 利空 · 来源：Pluang · 发布 11-14 16:21\nU.S. Bitcoin ETFs see $1.07B outflows in a week, extending two-week total to $2.35B amid Bitcoin price drop. - Pluang\n\nhttps://news.google.com/rss/articles/CBMirgFBVV95cUxQTW0yYkZxX2Z5QXl0N3JVSXAwSkxTM2w1bVAzTEl1c216cW12SU9naENLdU1ad0xBb1I4RXYyOFZXcEEtVXRJUDNSdmRGaWcycTVZT1ZBcmRDM0dDaWNuajg5S1VIbE5LRW5NcGJWeHNKVzFldGE1bDBsUkFfN296WUF4TEVsa2xndnU3Y3h0Q1AtV3k5Q0xqRlR6X29seUFPUVhwUVgzZDZXTTIxLXc?oc=5\nBTC 当时 67,118",
+   "email": false,
+   "subject": "[Google新闻·比特币] U.S. Bitcoin ETFs see $1.07B outflows in a week, extending two-week total to $2.35B amid B"
+  },
+  {
+   "time": "2026-11-14T07:21:55.402020+00:00",
+   "time_local": "11-14 16:21",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Spot Ethereum ETFs Turn to Net Inflows With $2.3 Million - bloomingbit",
+   "body": "直接相关 利多 · 来源：bloomingbit · 发布 11-14 16:21\nSpot Ethereum ETFs Turn to Net Inflows With $2.3 Million - bloomingbit\n\nhttps://news.google.com/rss/articles/CBMiVEFVX3lxTE9RMXZSTTl5V2hnUGxYdnNOcklmVHFpYnRmbDhGUFdvb3hYdWRrTHlqa1NheGxPV2RhUGthTkM4UTBZSVpHNy1MM0ZVZjVTZlctbmQ2Tg?oc=5\nBTC 当时 67,118",
+   "email": false,
+   "subject": "[Google新闻·比特币] Spot Ethereum ETFs Turn to Net Inflows With $2.3 Million - bloomingbit"
+  },
+  {
+   "time": "2026-11-14T07:21:55.400387+00:00",
+   "time_local": "11-14 16:21",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Spot Bitcoin ETFs See $185.4 Million in Net Outflows for Seventh Straight Session - bloomi",
+   "body": "直接相关 利空 · 来源：bloomingbit · 发布 11-14 16:21\nSpot Bitcoin ETFs See $185.4 Million in Net Outflows for Seventh Straight Session - bloomingbit\n\nhttps://news.google.com/rss/articles/CBMiVEFVX3lxTE5wMkZDV2pkaHd4RGhMQlVNZzhMOUpCTnpIekU5SWQwUHRMYXpDNHRDS2JtMkRfX2JHaUU1dDlTT1lNMndpRnFNYWM5cVFRWGVmdUdaRw?oc=5\nBTC 当时 67,118",
+   "email": false,
+   "subject": "[Google新闻·比特币] Spot Bitcoin ETFs See $185.4 Million in Net Outflows for Seventh Straight Session - bloomi"
+  },
+  {
+   "time": "2026-11-14T07:21:55.395920+00:00",
+   "time_local": "11-14 16:21",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] BREAKING: $250 million in crypto positions liquidated in - KuCoin",
+   "body": "直接相关 利空 · 来源：KuCoin · 发布 11-14 16:21\nBREAKING: $250 million in crypto positions liquidated in - KuCoin\n\nhttps://news.google.com/rss/articles/CBMickFVX3lxTFB0OV9IX1VmcXlUaEQzaWY3T25BVm52cGxZU2ZIVUNFUWFuZmpVT3p1ejRHSFNTWEhBelV0eW9OaHFjXzlvNFAzQlZVVG9BUVlQV2RacWtSX1FQcEV5Yi02OXhTVGZvUzZaTEF0YXJoWjZnQQ?oc=5\nBTC 当时 67,118",
+   "email": false,
+   "subject": "[Google新闻·比特币] BREAKING: $250 million in crypto positions liquidated in - KuCoin"
+  },
+  {
+   "time": "2026-11-14T07:15:00.652358+00:00",
+   "time_local": "11-14 16:15",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 2/6",
+   "body": "刚满足「近6根收盘都在MA7上」。现在满足的是：近6根收盘都在MA7上、MACD正柱比上一根短。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 2/6"
+  },
+  {
+   "time": "2026-11-14T07:11:54.678568+00:00",
+   "time_local": "11-14 16:11",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·地缘] Bitcoin Holds Above $65,000 As Stocks Fall And Oil Prices Rise - Baystreet.ca",
+   "body": "直接相关 中性 · 来源：Baystreet.ca · 发布 11-14 16:11\nBitcoin Holds Above $65,000 As Stocks Fall And Oil Prices Rise - Baystreet.ca\n\nhttps://news.google.com/rss/articles/CBMidEFVX3lxTE0wZERnS3pGMy1HLXQwRkFOaF9wT19XTGZfbE4yMFo5MGduUEE3LWpUUFcyc0dOSWZSaElDTGQ0X2tCb1NxRThEZ0dCUUNhXzlHcEpJbTJoUl9KOF9yWXZHNmVMeW1fMEZ1RE1OQ1ctUXJIeUI40gF0QVVfeXFMTTBkRGdLekYzLUctdDBGQU5oX3BPX1dMZl9sTjIwWjkwZ25QQTctalRQVzJzR05JZlJoSUNMZDRfa0JvU3FFOERnR0JRQ2FfOUdwSkltMmhSX0o4X3JZdkc2ZUx5bV8wRnVETU5DVy1Rckh5Qjg?oc=5\nBTC 当时 67,381",
+   "email": false,
+   "subject": "[Google新闻·地缘] Bitcoin Holds Above $65,000 As Stocks Fall And Oil Prices Rise - Baystreet.ca"
+  },
+  {
+   "time": "2026-11-14T07:07:00.747465+00:00",
+   "time_local": "11-14 16:07",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 2/6",
+   "body": "刚满足「RSI6>70」。现在满足的是：RSI6>70、MACD正柱比上一根短。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 2/6"
+  },
+  {
+   "time": "2026-11-14T07:07:00.747344+00:00",
+   "time_local": "11-14 16:07",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做空六维 2/6",
+   "body": "刚满足「顶部长上影+十字星」。现在满足的是：RSI6触及70、顶部长上影+十字星。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做空六维 2/6"
+  },
+  {
+   "time": "2026-11-14T07:07:00.747097+00:00",
+   "time_local": "11-14 16:07",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做空六维 2/6",
+   "body": "刚满足「RSI6触及70」。现在满足的是：RSI6触及70、顶部长上影+十字星。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做空六维 2/6"
+  },
+  {
+   "time": "2026-11-14T06:56:04.447780+00:00",
+   "time_local": "11-14 15:56",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 3/6",
+   "body": "刚满足「MACD正柱比上一根短」。现在满足的是：RSI6>70、近3根量连续递减、MACD正柱比上一根短。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 3/6"
+  },
+  {
+   "time": "2026-11-14T06:56:04.447662+00:00",
+   "time_local": "11-14 15:56",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 3/6",
+   "body": "刚满足「近3根量连续递减」。现在满足的是：RSI6>70、近3根量连续递减、MACD正柱比上一根短。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 3/6"
+  },
+  {
+   "time": "2026-11-14T06:56:04.447406+00:00",
+   "time_local": "11-14 15:56",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做空六维 2/6",
+   "body": "刚满足「MACD正柱见顶衰减」。现在满足的是：RSI6触及70、MACD正柱见顶衰减。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做空六维 2/6"
+  }
+ ],
+ "news": [
+  {
+   "time": "11-14 16:46",
+   "source": "Google新闻·地缘",
+   "title": "Adarsh Housing Society Scam – How a Housing Project Meant for Kargil War Heroes Became a Major Corruption Controversy - oneworldnews.com",
+   "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5MeW9ka2VwbXVfNnd0MmlvRHVyTFlCRDZ3SWQwOVZQUDF5a1RCcDNCMmNnLTdBZ3lWRTd0LXgzWWRWYmRGVk4ycDItRkpWZFQ1TXlHMlR2SE42R3YxRFJ3cDIwTWNpZHdUSDZzek5salJreE1CUFh2cnRR?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:46",
+   "source": "Google新闻·地缘",
+   "title": "Londoners Urge UK to Impose Sanctions on Israel over Gaza Genocide - خبرگزاری بین المللی قرآن",
+   "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQMVhvVE1EdjB3Q1FXYnV1cG5vV1FQQjgzR3JxNVJhZEhjdjh4OWNJWk1KQ3RVMmw0ZktzZHczenRTdVl2MXM2blh4cXd6bmhYZnNoR2liRm5KRjdSbHhETXdvT0MyYUM3aGd4dVRNVTRzZDB3cTlsbHpObTcxZXFUdHFMMnpCX0JMdUYxZjZkVmlHLTNKTm1vNDVPUUNlbFk?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:46",
+   "source": "Google新闻·地缘",
+   "title": "Falling crude oil prices drag global bunker prices lower amid mixed regional trends - BigMint",
+   "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNcmthMk1mRDhPdGhIMUROV1M4WXJiOEpiODBfQW1vSmtwQVl5WXhmMl9DOWRSV1N6TnJscW5YbUh2cWxMQnBNLTZSeGJGOW03MDU5N055UGh0YVd3UzgyX0hERV9sNTAtVldHNUU4QkpRX0hMNi03dnJRN3liQURxTG9BYi05MVlWSFNzc0kzMEFURGxyNldab2ZRbDR4ckN5UWxDdmo5OV94ald2TUYzYWRQSzZpX01XRFlqQURrdERvbS1zenBmMg?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:46",
+   "source": "Google新闻·地缘",
+   "title": "Turkey's president calls the war in Gaza an 'ecocide' at the UN climate summit - Mankato Free Press",
+   "link": "https://news.google.com/rss/articles/CBMikAJBVV95cUxPZ1ZodVUzbWJud2Ftc0pnUkUyZ09hYWNYdzJDQ3B4RjdBWEhYeFN5dE9vUnhQSlc0QzJkei1ERTh2ZVFBalNkOHVUUmc2UGZfSFVFaU9Wa3kyTzZGNUtDUkZSRDFqZl9QRmVid3hUYy1udXMtWUFkTzBpV1ZMdHQyZXJkZC1nY1l6Wk1mcFhkeWpMMmZZN2ZLckJiZXR3X1Y2eTJsQ0ZUX25XRzZXS2ZsZjhSdmVreHZITE5CSF8tek9aYUx4b2FYZjZoS3lKby1VYUZrcHNaVDJxb3NfN0tGd1hLY19HNkdnVGVPXzdGUkV1NThtdHBHNElTSldldkNwLUhCM3ZMdC1HZmlaU1VMaQ?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:46",
+   "source": "Google新闻·地缘",
+   "title": "Ukraine sees growth in Protestantism as war rumbles on - www.christiantoday.com",
+   "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQQXNfY1hPU2huVkRtNTNGdDVpZjlCQ1d2bTJQTW9hdFdiVzA0S3pWSjNlMzBwTXVMNmFBdVQtZF9xU2xOZHM1RTNGOHYyN2ZxNEtlTVo0WEVGaEQwcHRBVlFfRzdBeFZHbFhITWFxSlNTcFlvZmpDajFFdXluTWM0MC1IU3dVVmYyVEpuVHd2VUhWQmdt?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:46",
+   "source": "Google新闻·地缘",
+   "title": "How war with US is reshaping nuclear doctrine of post-Khamenei Iran - Al-Monitor",
+   "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNYk52VWEwcmJ0VGU0ZGJfWEZaUHFodGo3RjFYclpUR1JPWHRGcFE3SHY2MWFkT3ZpLUJ1V292aFkwN2xOdmo3MDQxRDRKYnVoVFBFakR5T3JhbTd0eUlzTU5NRXpfLVhlZFY5NVdtQkdJRGM3RFJodG5jN1cySHk4VUNWY1dTUFhfbnBsemRScDZITlBDN2tUN2hJOTZHVENsRlVB?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:42",
+   "source": "Google新闻·地缘",
+   "title": "Netanyahu Presses Trump to Resume Iran War as Mossad Chief Holds Talks in Washington - Dainik Jagran MP CG",
+   "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNR0toWVpybzBuOHNUOEQ1QzdLcUxtVWlVOEVRTEExdHNmOFIxSWlmc1Uzem0wanYtbFg4bXVCV0h5LVRyX3R3azRqT0UzYnNyM05FckRQRHFKcFJqXzFDYl9EcDlUeXdqSVN3OTg2RzJRMEtuRU9vRndpM3h2Q0RkUGx5ZlhJc0FURzN5a2Y4b3NfMmMtaW1aTE50dTNZVXBIN2hEbXpRY3FkVmNwQ0ZPT083RzE5Ui05R1JEcFJybmo?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:42",
+   "source": "Google新闻·地缘",
+   "title": "Talk peace, fund the war? EU pledges more support for Ukraine while preparing new Russia sanctions | Videos - Hindustan Times",
+   "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxNSzlZM1Z4SmpHd1JhQ3JpMWNJMmRmOU4wRGdXeWJwWGVxRVlmcm45TnhrdmoxamtYRER6NVdDUVZrLW5TZjNqN3NsNVRtWXBNUXNqdlNDYXRoY2VxOVhFRWM2QVlSWldOcTFPaldXV3VGa19sQTVwSkt6WGdXMUYyNWYzTzBRdHlEd19aRmwzME9UWmprSmxhXzZOUmdaZXBVRDN2MVFrZU45RlRoaUpraHA2SmFZeDk2MTJyanZGa3NaZDJYWHhURnhEM1BTQlNsck1MY2xVV3ZSWkIzbG9MRnVicmw0ZlZ5Z1pn0gHwAUFVX3lxTE8yUTB1QmRjd2tsV0hkWEpDRmkzU0I1R0VPTVNLNnRVT3FfWlhqWnoxTTNLRDRaZ1pET0RmU2RBa0dpNFNCTHhXa2Q2aFdjNE9DeHNWMU9wSzhzNTlVSVV2R19NR2lxOGtSV3BsaFlDS012VUNVQk9XYmY2UjI4Y2F1RDBWNG1nZ0ZJNExIUXFteTBKOTVHZW9veTREcDFNallVdjhVYm5yUEhfaGpYZFhOR242d1BuZ3ducWpvMG1KWkFIaHJ4M0pwU2kwbjEtMlBHbTV6ODNVTnhBSkxNWlE4NVFmQ3BIcks2b3dWNk5wMw?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:42",
+   "source": "Google新闻·地缘",
+   "title": "Trump does not want to resume war with Iran 'for now': Report - A News",
+   "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNQUZTRjkycDd6YnBySU1uZjRUWHU4Z2stcnFIb2pQWjFlWGUyZ0ZKdUp4ZE5DRzJNNHJDOGdvTWNoZzZhYlQxX3F0NFlTNUw4ZXJFM3N6NllJalowTkNNbUtBSjBTc1gxS0pEZ3dEcWw1VU1OOW9CZjlBRnFXMllvMHdJcVFLS0o0Uy1fMkxBcHl3ZUUyZDZXS2VCUkNrYTAydkF3YzJ30gGrAUFVX3lxTFB1UjhiOTRZTUpHd0Vzc3l0cFJNdlVvSW1pQTczcnVOOU5LR1BLSk41dmh3Yl9wQnRJLUtra1BuX1paWUV6dzN2NGYwT01NSkUtX3RQSWhsWGNrTThRYTVpTlM4cHVHSGdiV0E3QmpRTkN5dmZTX01iTWd4aWZiV1F3M1lGcmYxM2JNWmRCVlRrcnBVVkpLQlBINXUwemNObEZ2c0xyeHBOS1FKTQ?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:42",
+   "source": "Google新闻·宏观",
+   "title": "US Fintech Weekly: Coinbase Secures Federal Trust Charter, While Hot CPI Pressures Rate-Sensitive Lenders - Stocktwits",
+   "link": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxQNlBSVlJMVW41TjNKYlA3QXpmUHdZcVZLcXVnVHMxODJhWVZIY3NvSHp0cUpRTkt5enpVSW5oazFDdGNBWUhfNVBwaE9nbTcwS3NxRWpfZklCQUljQ29vYnhxUnhacWNfeHNPZ3JJMm1WdnRZQkozMXlqcVFXQVltZ2dFanZQN2dDdGRYVUZwSnJYVWRzMTRWOUgtTVNDT0l4S29rTDVkamZqU3ltN1FLbEFjYmpqMDdoMnpPcnQtay0tczFaX00wVDNmTVhUU3k4VmNOc29nNHY4eThrZjZlRG8wRVlTY2NuOW9Ua25oakNITjRuWUhFcERUWQ?oc=5",
+   "level": "yellow",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:41",
+   "source": "Google新闻·比特币",
+   "title": "Fake GTA VI download for PC steals Steam logins, crypto wallet data - Neowin",
+   "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNRldnRTQ3cGdQU25weVgzdjQ0OEI1NzlIT2tHOGhaQjF5bWdsX1ltUmRvdVR0SHkzOEY3WFQzcUtlWWxaUHZES1pYU21IRnI4Tnh5enY4UDJSaml5endQMmFKOGJGbVpVSkZia3RlbGZXNF9hT3JDNXlkZ25TY3c4V1c0ZkJpUWt1bFRZSzBYYmQ1NE5seWptRl9MYw?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:41",
+   "source": "Google新闻·比特币",
+   "title": "Strive CEO Says Bitcoin Could ‘Go To A Penny’ And The Company Would Still Survive Because It Has No Debt - Stocktwits",
+   "link": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxPMHl1V2RJRUVaZVZrWExFcmFsYlhiMERRWmt5UEpSdG1iVEU1aVBobmRwZHM2NlVsc2IyRUFBNUd4amJENTVoM09UV1p6a1N1WDdpaElyUE5ZMUpBcXBrQm9ONzBHaE9QTGhUYUhMMDVvakNPY18tVnktdHpYdzRFSTVlQWhtY0JBdFZRS2RXX3V4cGEzNzRHa2dJVWpJQ0VWU296NFRWc3ktMTdBZGR4RUpsVllxVDhXUm55UW5TWU9HdEE2V3p6aXVEWndpb0hPbk95ZmFuQVRUUmhFM3VOODFVRHdING1kY1lOY3ZoS3RmNkx0Q1BSREV3?oc=5",
+   "level": "yellow",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:41",
+   "source": "Google新闻·比特币",
+   "title": "U.S. seizes $1.2 B in Crypto - KXLY.com",
+   "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNLXZEemVuQjZXTnh3ZjVMYS1rMWNJbjE5bWFUOHVKc1lFeVlJcnVXOUJWR3dJWGJaT2JtT21QWGg2NXhSbHJNTkxMY3UyZWNPZ2xhOWswRm5kSWRRNFNXYW1iWUhoSjhZbldzck55aFRXV1ZlWEsyY1BXYjNfcHFOeThBM3VjZ1BiQjgtQWs4bGlzcG9XR1VXai1RRU80Q3F5MUpZ?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:38",
+   "source": "Google新闻·地缘",
+   "title": "Cauvery Water War: DK Shivakumar Says Karnataka Has The Right To Build Mekedatu Dam | News18 - News18",
+   "link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxNcThZWE4tanBCY1NNcXVTcmJpRlZiampzNml5TVhsaDVLUGdUWjR5clgwUElpMXAzLXRjVEtibFBXaVpKNXp1ZGxBaU5YdmVhSV9xWnBaa0lVU2hvRkJCUFZkSmpVR1BfcG03ZUZYQURtMmJ6NGRETkd4c1lidERFNFNONXJWU3l5b3hxRXdIV0VaVmUzMEhFUV85YVlpSHYya2M0OEtlZUZVTEk5N3VuVkVoSW9zRmtQdUhacWlHM3hiTExZQkNNcFJKZkpSTzc3MTRaenk4bHM4Z2_SAdsBQVVfeXFMTXE4WVhOLWpwQmNTTXF1U3JiaUZWYmpqczZpeU1YbGg1S1BnVFo0eXJYMFBJaTFwMy10Y1RLYmxQV2laSjV6dWRsQWlOWHZlYUlfcVpwWmtJVVNob0ZCQlBWZEpqVUdQX3BtN2VGWEFEbTJiejRkRE5HeHNZYnRERTRTTjVyVlN5eW94cUV3SFdFWlZlMzBIRVFfOWFZaUh2MmtjNDhLZWVGVUxJOTd1blZFaElvc0ZrUHVIWnFpRzN4YkxMWUJDTXBSSmZKUk83NzE0Wnp5OGxzOGdv?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:38",
+   "source": "Google新闻·地缘",
+   "title": "ECB declares war on YouTube show, threatens Ashes ban for popular Commentators - Cricket Addictor",
+   "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQOHoyNVp3TXM2elNJZU5iWmpjX1FaM1lEVVAxcWRUaGYzLWlNNkpIZGFfXzU3eTFqNmRHVTRxQ3FEZTBMcFNRd2lrM0doZTVseTBkd3U5bHJKOUFyM3pKdlJSaVNZa2phcUN2WTJ2RjNOM25HSi1XMXViekFZRzdIZFFuQUhlY3hVa1hQVDZjUDZ6Yy0zLWU1Y1hDdmYwaUVPWkdaUk1UeEJBTXBxVlgwQTNJdnlyZC1XSFN5dGZPakRHczBQ?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:38",
+   "source": "Google新闻·地缘",
+   "title": "Iran fired over 7,000 missiles and drones at Gulf nations since war began, GCC chief tells UN - アラブニュース",
+   "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPTEE0Q0E5dkU4VnhMWUVJVk5ldWdTQUpqSUplMHBPZ20zRHVjUVh3d0h3UzVULTltVG9nNnFhcFdDYVctZy1DbHVaZVk4Vmg3V3hhNTIwRGVBOFI5eF84N0g0OERjcnRuMGtXYjktVXczREZjRkQtWHB6M1l1ZmpWd05JM2QwQ2dsblEyQ3lNcWZ3bVJGcFFNT0o0U1kyZFpTNnV0cE1oOUJQV0ROR2x5WnpMR0dDRmlSYk1sdDc3MkpwUXFHZkY2a3F5RUZtN2pJTnZrRA?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:38",
+   "source": "Google新闻·宏观",
+   "title": "US producer price inflation hits highest level in nearly four years, adding pressure on the Fed to raise interest rates. - Vietnam.vn",
+   "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPOVl4cDhQeGV3Umpmam9KdzIxSUR4ck1yQUN1Rmx6MS1SQUkzYzdudzEwTFRXamFLOGRXVG1zcjhsTnNmUVBNbzExaGRLS1NjQTVQMFEyR2ZWbVktNUdOZ21jVUZvQ3RLRW93cS1GWWNNTmw1X0hYVHZSbTI2TXRoMVd3NkN6bmtCaTE2ajlDNTF5R3BfakN0b0l0NERLSi16?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:38",
+   "source": "Google新闻·比特币",
+   "title": "SoFi’s Bank-Issued Stablecoin Launches on Polygon Network - Coinfomania",
+   "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOMm85SFhFWnoyUlJFNjd1aHQyMVhrd2Q1RENTaEdTUjZuSk5sVUhVU3BmdVhtdjR5VkNnYWJRUUUwdnFVVy1UMkxBbC1QQUNQMlFOUE5qSnBlMGxhdEVGLVR1cm5uNHBBb1NfQ1BOd1RKajFWUXZKQmxZMlJmZWEtVEZBMWJpWjNw?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:38",
+   "source": "Google新闻·比特币",
+   "title": "We Asked 3 AIs: Is Bitcoin’s Bull Market Over After a $13K Drop in 10 Days? Here’s What Worried Us - CryptoRank",
+   "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQRUdPUXN5Qkc4T09yR0tyTXF3OWR2UXRKRU12cHhzY0hNZUwwR1VZUWRxUktNckJ6ZklrdG14MGRneFMtdXptanUwcU5tWkNxblFodER5cXVLQ3NqNDJGZVZkUlBrWTdDbm5lUHQxT3Jxdm1POWpKX1QzTUN5S3NMUktNT3BoeGo0aG5aUUR5ZjlPQ080ZG5fRENvdm1EckhucUE1NDRjdlpMSTZhclFYbExjV0dueV94WkxRQmdpSEJZblZjV0hqMnNidw?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:38",
+   "source": "Google新闻·比特币",
+   "title": "Strategy’s Bitcoin Cost Gap Widens to $7.7 Billion - The Defiant",
+   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQWnlKVDdURkVBWjAwcWphQnUxaXVvcHFqRUZ4ZkdKMXRRdHhHa3pnMVdDNnNvYkwyeXFNQTdQUTB2cGk0WFNaMHdhT25LenRra2tUQ1VCaFF1UDJHZlVfS0g3eG9jaElMVGNXbWxhY3JvRXlRdlNRTGlQZWFIVEpaMHJGeGI2VlNuR0d4OQ?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:35",
+   "source": "Google新闻·比特币",
+   "title": "Thailand Launches Crypto-to-Baht Payments for Tourists via PromptPay QR Codes - Thailand Business News",
+   "link": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOX2hOT0lUR29ZVWVORWhna014QVFvLUpFcTZSRUx0WUlrX1loQ2JVV1F0NXlmNFJ3NERYOTlISEVtdjN6Y2tXQ3FhTTR1T2JyNWg3YXU1WWJsVUtvOWlSQW5BVVJ4QjNwVWNLSVdRM0U1SlBuTHNDUVVQa0xnbVVoX2ZHcmRzYS1IRzE4R3ByT2lERnZscWliajNXQ1dia2llTUVKa29xSHhJbkV3b3cxNHpwRlNWUHY5UkFLOE12QlJwdDlaLVBVZ0g4NERqajBJU2xQcmY2Zw?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:34",
+   "source": "Google新闻·中文",
+   "title": "$比特币(BTC.CC)$ 比特币没有任何基本面支撑。全靠收割人们的信仰，而且不像黄金那样有实体形态。纯属自我安慰 - Moomoo",
+   "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQZnpzMThFbUdoWVpyQjEtOGxTSTE4eWo1UEJlT1EtOFdjSXRqUjlGSG9fQW5PVUtYWXRhdDlZcGoxdGszMkJaT0FmQVQxVlZBRFFETVJoZllwSDZIQXBjLUktS1duWkF2N2l2YUhaT1FvU1BsV01OVFVJcjdRYVJKMWdZeFAtZzNCZkM5eVJyaTZXY09IQzVacU8zR1UwcktnUGNPU1VWVEpkVThQRDg4ZVVNcEVGZ0luWTBV?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:34",
+   "source": "Google新闻·中文",
+   "title": "美联储重磅报告：“AI热”正推高资产估值 或对金融系统构成风险 - 中金在线",
+   "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1IYjZmSnRYNjBuNGFRSWlreGRrS0V4UEJmb2ZDZXd4cE1QaDJwbVJOSzBtYmdmNzBNWFpta0dOTENzR3NrRE9HdTF1ZDZ3UWZmbUhQbGlsVGFzbVhhbVVydi10c2RScjNqcmc?oc=5",
+   "level": "yellow",
+   "relevance": "间接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:34",
+   "source": "Google新闻·中文",
+   "title": "美联储发布重磅报告 - 凤凰网财经",
+   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE83eVN1bm1WczNROWtMTFN3a01kX08wTzd2YnYtTk5qME11QTF3T3pEOUZkMUFQYjBwdWt1M0lxZEpLbW81czR4b2V4OWJzbF8w?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:34",
+   "source": "Google新闻·地缘",
+   "title": "Ukraine Expects Largest-Ever Prisoner Exchange with Russia Since War, Involving Over 1,000 from Each Side: Zelenskyy - Republic World",
+   "link": "https://news.google.com/rss/articles/CBMiggJBVV95cUxOcjVaSmw1WHN0OUl6S0E2XzNSQ1F2LTZzRGNsT2RTS2ZhMklVU1NBNmJNMHlMRU1VeERNNGJjZ3FmUWVBdVBKVV9INV94WnhVaEItcjY2TEZkVnNpZ183YTlMVFo2eWlFUnFtOXpqcmxVTENyeGRibThnR2ZBRXF5WWdNQ3EyeTMwbWJPMjV4OVlHLWNmWDUxeU1hMmh4Y1ZlaFNwclBBLWRoWE1JQWNHMk5CenhadFRoNWhYVzR0emJtZGdiNzNOa29VaVJob2ViS25jOG8ybUo0TEh0VEt1UzdUOGoxTkFuQzUyNDdjU08wSXR3MFhtVEp2cHNYemZ5d0HSAYcCQVVfeXFMT0M1alctZ2I1MmdxaWlwbmNWc3QtMTRXTE96MVdtYU9RS0YteXZGWXd1dmY3d0UydWZsS2R5Tmg0cEpzd2w1TUVCY25ubEIxOWphUEtZZDU0UUxRWXVkS3pCaVNZRmljSUhJeVdRRTd1UFpSY3RpVzhBU002M3dwLVNvbWNYUXItTUduT0pXNDZZMFM4SVJYSWd1SHlEbkpfSm53eDdRUWY3a0c5Y3A1b2taZnBQUXNQbEtCRnJHNnA3ZU1TQnlOMFdkWWZqNEhEa2NsREIxMkhmUUVxVkNCUkVwNXdKaE80dUttQ0JmbUU2empoXzNiVFBPRUhHU2w5U0ZwOEpNdW8?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:34",
+   "source": "Google新闻·地缘",
+   "title": "LIONS HANG ON IN DEFENSIVE TUG OF WAR - Your Sports Network",
+   "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTFB0dWJUYVRBMl80Ni1TTWVUQ3h4dm5lNEl2RW5Ea2NCbURSQ004aEJNNWh0a3BnSkh3U0x6M0c3dFFhREZNNUpMTFNiTWNxT05LSU5fcmdCY3pWOFBwVGhpTnowaktVeXlzQWc?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:32",
+   "source": "Google新闻·比特币",
+   "title": "24 Hour Crypto Recap: Here’s What Happened in the Market - Coin Edition",
+   "link": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQeEF2MVZYM3dpcFppQWxqME1JcE5zcWFCYld5MlJoMzZmcWFfY0hrelVKdFZBTWJuVWJkc0xsRXBSZ2w5NWU3ZG5JM0dJUllwR1pTZVcyenpWMXJCZE91czZtMlZTMVFQWGVEQnIwdTJ2a1VSYVFzQkxoUjZzcjFRZ0xPaldvSU5HVUE?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:30",
+   "source": "Google新闻·地缘",
+   "title": "UN Security Council reauthorizes Yemen sanctions - Macau Business",
+   "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOSU5aMkl4eGd4NmVEZUtSNGJOZjVKYXNJZ2ZpcmpVZHBNOHhqUXJxZnJHekFGTmdzRlZEcFZUVGUxUmZsSkRGQ0EtQ3ZYZVc5aVdPdGxZYVd6NG43SUdnR3FXZVhacXh2TERoeThoZXpaM1dCMFVHTjJ6YUhjeHBIOA?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:30",
+   "source": "Google新闻·宏观",
+   "title": "The Weekly Spread: What Shaped US Treasury Yields And The Dollar This Week - Stocktwits",
+   "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNUUtHc25Vd18tRjNZblEwOHpzUmJpTkVuZUMydkk0NnFrN2h3b3V6T25DbFpZcE1TN3Vvd2dzNHZCMEt2QnRFNG9GdDA0R0lZbnBkWDBVWG1LVmhISkNUTHY3c3B4U0Ffb2I1NkVEME90dUh5aUtWWkRFVUNmOF9qelZ0bzEwYkZ2YklBX3NvOGFJNkpNTXJaR0lndmthRjVrdFcybTZiTWpsaWNtZUVBZWhYdkxzSXBrcW9hajdyY3VqV2xLeVZLc203WEhLZkZ0?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:28",
+   "source": "Odaily快讯",
+   "title": "以太坊社区发布「通用证明验证与批量处理」EIP草案",
+   "link": "https://www.odaily.news/zh-CN/newsflash/534508",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:27",
+   "source": "Google新闻·比特币",
+   "title": "Hawkish Fed Repricing Punishes Non-Yielders: Gold and Bitcoin Slide as Dollar Surges to 2026 High - Action Forex",
+   "link": "https://news.google.com/rss/articles/CBMiiAJBVV95cUxQM0szeVJHSUtITEJBd2dtek9yTDlNOHZIX0RyZ0EyaG1EQlF5RVdyR1ZNQ3Ztc05HaTc2dm0wSU1TcHhjNjNtSC1tYy1uNnNQUm9YZnFRVm9vcXpsUFBrOGRuRzl4R3puQThfTm9kajc1ZVRZdDhEazA2OFZPYnBBUUwxTXl1b0VqVlRpSGpWR2pIR0t4NFBRUHZlOTA4TzN6eUJ2a1hfc1k3QmdOT0tkT29rekl5b0NfSEVlV2xkN19QMTFYdnphLVJoWFpjVXBLWld5dmdEd2YyXzJZVU1CdlhlaUFvNlFjMXQxaENONHliM0YtdHF5Ul9NZFBSUE1EZ0hsNE1XYUc?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "利多（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:27",
+   "source": "Google新闻·比特币",
+   "title": "Volunteers fight crypto scams targeting San Diego seniors - Yahoo",
+   "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOVGJ1NEQ2YVFXUXVoNlZRYUF6a3pPNFM5NTNwN3E2N0ZEME9CM04yd0lfaEJrSjl3elR2QnFKY255cFl1X0NBbjhkc0xXXy1ZR0p4alRneWhFVGU2clBXUWtERHV4aFNVekd0WEJRRzdHX0J6Z0lOc1M4VGFZQ01IWnozQ0RoYURoRU1USXNrSml2eU5m?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:27",
+   "source": "Google新闻·比特币",
+   "title": "Bitcoin Falls Below $69,000 as Ether Slides Under $2,000 - The Defiant",
+   "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQZTY1NTlWQjdjRXM2UHNlUVRwdmVfTkE0MjdsRzNlZm1xd0ozby0xREZXTmZ4RzJXUUVqNjRhZW41TnFaX0RBUjgxU24ydS1adEdLNkxBY0Q3bWFINHAzQlNZQkt2Y3hSa2hVNjBHS1JDdmdHYXFjTnk2ZkhSc2N2cEZscjFZdFJHM19scUVjX19VYkk?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:26",
+   "source": "Google新闻·地缘",
+   "title": "1725 Days of russia-Ukraine War – russian Casualties In Ukraine - Defense Express",
+   "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOOWVLUU40NmZGZURvbU5sRklIMVh6dE82WDhpOWR4VGQydnF1V0Q2OWUxZUZpQzc4MFVxS1JRbk5EczZIdzlGRXpJekR6OUdLSko2ZEhMaWtNMWdPMjhvNnJaOWthSTFZZ3J0Mzk2cEMybWpCMVBuR1pGMG1EWG14d2pjTkx3U0VjMUFybFhKbl95X3BrelZUUGJYd1hUWnNhOWlxSjVn?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:26",
+   "source": "Google新闻·宏观",
+   "title": "Dollar nears 19-month high as inflation fuels bets on bigger Fed rate hike next month - The Times of India",
+   "link": "https://news.google.com/rss/articles/CBMiiwJBVV95cUxPY0MtbFlkU0oxUnFOZnJLZVdqYy1vMFlpQ1VTSHFjR1JWRXFlcmZzS2docGtJT1RTVzFKa04tV3ZzeVpfM0FUQ09GM2pTZmx3QzZCSUxHNHVKV29DUWllNkNBbEl6LW81UjhlbW5uSWgzQTVjZXBvbUs1dUlKZEJaWHFRRUVOX3h1SGhJRHdFTXF3MXUxQUpJQ05OUTBoYlJuQk5sVXNqX3R3SjVnZmd1b0NZUEtyYXBCSGF6ZnBQYjRfc1IwbHVwQUNXV3VSdXJDWDIzenJCZ1ZXWW1mUDJ3SS12T2dPMGJwWHZNa2pzd0FqQ3lEVGFsaHA3UVJWUTdWcHlYOE9tdndPRjDSAZACQVVfeXFMUDJfd09sNllpVlNwcmlyenpRcEIxY1Blb2tsd2VzT3cwTU9iUW5KVURFOVRndFBNem1VWllBbHVETGlxVlYxdlNOQjIySmVfbW15eEtBVjkxeUVHVTFiZmxJXzdnV2tGRnhlN3F4MzhrSEwzQ0lMSmRRdVFndEV0SFFBd0ZJR3NHdlVHclMxQW1sV3JqUnV5UjJFaWdtQ1d1YWpVemVnODE3bmp3QnpfRzZkNk56SDBoQnZLTUQzTXFDUUZ3LXJsTC1jTUYwWnpVcktUY1BEVHNDUWRfTm9GaWtJeXRaM3hlb2pLWFdKMlIwdXlEVVI2TF9udU5UN09UQ0ZvX2JFd1UzbXZFakdYSGk?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:24",
+   "source": "Google新闻·比特币",
+   "title": "XRP Price Prediction 2035: Coinbase Shows $1.57, Holders React - Coinpedia",
+   "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOVWFzU2plN2lNdmxtbU0xVHR1QVRHSElxVkNmOFpQZmtvX1lQUDUyUllaWEQ1ODBjd2tnSmNUQ0pFTlZoRWd4TW9lZnBXNkFFQUl1YVBpTnphOTQ2b3VjSWFPeHdOXzJNalVPaklQcE03UkNjUTN4M2F0TTB5WU54THpHeG1Ib1NoZVFHRzJrb0dCdFRYdmpDcGk2SzFSeXVP0gGmAUFVX3lxTFB4ZmRzQ0tuVWwyRWJHSDJ2ZzNKZVU1bUhDTWpUWHlPb2lRcnhycGZ1MWFhNGxCbTVYM3N1bUZSUnV1ZWdkbk4yNy00UnEtUG5Eam14Y05YOXh4YmNGVVNxa0QwTVVHaUFMY1ZlT0FDOEpVLXZNVTE4LUg1ZllrU2VQaTUzR2ZNT0lrR3doUWhfNkpOWVUwTk1lcUlDLVJlMXIxbTZiR3c?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:24",
+   "source": "Google新闻·比特币",
+   "title": "US PPI Hits 6.5% as Bitcoin and Ether Edge Higher - The Defiant",
+   "link": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNYVRDcmVVUWo5TnFqUUVZckJuSjJiTWVaaXNYZzZNWlQ2bDdjYzFjS01sby04MlJzTWlXaWRiWFljNjVzOVNqUW5wdVZadUJfTko5cjlkUFFSUlFYNzZ2eHNZMHdNUEtfRDdoX2psS0FDNExpaDhkOXN3T1lzV1pFQUFsQV9xQ1pmSnBV?oc=5",
+   "level": "yellow",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:21",
+   "source": "Google新闻·地缘",
+   "title": "David Warner’s war is only getting started and he won’t be silenced - The Australian",
+   "link": "https://news.google.com/rss/articles/CBMinwJBVV95cUxNSEhvUVh1bTZ2TERzY0xqSi1kb2Fpdi01OE52NlNsYzVwUGlYMHYtcVhsajhpeV84ZXMycGNmbWd5YWdEaXVidjN3T0Rab2hja2dlNF9tOEVTYnRZRVVOQmlLT2kyVDhmaS1Ia2JHVklRU251RWJxNHV0VmxpTnpWMnhZTDh5TmF1Q1dSTjVrOEdyaEd3d1U1enpwSnNsQy1rNV92YnhrUHFSYnJVVVhwd1YwLWI4MXRKeHNfc0JOTnN0emEzSTlxaFFwYjlWN3d6U1gyLTVNWVd0eEdBdEUtVDBBdGo4RkpjYlhMb1BDN0dnLUdjdnJwOXpXYVA4Z0lnSzcxcmFnNGF6RWd6WDFNNUdQU09Belk2UmNncV9DOA?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:21",
+   "source": "Google新闻·比特币",
+   "title": "Bitcoin Price in India Slips to ₹63 Lakh as AKE Surges 370% - Coin Gabbar",
+   "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQUUNCY3FndEkyb3JMUmhXRnh1ZWlKZ0hfemhBYno4a1FzaW9RTTJucV92VEJ4MGJrclc4NG5EeWNaWk9XTWJ1TDRxN1lhc25xRmFkd1VwVGNpM0x3NFgwbjBtXzMyUHE5VHZvck1kd1lacG5RcFREY29hbmtHLS1IQw?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "利多（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-14 16:21",
+   "source": "Google新闻·比特币",
+   "title": "Crypto ETF Outflows Today: BTC, XRP, SOL Bleed as ETH Turns Green - Coin Gabbar",
+   "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOemhsTjA4SnYwSU9jbHhoejEzb0dGZzNsVFBMYVJIZEwtRFpzbEJkSGw2Ym56U1lRdXNWLXRITnUwMTNyR0pydWp5TUotMEYzWFJZS1h6UlhacVpaX2RUUXpUSlBSeURmZ2JhUmkwMkI4VWQxV1htd0lBVFFxY1NOWTdR?oc=5",
+   "level": "yellow",
+   "relevance": "直接",
+   "lean": "利空",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  }
+ ]
+}
