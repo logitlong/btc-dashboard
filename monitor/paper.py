@@ -42,7 +42,8 @@ def cloud_calls():
             doc = json.loads(base64.b64decode(json.load(r)["content"]).decode("utf-8"))
     except Exception:
         return []
-    return [c for c in doc.get("calls", []) if c.get("who") not in (MODEL_WHO, "张主任多周期信号") and c.get("ref")]   # 程序记的单自己管卖出
+    # 程序记的单自己管卖出；实盘里非 BTC 的单没有行情可盯（实盘 BTC 单照常提醒止损止盈）
+    return [c for c in doc.get("calls", []) if c.get("who") not in (MODEL_WHO, "张主任多周期信号") and c.get("ref") and (c.get("sym") or "BTCUSDT") == "BTCUSDT"]
 
 
 def mac_notify(title, body):

@@ -121,7 +121,7 @@ const UI = (() => {
 
   // ---------- 第一次在这台设备打开：先选是谁（不再默认陈总，免得把别人的单记到陈总名下） ----------
   if (!ls.get("btc_account")) {
-    const m = modal(`<h3>这台设备是谁在用？</h3><p>喊单、交易日志、模拟盘按人分开存。选错了会把单记到别人名下，之后可以在右上角「设置」里切换。</p>
+    const m = modal(`<h3>这台设备是谁在用？</h3><p>交易记录和模拟盘按人分开存。选错了会把单记到别人名下，之后可以在右上角「设置」里切换。</p>
       <div class="uibig">${Object.entries(NAMES).map(([k, n]) => `<button type="button" data-a="${k}">${n}</button>`).join("")}</div>`);
     m.addEventListener("click", e => { const b = e.target.closest("[data-a]"); if (!b) return; ls.set("btc_account", b.dataset.a); markSwitched(b.dataset.a); location.reload(); });
   }

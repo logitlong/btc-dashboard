@@ -283,6 +283,19 @@ label[hidden]{display:none}
 #cform fieldset{margin:0;min-width:0;border:1px solid var(--line);border-radius:8px;padding:6px 10px 10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start}
 #cform legend{padding:0 4px;font-size:12px;color:var(--fg2)}
 #cform .full{grid-column:1/-1}
+#cform fieldset[hidden]{display:none}
+#realBox{grid-column:1/-1;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));border-color:var(--accent)}
+.chead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.chead .csrc{min-width:200px}
+.chead .csrc button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.chead .note{margin:0}
+.rtabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+.rtabs button{font:inherit;font-size:14px;padding:8px 14px;border:0;border-bottom:2px solid transparent;background:none;color:var(--fg2);cursor:pointer;white-space:nowrap}
+.rtabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent);font-weight:600}
+.rpanel{display:flex;flex-direction:column;gap:10px}
+.rpanel[hidden]{display:none}
+.rset{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.rnote summary{cursor:pointer;color:var(--muted);font-size:13px}
 #cform fieldset:nth-child(3){grid-template-columns:repeat(2,minmax(0,1fr))}
 #cform fieldset:nth-child(3) label:last-child{grid-column:1/-1}
 .centry{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--chip)}
@@ -769,7 +782,7 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
     <div class="tablewrap"><table class="ma" id="volTbl"></table></div>
     <div class="verdict" id="volSize"></div>
     <div class="verdict badv" id="volFade"></div>
-    <p class="note">「逆向」= 进场后、不管最后对不对，价格先朝反方向走的最远距离。2021–2026 年的数据里，这个距离和「过去 24 小时 1 小时 K 线平均振幅」（ATR）成正比：无论行情平静还是剧烈，换算成 ATR 的倍数几乎一样。所以止损和仓位应该跟着 ATR 变，而不是沿用上周的固定点数。建议止损取所选持有时间的 P80 逆向（历史样本里约八成的最大逆向没超过这个距离；这是过去的统计，不代表这一单有八成概率不被扫），仓位 = 余额 × 每笔最多亏 % ÷ 止损幅度，余额和比例在「交易日志与风控」里设置。</p>
+    <p class="note">「逆向」= 进场后、不管最后对不对，价格先朝反方向走的最远距离。2021–2026 年的数据里，这个距离和「过去 24 小时 1 小时 K 线平均振幅」（ATR）成正比：无论行情平静还是剧烈，换算成 ATR 的倍数几乎一样。所以止损和仓位应该跟着 ATR 变，而不是沿用上周的固定点数。建议止损取所选持有时间的 P80 逆向（历史样本里约八成的最大逆向没超过这个距离；这是过去的统计，不代表这一单有八成概率不被扫），仓位 = 余额 × 每笔最多亏 % ÷ 止损幅度，余额和比例在「交易记录 · 风控与归因」里设置。</p>
   </section>
 
   <section data-grp="4" id="rulerCard" class="card span">
@@ -821,27 +834,26 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
   </section>
 
   <section data-grp="5" class="card span" id="callsCard">
-    <h2>喊单记录与验证 <small>到期自动按币安行情核对 · 连接云端后存在私有 GitHub 仓库</small></h2>
+    <h2>交易记录 <small>喊单、我的实盘、模型、模拟盘都记在这一份 · 喊单到期自动核对 · 连接云端后存在私有 GitHub 仓库</small></h2>
     <div class="jbtns"><button type="button" class="btn cloud-on">连接云端</button><button type="button" class="btn cloud-now cloud-off">立即同步</button><button type="button" class="btn cloud-off">断开云端</button><span class="cloud-st note"></span></div>
     <details class="slogbox"><summary>同步记录（作战面板和模拟盘）</summary><div class="sync-log"></div></details>
-    <form class="sum-in" onsubmit="return false">
-      <label for="cDefAmt">没写金额时每单按投入（U）<input id="cDefAmt" inputmode="decimal" value="100"></label>
-      <label for="cDefLev">没写杠杆时按（倍）<input id="cDefLev" inputmode="numeric" value="10"></label>
-    </form>
     <div class="cbar">
       <label for="cFilter">统计范围<select id="cFilter"><option value="">全部人（统计不含模拟盘）</option></select></label>
       <div class="jbtns"><button type="button" class="btn" id="cExport">导出</button><label class="btn" for="cImport">导入<input type="file" id="cImport" accept="application/json" hidden></label></div>
     </div>
-    <h3 class="sub-h">方向成绩 <small class="mut">（到时间涨了还是跌了，和有没有成交、赚没赚钱无关）</small></h3>
-    <div class="status" id="cStats"></div>
-    <p class="note">盈亏同时显示未扣手续费和扣手续费后的估算；收益率均为盈亏 U ÷ 投入保证金 U × 100%。手续费沿用开平合计名义仓位的 0.1%，持有中也预估完整开平手续费，未计资金费和滑点。强平时沿用亏光保证金的简化估算。</p>
-    <h3 class="sub-h">执行成绩 <small class="mut">（有没有成交、止盈止损谁先到、扣费后赚亏多少；实际金额和按默认金额模拟的分开算）</small></h3>
-    <div class="status" id="cExec"></div>
-    <div class="verdict" id="cPaper">严格执行成绩读取中…</div>
-    <div class="tablewrap"><table class="ma" id="cHzTbl"></table></div>
-    <div class="verdict" id="cSum">还没有记录。把张主任（或任何人、包括你自己）的喊单原话贴进来，识别后确认保存，到期面板会自动核对。</div>
+    <div class="rtabs" role="tablist" aria-label="交易记录">
+      <button type="button" role="tab" data-rtab="list" aria-selected="true">记录</button>
+      <button type="button" role="tab" data-rtab="perf" aria-selected="false">成绩</button>
+      <button type="button" role="tab" data-rtab="risk" aria-selected="false">风控与归因</button>
+    </div>
+    <div class="rpanel" data-rpanel="list">
     <div class="centry">
-      <h3>记一条喊单</h3>
+      <div class="chead"><h3>记一笔</h3>
+        <div class="seg csrc" role="group" aria-label="记的是什么">
+          <button type="button" id="src-call" data-src="call" aria-pressed="true">喊单</button>
+          <button type="button" id="src-real" data-src="real" aria-pressed="false">我的实盘</button>
+        </div>
+        <span class="note" id="cSrcHint">别人或自己的判断，到期自动按行情核对对错</span></div>
       <div class="cpaste">
         <textarea id="cText" aria-label="粘贴喊单原话" placeholder="粘贴喊单原话，例如：现价空 100U 20倍，止损 84800，目标 83000，今晚看 · 或：30 分钟内回踩 82500 再多，到 83300 卖"></textarea>
         <button type="button" class="btn" id="cParse">识别填入</button>
@@ -849,19 +861,19 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
       <p class="note" id="cParseMsg" aria-live="polite"></p>
       <form id="cform" onsubmit="return false">
         <fieldset>
-          <legend>谁 · 什么时候 · 方向</legend>
-          <label for="cWho">谁喊的<input id="cWho" list="cWhoList" value="张主任"><datalist id="cWhoList"></datalist></label>
+          <legend id="cWhoLg">谁 · 什么时候 · 方向</legend>
+          <label for="cWho" id="cWhoL">谁喊的<input id="cWho" list="cWhoList" value="张主任"><datalist id="cWhoList"></datalist></label>
           <label>方向
             <div class="seg" role="group" aria-label="喊单方向">
               <button type="button" class="long" id="c-long" aria-pressed="false">看多</button>
               <button type="button" class="short" id="c-short" aria-pressed="false">看空</button>
             </div>
           </label>
-          <label for="cTime" class="full"><span>喊单时间 · <span class="tzn">东京时间</span></span><input id="cTime" type="datetime-local" step="1"></label>
+          <label for="cTime" class="full"><span><span id="cTimeT">喊单时间</span> · <span class="tzn">东京时间</span></span><input id="cTime" type="datetime-local" step="1"></label>
         </fieldset>
         <fieldset>
           <legend>进场</legend>
-          <label for="cEntry">怎么进<select id="cEntry"><option value="market">现价进</option><option value="limit">到价再进</option></select></label>
+          <label for="cEntry" id="cEntryL">怎么进<select id="cEntry"><option value="market">现价进</option><option value="limit">到价再进</option></select></label>
           <label for="cRef" id="cRefL">进场价<input id="cRef" inputmode="decimal" placeholder="空着 = 市价"></label>
           <label for="cValid" id="cValidL" hidden>几分钟内到价有效<input id="cValid" inputmode="numeric" value="60"></label>
         </fieldset>
@@ -876,6 +888,14 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
           <label for="cAmt">投入 U<input id="cAmt" inputmode="decimal" placeholder="保证金"></label>
           <label for="cLev">杠杆 倍<input id="cLev" inputmode="numeric"></label>
         </fieldset>
+        <fieldset id="realBox" hidden>
+          <legend>实盘计划 · 保存后不能改</legend>
+          <label for="jsym">品种<input id="jsym" value="BTCUSDT"></label>
+          <label for="jreason">依据<select id="jreason"><option>规则 A 信号</option><option>规则 B 信号</option><option>张主任判断</option><option selected>自己判断</option><option>其他</option></select></label>
+          <label for="jwhy" class="full">为什么现在进，而不是继续等<input id="jwhy" placeholder="例如：5 分钟站上 MA7 且 MA7 拐头"></label>
+          <label for="jinval" class="full">什么情况算判断错了<input id="jinval" placeholder="例如：1 小时收盘跌回 82,500 下方"></label>
+          <div class="jbtns full"><button type="button" class="btn sm" id="jsize">按风险算仓位</button><button type="button" class="btn sm" id="jfrom">从持仓推演带入</button></div>
+        </fieldset>
       </form>
       <div class="verdict" id="cPreview" hidden></div>
       <div class="jbtns"><button type="button" class="btn primary" id="cAdd">保存这条喊单</button></div>
@@ -884,47 +904,36 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
     <p class="note">多单在检验反弹假设，空单在检验回落假设，并非已确认止跌或见顶。同方向相邻信号间隔不超过 6 小时且中间没有反向 A 信号，归为同组；这只是固定时间分组，不代表识别出真实行情阶段。原始记录、盈亏和策略均保留。组内信号相关，不能当作独立样本计算置信度。只有假设或执行条件改变才另立策略版本，不能覆盖旧成绩。</p>
     <div class="tablewrap"><table class="jt" id="aGroups"></table></div>
     <div class="tablewrap"><table class="jt ct" id="cTable"></table></div>
-    <p class="note">进场有两种：「现价进」= 喊单那一刻就算买入；「到价再进」= 价格在规定分钟内碰到进场价才算买入（比如「30 分钟内回踩 82500 再多」），没碰到记「未成交」，也可以点「撤单」。止盈价就是「到这个价卖」。原话里说了投入多少 U、几倍杠杆就一起记下，盈亏会同时显示 U；没说就只看百分比。每条持有中的记录都有「卖出」按钮，按现价记一笔卖出，持仓与卖出、云端同步一起更新。时间精确到秒。核对方法：从喊单时间到验证时间，逐根取币安 BTCUSDT 永续 K 线（24 小时内用 1 分钟，3 天内用 5 分钟，更长用 1 小时）。到期价比参考价朝喊单方向走了 0.1% 以上算「对」，反方向 0.1% 以上算「错」，其余算「平」。目标价和止损价按 K 线最高 / 最低判断谁先到，同一根里两个都碰到按先打止损算。上方的对比表不管每条喊单自己的验证周期，统一看进场后 1 小时、4 小时、24 小时的方向，用来判断方向判断在多长时间内最准、止盈该放多远。「中途最大逆向」是到期前价格朝反方向走的最远距离，用来看「方向对了但拿不住」：止损如果比它小，就会在方向兑现之前被扫掉。喊的价位离当时市价超过 0.15% 时当作挂单：价格碰到这个价才算进场，进场前的波动不计，到期都没碰到记「未成交」，不算对错。「模型·此刻结论」是自动记录的：顶部「此刻结论」每出现一次参考信号（规则 A 或 B），就按当时给出的进场价、止损、止盈和持有时间记一条，同一规则同方向 60 分钟内只记一次。浏览器开着时面板自己记；后台监控程序运行时，浏览器关着也会记，打开面板后自动合并。在「统计范围」里选它，就能看到模型自己的成绩。同一个人在上一条还没到期时喊了反方向，上一条标「改口」，照常核对，单独计数。</p>
-  </section>
-
-  <section data-grp="5" class="card span" id="journalCard">
-    <h2>交易日志与风控 <small>连接云端后存在私有 GitHub 仓库，可导出备份</small></h2>
-    <div class="jbtns"><button type="button" class="btn cloud-on">连接云端</button><button type="button" class="btn cloud-now cloud-off">立即同步</button><button type="button" class="btn cloud-off">断开云端</button><span class="cloud-st note"></span></div>
-    <details class="slogbox"><summary>同步记录（作战面板和模拟盘）</summary><div class="sync-log"></div></details>
-    <div class="status" id="risk"></div>
-    <div class="verdict" id="riskMsg"></div>
-    <form id="jform" onsubmit="return false">
-      <label for="jbal">账户余额 (U)<input id="jbal" inputmode="decimal"></label>
-      <label for="jrisk">每笔最多亏 (% 余额)<input id="jrisk" inputmode="decimal" value="2"></label>
-      <label>方向
-        <div class="seg" role="group" aria-label="日志方向">
-          <button type="button" class="long" id="j-long" aria-pressed="true">做多</button>
-          <button type="button" class="short" id="j-short" aria-pressed="false">做空</button>
-        </div>
-      </label>
-      <label for="jentry">进场价<input id="jentry" inputmode="decimal"></label>
-      <label for="jstop">止损价<input id="jstop" inputmode="decimal"></label>
-      <label for="jnotional">名义仓位 (U)<input id="jnotional" inputmode="decimal"></label>
-      <label for="jlev">杠杆<input id="jlev" inputmode="decimal" value="10"></label>
-      <label for="jsym">品种<input id="jsym" value="BTCUSDT"></label>
-      <label for="jreason">依据<select id="jreason"><option>规则 A 信号</option><option>规则 B 信号</option><option>张主任判断</option><option>自己判断</option><option>其他</option></select></label>
-      <label for="jhold">预计拿多久（小时）<input id="jhold" inputmode="decimal" placeholder="例如 4"></label>
-      <label for="jwhy" class="wide">为什么现在进，而不是继续等<input id="jwhy" placeholder="例如：5 分钟站上 MA7 且 MA7 拐头，扳机出现"></label>
-      <label for="jinval" class="wide">什么情况算判断错了（失效条件）<input id="jinval" placeholder="例如：1 小时收盘跌回 82,500 下方"></label>
-      <label for="jnote" class="wide">备注<input id="jnote" placeholder="其他想记的"></label>
-    </form>
-    <p class="note">「记一笔开仓」时会同时保存一份不能修改的开仓计划：进场价、止损、仓位、杠杆、最大计划亏损、预计持有时间、失效条件、为什么现在进，以及当时的行情快照（价格、ATR、波动状态、模型概率、此刻结论、下一个事件）。之后加减仓、改止损、撤止损、改持有时间，都通过表格里的按钮操作，逐条追加到变更记录里，平仓后自动做亏损归因。</p>
-    <div class="jbtns">
-      <button type="button" class="btn" id="jsize">按风险算仓位</button>
-      <button type="button" class="btn" id="jfrom">从持仓推演带入</button>
-      <button type="button" class="btn primary" id="jadd">记一笔开仓</button>
-      <button type="button" class="btn" id="jexport">导出日志</button>
-      <label class="btn" for="jimport">导入日志<input type="file" id="jimport" accept="application/json" hidden></label>
     </div>
-    <div class="tablewrap"><table class="jt" id="jtable"></table></div>
-    <h3 class="sub-h">亏损归因（已平仓的单）</h3>
-    <div class="tablewrap"><table class="ma att" id="jatt"></table></div>
+    <div class="rpanel" data-rpanel="perf" hidden>
+    <h3 class="sub-h">方向成绩 <small class="mut">（到时间涨了还是跌了，和有没有成交、赚没赚钱无关）</small></h3>
+    <div class="status" id="cStats"></div>
+    <p class="note">盈亏同时显示未扣手续费和扣手续费后的估算；收益率均为盈亏 U ÷ 投入保证金 U × 100%。手续费沿用开平合计名义仓位的 0.1%，持有中也预估完整开平手续费，未计资金费和滑点。强平时沿用亏光保证金的简化估算。</p>
+    <h3 class="sub-h">执行成绩 <small class="mut">（有没有成交、止盈止损谁先到、扣费后赚亏多少；实际金额和按默认金额模拟的分开算）</small></h3>
+    <div class="status" id="cExec"></div>
+    <div class="verdict" id="cPaper">严格执行成绩读取中…</div>
+    <div class="tablewrap"><table class="ma" id="cHzTbl"></table></div>
+    <div class="verdict" id="cSum">还没有记录。把张主任（或任何人、包括你自己）的喊单原话贴进来，识别后确认保存，到期面板会自动核对。</div>
+    </div>
+    <div class="rpanel" data-rpanel="risk" hidden>
+      <form class="rset" onsubmit="return false">
+        <label for="jbal">账户余额 (U)<input id="jbal" inputmode="decimal"></label>
+        <label for="jrisk">每笔最多亏 (% 余额)<input id="jrisk" inputmode="decimal" value="2"></label>
+        <label for="cDefAmt">没写金额时每单按投入 (U)<input id="cDefAmt" inputmode="decimal" value="100"></label>
+        <label for="cDefLev">没写杠杆时按 (倍)<input id="cDefLev" inputmode="numeric" value="10"></label>
+      </form>
+      <h3 class="sub-h">风控 <small class="mut">（只看「我的实盘」，喊单、模型、模拟盘都不算；顶部「能不能开仓」的亏损和保证金两条也读这里）</small></h3>
+      <div class="status" id="risk"></div>
+      <div class="verdict" id="riskMsg"></div>
+      <h3 class="sub-h">亏损归因 <small class="mut">（已平仓的实盘）</small></h3>
+      <div class="tablewrap"><table class="ma att" id="jatt"></table></div>
+    </div>
+    <details class="rnote"><summary>说明</summary>
+    <p class="note">进场有两种：「现价进」= 喊单那一刻就算买入；「到价再进」= 价格在规定分钟内碰到进场价才算买入（比如「30 分钟内回踩 82500 再多」），没碰到记「未成交」，也可以点「撤单」。止盈价就是「到这个价卖」。原话里说了投入多少 U、几倍杠杆就一起记下，盈亏会同时显示 U；没说就只看百分比。每条持有中的记录都有「卖出」按钮，按现价记一笔卖出，持仓与卖出、云端同步一起更新。时间精确到秒。核对方法：从喊单时间到验证时间，逐根取币安 BTCUSDT 永续 K 线（24 小时内用 1 分钟，3 天内用 5 分钟，更长用 1 小时）。到期价比参考价朝喊单方向走了 0.1% 以上算「对」，反方向 0.1% 以上算「错」，其余算「平」。目标价和止损价按 K 线最高 / 最低判断谁先到，同一根里两个都碰到按先打止损算。上方的对比表不管每条喊单自己的验证周期，统一看进场后 1 小时、4 小时、24 小时的方向，用来判断方向判断在多长时间内最准、止盈该放多远。「中途最大逆向」是到期前价格朝反方向走的最远距离，用来看「方向对了但拿不住」：止损如果比它小，就会在方向兑现之前被扫掉。喊的价位离当时市价超过 0.15% 时当作挂单：价格碰到这个价才算进场，进场前的波动不计，到期都没碰到记「未成交」，不算对错。「模型·此刻结论」是自动记录的：顶部「此刻结论」每出现一次参考信号（规则 A 或 B），就按当时给出的进场价、止损、止盈和持有时间记一条，同一规则同方向 60 分钟内只记一次。浏览器开着时面板自己记；后台监控程序运行时，浏览器关着也会记，打开面板后自动合并。在「统计范围」里选它，就能看到模型自己的成绩。同一个人在上一条还没到期时喊了反方向，上一条标「改口」，照常核对，单独计数。</p>
+    <p class="note">记「我的实盘」时会同时保存一份不能修改的开仓计划：进场价、止损、仓位、杠杆、最大计划亏损、预计持有时间、失效条件、为什么现在进，以及当时的行情快照（价格、ATR、波动状态、模型概率、此刻结论、下一个事件）。之后加减仓、改止损、撤止损、改持有时间，都通过表格里的按钮操作，逐条追加到变更记录里，平仓后自动做亏损归因。</p>
     <p class="note" id="jattNote">每笔已平仓的单拆成几部分，加起来等于实际盈亏：①按原计划执行的结果（原计划的仓位，原止损如果被碰到就按原止损出场，否则按实际平仓价）；②加减仓（相对计划仓位：每次加仓、减仓按实际成交价和数量重算，减仓的盈亏当场落袋）；③撤止损 / 改止损（原止损被碰到之后还拿着，比按原止损出场多亏或少亏了多少）；④超时持有（超过计划持有时间之后的盈亏）；⑤交易成本（每笔成交按 0.035% 估算的手续费，资金费没计入）；⑥非 BTC 交易（整笔单独列出）。一笔单可以同时有几个标签。这些都是在「原计划」假设下的对比，不代表按计划一定能赚到。没有开仓计划的旧记录只拆手续费。</p>
+      <p class="note">2026-11-14 起，交易日志合并进这里：原来交易日志里的每一笔都自动变成一条「我的实盘」（原始的 journal.json 保留在云端不动，当作备份）。实盘只认你记的平仓，不会因为碰到止损或到时间就自动算卖出；碰到止损止盈时「持仓与卖出」照样提醒。</p>
+    </details>
   </section>
 
   <section data-grp="6" class="card span" id="rulesCard">
@@ -1014,6 +1023,12 @@ const sizeTxt = c => { const z = sizeOf(c); return `${fmt(z.amt)} U × ${z.lev} 
 // 百分比换成 U：名义仓位 × 涨跌幅，扣开平各 0.05% 市价手续费；亏到强平价就按亏光保证金算
 function pnlU(c, pctv, deductFees = true) {
   if (!isFinite(pctv)) return NaN;
+  // 实盘：按逐笔成交（加减仓、已落袋）算，价格由涨跌幅还原；手续费按每笔 0.035%
+  if (c.real && c.j) {
+    const t = c.j, px = c.ref * (1 + (c.side === "long" ? 1 : -1) * pctv / 100), t0 = { ...t, fills: jFills(t).filter(f => f.k !== "close") }, p = jPos(t0);
+    const net = jPnl(t0, px);
+    return deductFees ? net : net + p.fees + p.Q * px * FEE1;
+  }
   const z = sizeOf(c), notional = z.amt * z.lev, liq = Math.max(0, 1 / z.lev - 0.004) * 100;
   return pctv < 0 && -pctv >= liq ? -z.amt : notional * pctv / 100 - (deductFees ? notional * 0.001 : 0);
 }
@@ -1532,7 +1547,7 @@ function renderVol() {
   const q = M[hold], stop = q.p80 * v.atr, bal = J.balance || +$("jbal").value || 0, riskPct = J.riskPct || +$("jrisk").value || 2;
   const notional = bal ? bal * riskPct / 100 / (stop / P) : NaN;
   $("volSize").innerHTML = `持有 ${hold}：建议止损距离约 <b>${fmt(stop)}</b> 美元（${(stop / P * 100).toFixed(2)}%）——做多止损 ${fmt(P - stop)}，做空止损 ${fmt(P + stop)}。` +
-    (bal ? `按余额 ${fmt(bal)} U、每笔最多亏 ${riskPct}%（${fmt(bal * riskPct / 100)} U），名义仓位最多约 <b>${fmt(notional)}</b> U（${(notional / P).toFixed(3)} BTC，相当于 ${(notional / bal).toFixed(1)} 倍杠杆）。` : "在「交易日志与风控」填上账户余额，这里会算出仓位上限。") +
+    (bal ? `按余额 ${fmt(bal)} U、每笔最多亏 ${riskPct}%（${fmt(bal * riskPct / 100)} U），名义仓位最多约 <b>${fmt(notional)}</b> U（${(notional / P).toFixed(3)} BTC，相当于 ${(notional / bal).toFixed(1)} 倍杠杆）。` : "在「交易记录 · 风控与归因」填上账户余额，这里会算出仓位上限。") +
     (fixed ? ` 如果还用 ${fmt(fixed)} 美元的固定止损，持有 ${hold} 被正常波动扫掉的概率约 ${Math.round(pExceed(fixed / v.atr, q) * 100)}%。` : "");
   // 逆势单：当前波动状态下，急跌后买 / 急涨后空的历史结果
   const R = VOLSTAT.regime, d = R.drop[v.state] && R.drop[v.state]["1 小时"], r = R.rally[v.state] && R.rally[v.state]["1 小时"];
@@ -1800,10 +1815,10 @@ function renderFast() {
 // ---------------- 我的风险：账户、持仓风险、止损状态、事件、数据新鲜度 ----------------
 function riskNow() {
   const now = Date.now(), bal = J.balance || 0, riskPct = J.riskPct || 2, P = S.price;
-  const open = J.trades.filter(t => !t.exit), btc = open.filter(t => t.sym === "BTCUSDT");
+  const trades = RT(), open = trades.filter(t => !t.exit), btc = open.filter(t => t.sym === "BTCUSDT");
   const riskOf = t => t.stop ? t.notional * Math.abs(t.entry - t.stop) / t.entry + t.notional * 0.0007 : Infinity;
   const total = open.reduce((s, t) => s + riskOf(t), 0), noStop = open.filter(t => !t.stop), unconf = open.filter(t => t.stop && !t.stopOk), conf = open.filter(t => t.stop && t.stopOk);
-  const today = J.trades.filter(t => t.exit && todayKey(t.exitT) === todayKey(now)).reduce((s, t) => s + t.pnl, 0);
+  const today = trades.filter(t => t.exit && todayKey(t.exitT) === todayKey(now)).reduce((s, t) => s + t.pnl, 0);
   const unreal = btc.reduce((s, t) => s + (isFinite(P) ? jPnl(t, P) : 0), 0), day = today + unreal;
   const room = bal ? bal * riskPct / 100 : NaN;          // 一笔新单最多可以亏多少
   const dayRoom = bal ? bal * 0.15 + day : NaN;           // 离今天 -15% 停手线还剩多少
@@ -1840,10 +1855,10 @@ function levNote(z, P, sgn) {
   if (z.overBal) w.push(`保证金 ${fmt(z.margin)} U 超过余额，要么提高杠杆、要么放宽每笔最多亏的比例前先确认`);
   return w.length ? `<p class="if bad">${w.join("；")}。</p>` : `<p class="if">${z.lev} 倍杠杆的强平价约 ${fmt(lp)}（反向 ${(z.liq * 100).toFixed(2)}%），在止损外面。</p>`;
 }
-// 账户层面的硬性禁止（与「交易日志与风控」同口径）。结论卡和精简版共用
+// 账户层面的硬性禁止（与「交易记录 · 风控与归因」同口径，只看我的实盘）。结论卡和精简版共用
 function hardBans(P, F) {
   const bal = J.balance || 0;
-  const open = J.trades.filter(t => !t.exit), today = J.trades.filter(t => t.exit && todayKey(t.exitT) === todayKey(Date.now()));
+  const trades = RT(), open = trades.filter(t => !t.exit), today = trades.filter(t => t.exit && todayKey(t.exitT) === todayKey(Date.now()));
   const dayPnl = today.reduce((s, t) => s + t.pnl, 0) + open.reduce((s, t) => s + (t.sym === "BTCUSDT" ? jPnl(t, P) : 0), 0);
   const usedMargin = open.reduce((s, t) => s + t.notional / (t.lev || 1), 0);
   const hard = [];
@@ -2071,7 +2086,7 @@ function renderPaper() {
   box.innerHTML = `模型的严格执行成绩（按真实挂单规则，同一时间只拿一单，扣手续费，不乘杠杆）：${part("A")}；${part("B")}。<small class="mut">后台处理到 ${t} 的 K 线。这一行验证的是原版规则（规则 A 不设止损），和回测完全一致；上面「模型·此刻结论」的单是每次信号都记、马上成交的打分口径，而且规则 A 的单是加了保险止损的方案 A′（未验证的变体），所以两者的成绩不能直接比。</small>`;
 }
 
-// ---------------- 交易日志与风控（localStorage，只在本机） ----------------
+// ---------------- 账户设置（余额、每笔风险、默认金额杠杆）+ 旧交易日志（只读备份，已搬进交易记录） ----------------
 const JKEY = AK("btc_journal_v1");
 const J = (() => { try { return JSON.parse(localStorage.getItem(JKEY)) || {}; } catch (e) { return {}; } })();
 J.trades = J.trades || []; J.side = J.side || "long";
@@ -2095,46 +2110,71 @@ function jPnl(t, px) {
   return p.realized + (p.Q > 1e-12 ? sgn * (px - p.E) * p.Q - p.Q * px * FEE1 : 0) - p.fees;
 }
 function jSync(t) { const p = jPos(t); if (p.Q > 1e-12) { t.entry = Math.round(p.E * 10) / 10; t.notional = Math.round(p.notional * 10) / 10; } }
+// ---------------- 实盘：2026-11-14 起合并进喊单记录 ----------------
+// 实盘单就是一条 real: true 的喊单，开仓计划、逐笔成交、变更记录、行情快照、亏损归因放在 c.j（和原来交易日志的一笔完全一样）。
+// journal.json 里的旧交易原样保留做备份，打开面板或同步时自动搬进 calls.json（id = "j-" + 原 id），之后只改 calls.json。
+const REAL_HZ = 43201;                         // 实盘没有「到时间自动卖」，手动平仓前一直算持有中
+const acctName = () => (ACCTS.find(x => x[0] === ACCT) || ACCTS[0])[1];
+const RC = () => C.calls.filter(c => c.real && c.j);
+const RT = () => RC().map(c => c.j);
+const JOPEN = new Set();                       // 展开了开仓计划的实盘单（只是界面状态）
+const isNonBtc = c => !!(c.sym && c.sym !== "BTCUSDT");
+function jMirror(c) {
+  const t = c.j, lev = t.lev || 1, f0 = jFills(t)[0], p = t.plan || {};
+  Object.assign(c, { real: true, sym: (t.sym || "BTCUSDT").toUpperCase(), t: t.t, side: t.side, entry: "market", ref: p.entry || (f0 && f0.px) || t.entry, refGiven: true,
+    stop: t.stop || 0, target: t.target || 0, lev, amt: Math.round((p.notional || t.notional) / lev * 100) / 100,
+    hz: t.exit ? Math.max(1, Math.ceil(((t.exitT || t.t) - t.t) / 6e4)) : REAL_HZ,
+    text: ["实盘", isNonBtc({ sym: t.sym }) ? t.sym : "", t.reason, t.note, p.why ? "为什么进：" + p.why : ""].filter(Boolean).join(" · ") });
+  if (t.exit) c.manualExit = { t: t.exitT, px: t.exit, why: "实盘平仓" }; else delete c.manualExit;
+}
+const jCall = t => C.calls.find(c => c.j === t) || C.calls.find(c => c.real && c.j && c.j.id === t.id);
+// 改了实盘单之后：同步喊单字段、重新核对、存盘
+function jTouch(t) {
+  const c = jCall(t); if (!c) return;
+  t.u = Date.now(); jMirror(c); c.u = t.u; c.res = null; c.exit = null;
+  markFlips(); csave(); renderJournal(); renderCalls(); renderPositions(); verifyCalls();
+}
+// 交易日志里还没搬过来的交易 → 实盘喊单（删过的不再搬）
+function migrateJournal() {
+  const have = new Set(C.calls.map(c => c.id)), del = new Set(C.deleted || []), jdel = new Set(J.deleted || []);
+  let n = 0;
+  for (const t of J.trades || []) {
+    if (!t || !t.id) continue;
+    const id = "j-" + t.id;
+    if (have.has(id) || del.has(id) || jdel.has(t.id)) continue;
+    const j = JSON.parse(JSON.stringify(t)); delete j._open;
+    const c = { id, who: acctName(), j }; jMirror(c); c.u = t.u || t.t; C.calls.push(c); n++;
+  }
+  return n;
+}
+// 风控：只看实盘单（喊单、模型、模拟盘都不算）
 function renderJournal() {
-  const bal = +$("jbal").value || J.balance || 0, riskPct = +$("jrisk").value || 2, now = Date.now();
-  const open = J.trades.filter(t => !t.exit), today = J.trades.filter(t => t.exit && todayKey(t.exitT) === todayKey(now));
+  if (!$("risk")) return;
+  const trades = RT(), bal = +$("jbal").value || J.balance || 0, riskPct = +$("jrisk").value || 2, now = Date.now();
+  const open = trades.filter(t => !t.exit), today = trades.filter(t => t.exit && todayKey(t.exitT) === todayKey(now));
   const realized = today.reduce((s, t) => s + t.pnl, 0), unreal = open.reduce((s, t) => s + (t.sym === "BTCUSDT" && isFinite(S.price) ? jPnl(t, S.price) : 0), 0);
   const margin = open.reduce((s, t) => s + t.notional / (t.lev || 1), 0);
-  const noStop = open.filter(t => !t.stop).length, nonBtc = J.trades.filter(t => todayKey(t.t) === todayKey(now) && t.sym !== "BTCUSDT").length;
-  const nToday = J.trades.filter(t => todayKey(t.t) === todayKey(now)).length;
+  const noStop = open.filter(t => !t.stop).length, nonBtc = trades.filter(t => todayKey(t.t) === todayKey(now) && t.sym !== "BTCUSDT").length;
+  const nToday = trades.filter(t => todayKey(t.t) === todayKey(now)).length;
   const dayPct = bal ? (realized + unreal) / bal * 100 : NaN, marginPct = bal ? margin / bal * 100 : NaN;
-  // 只基于记录过的交易：今天平仓的单按整笔盈亏算（包括昨天开、今天平的），持仓按开仓至今的浮动算；不是账户权益的今日变化
   const openNon = open.filter(t => t.sym !== "BTCUSDT").length;
   $("risk").innerHTML = [
-    ["今天平仓的交易", today.length ? uTxt(realized) : "—", plCls(realized), `${today.length} 笔 · 按平仓日算整笔盈亏（隔夜单含昨天的涨跌）`],
-    ["持仓浮动", open.length ? uTxt(unreal) : "—", plCls(unreal), `从开仓至今 · 只算 BTC${openNon ? `，${openNon} 笔非 BTC 持仓没计入` : ""}`],
-    ["停手线（估算）", bal ? pct(dayPct) : "先填余额", isFinite(dayPct) && dayPct <= -15 ? "bad" : "", bal ? "上面两项合计 ÷ 余额，-15% 停止开新仓；仅基于已记录交易，不是账户权益" : ""],
+    ["今天平仓的实盘", today.length ? uTxt(realized) : "—", plCls(realized), `${today.length} 笔 · 按平仓日算整笔盈亏（隔夜单含昨天的涨跌）`],
+    ["实盘持仓浮动", open.length ? uTxt(unreal) : "—", plCls(unreal), `从开仓至今 · 只算 BTC${openNon ? `，${openNon} 笔非 BTC 持仓没计入` : ""}`],
+    ["停手线（估算）", bal ? pct(dayPct) : "先填余额", isFinite(dayPct) && dayPct <= -15 ? "bad" : "", bal ? "上面两项合计 ÷ 余额，-15% 停止开新仓；仅基于已记录的实盘，不是账户权益" : ""],
     ["保证金占用", bal ? `${marginPct.toFixed(0)}%` : "—", marginPct > 33 ? "bad" : "", "上限 33%"],
-    ["持仓中", `${open.length} 笔`, noStop ? "bad" : "", noStop ? `${noStop} 笔没有止损` : "都设了止损"],
+    ["实盘持仓", `${open.length} 笔`, noStop ? "bad" : "", noStop ? `${noStop} 笔没有止损` : "都设了止损"],
     ["今日开仓", `${nToday} 笔`, nToday > 5 ? "warn" : "", nonBtc ? `其中 ${nonBtc} 笔不是 BTC` : "只做 BTC"],
   ].map(([a, b, c, d]) => `<div class="chip"><span>${a}</span><b class="${c}">${esc(b)}</b><span>${esc(d)}</span></div>`).join("");
   const warn = [];
-  if (isFinite(dayPct) && dayPct <= -15) warn.push("按已记录交易估算，今天的亏损已超过 15%，按规则今天停止开新仓。");
+  if (isFinite(dayPct) && dayPct <= -15) warn.push("按已记录的实盘估算，今天的亏损已超过 15%，按规则今天停止开新仓。");
   if (marginPct > 33) warn.push("保证金占用超过三分之一，不要再加仓。");
-  if (noStop) warn.push("有持仓没有设止损。");
+  if (noStop) warn.push("有实盘持仓没有设止损。");
   if (nonBtc) warn.push("今天有非 BTC 的交易，违反「只做 BTC」。");
   $("riskMsg").className = "verdict " + (warn.length ? "badv" : "goodv");
-  $("riskMsg").textContent = warn.length ? warn.join(" ") : `按已记录的交易看，风控没有触发（不是账户实际权益，交易所里没记的单不在内）。按每笔最多亏 ${riskPct}% 余额来定仓位。`;
-  const fmtT = fmtDT;
-  const rows = J.trades.slice().reverse().slice(0, 30).map(t => {
-    const cur = t.exit ? t.pnl : t.sym === "BTCUSDT" && isFinite(S.price) ? jPnl(t, S.price) : NaN, open = !t.exit;
-    const stopSt = !t.stop ? '<b class="bad">没有止损</b>' : t.stopOk ? `${fmt(t.stop)}<small class="good">已确认交易所挂单</small>` : `${fmt(t.stop)}<small class="warn">只填了价格，未确认挂单</small>`;
-    const fl = jFills(t), dev = [fl.some(f => f.k === "add") ? "加过仓" : "", fl.some(f => f.k === "reduce") ? "减过仓" : "", (t.changes || []).some(c => c.kind === "撤止损" || c.kind === "改止损") ? "改过止损" : ""].filter(Boolean);
-    const acts = `<button type="button" class="btn sm" data-jact="plan" data-id="${t.id}">${t._open ? "收起计划" : "计划"}</button>` + (open ? `<button type="button" class="btn sm" data-jact="stop" data-id="${t.id}">改止损</button><button type="button" class="btn sm" data-jact="size" data-id="${t.id}">加 / 减仓</button><button type="button" class="btn sm" data-jact="hold" data-id="${t.id}">改持有</button>${t.stop ? `<button type="button" class="btn sm" data-jact="ok" data-id="${t.id}">${t.stopOk ? "取消确认" : "已挂止损"}</button>` : ""}` : "");
-    return `<tr><td>${fmtT(t.t)}</td><td>${esc(t.sym)}</td><td class="${t.side === "long" ? "good" : "bad"}">${t.side === "long" ? "多" : "空"}</td><td>${fmt(t.entry)}</td><td>${stopSt}</td><td>${fmt(t.notional)}</td><td>${t.lev}x</td>
-      <td class="txt">${esc(t.reason)}${t.note ? " · " + esc(t.note) : ""}${dev.length ? "<br>" + dev.map(x => `<span class="tag">${x}</span>`).join("") : ""}</td><td class="${cur > 0 ? "good" : cur < 0 ? "bad" : ""}">${isFinite(cur) ? uTxt(cur) : "—"}${t.exit ? "" : "（浮动）"}</td>
-      <td>${t.exit ? fmt(t.exit) : `<input id="x_${t.id}" inputmode="decimal" placeholder="平仓价" aria-label="平仓价"> <button type="button" class="btn sm" data-close="${t.id}">平仓</button>`}</td><td class="txt">${acts}</td></tr>` +
-      (t._open ? `<tr class="planrow"><td colspan="11">${jPlanHtml(t)}</td></tr>` : "");
-  }).join("");
-  $("jtable").innerHTML = J.trades.length ? `<thead><tr><th>开仓</th><th>品种</th><th>方向</th><th>进场</th><th>止损</th><th>名义 U</th><th>杠杆</th><th>依据 / 备注</th><th>盈亏</th><th>平仓</th><th>计划和改动</th></tr></thead><tbody>${rows}</tbody>` : `<tbody><tr><td class="txt">还没有记录。开仓时记一笔，平仓时填平仓价，面板会自动统计盈亏并检查风控。</td></tr></tbody>`;
+  $("riskMsg").textContent = warn.length ? warn.join(" ") : `按已记录的实盘看，风控没有触发（不是账户实际权益，交易所里没记的单不在内）。按每笔最多亏 ${riskPct}% 余额来定仓位。`;
   renderAttribution();
 }
-function jSetSide(sd) { J.side = sd; $("j-long").setAttribute("aria-pressed", sd === "long"); $("j-short").setAttribute("aria-pressed", sd === "short"); jsave(); }
 // 开仓那一刻的行情快照（之后不改），复盘时对照「当时看到的是什么」
 function marketSnap() {
   const v = volNow(), ev = nextEvent(Date.now()), sides = [...document.querySelectorAll("#sumSides .sum-side")].map(x => x.querySelector(".vd")?.textContent || "");
@@ -2143,23 +2183,73 @@ function marketSnap() {
     summary: ($("sumNow")?.textContent || "").split("。")[0], long: sides[0] || "", short: sides[1] || "", funding: isFinite(S.funding) ? +S.funding.toFixed(4) : null,
     event: ev ? [ev[0], ev[1]] : null, fast: S.fm ? `${S.fm.dir > 0 ? "急涨" : "急跌"} ${S.fm.k.toFixed(1)} ATR` : null };
 }
-function jChange(t, kind, from, to) { (t.changes = t.changes || []).push({ at: Date.now(), kind, from, to }); t.u = Date.now(); delete t.att; jsave(); renderJournal(); }
+function jChange(t, kind, from, to) { (t.changes = t.changes || []).push({ at: Date.now(), kind, from, to }); delete t.att; jTouch(t); }
 function jPlanHtml(t) {
   const p = t.plan, sn = t.snap, ch = t.changes || [];
   if (!p) return `<span class="mut">这一单是旧记录，没有开仓计划。</span>`;
   const f = x => x == null || x === "" ? "—" : x;
-  return `<div class="plan-v"><div><b>开仓计划</b>（${fmtDTs(p.at)} 保存，不可修改）：进场 ${fmt(p.entry)} · 止损 ${p.stop ? fmt(p.stop) : "没设"} · 名义 ${fmt(p.notional)} U × ${p.lev} 倍 · 最大计划亏损 ${p.maxLoss != null ? p.maxLoss + " U" : "无上限（没设止损）"} · 预计拿 ${p.hold ? p.hold + " 小时" : "—"}</div>
+  return `<div class="plan-v"><div><b>开仓计划</b>（${fmtDTs(p.at)} 保存，不可修改）：进场 ${fmt(p.entry)} · 止损 ${p.stop ? fmt(p.stop) : "没设"}${p.target ? " · 止盈 " + fmt(p.target) : ""} · 名义 ${fmt(p.notional)} U × ${p.lev} 倍 · 最大计划亏损 ${p.maxLoss != null ? p.maxLoss + " U" : "无上限（没设止损）"} · 预计拿 ${p.hold ? p.hold + " 小时" : "—"}</div>
     <div>为什么现在进：${esc(f(p.why))}　失效条件：${esc(f(p.inval))}</div>
     ${sn ? `<div class="mut">当时行情：价格 ${fmt(sn.price)} · ATR ${f(sn.atr)} · 波动${f(sn.vol)} · 模型上涨概率 15 分钟 ${f(sn.p15)}% / 1 小时 ${f(sn.p1h)}% / 4 小时 ${f(sn.p4h)}% · 此刻结论：做多${f(sn.long)}、做空${f(sn.short)}（${esc(f(sn.summary))}）· 资金费率 ${f(sn.funding)}% · 下一个事件 ${sn.event ? esc(sn.event[0]) + " " + fmtDT(sn.event[1]) : "—"}${sn.fast ? " · " + sn.fast : ""}</div>` : ""}
     <div>${ch.length ? "变更记录：" + ch.map(c => `${fmtDTs(c.at)} ${c.kind}（${c.from ?? "—"} → ${c.to ?? "—"}）`).join("；") : "没有改过计划。"}</div></div>`;
+}
+// 实盘单的操作按钮（喊单表格和持有中表格共用）
+function jActs(c) {
+  const t = c.j, open = !t.exit, b = (k, txt) => `<button type="button" class="btn sm" data-jact="${k}" data-id="${esc(t.id)}">${txt}</button>`;
+  return b("plan", JOPEN.has(t.id) ? "收起计划" : "计划") + (open ? b("close", "平仓") + b("stop", "改止损") + b("tp", "改止盈") + b("size", "加 / 减仓") + b("hold", "改持有") + (t.stop ? b("ok", t.stopOk ? "取消确认" : "已挂止损") : "") : "");
+}
+function jStopTxt(t) { return !t.stop ? '<b class="bad">没有止损</b>' : t.stopOk ? `${fmt(t.stop)}<small class="good">已确认交易所挂单</small>` : `${fmt(t.stop)}<small class="warn">未确认挂单</small>`; }
+function jTags(t) {
+  const fl = jFills(t);
+  return [fl.some(f => f.k === "add") ? "加过仓" : "", fl.some(f => f.k === "reduce") ? "减过仓" : "", (t.changes || []).some(c => c.kind === "撤止损" || c.kind === "改止损") ? "改过止损" : ""].filter(Boolean);
+}
+function jActClick(ev) {
+  const a = ev.target.dataset || {}; if (!a.jact) return;
+  const t = RT().find(x => x.id === a.id); if (!t) return;
+  UI_HOLD = 0;
+  if (a.jact === "plan") { JOPEN.has(t.id) ? JOPEN.delete(t.id) : JOPEN.add(t.id); renderCalls(); renderPositions(); return; }
+  if (t.exit) return;
+  if (a.jact === "close") {
+    const v = prompt(`平仓价（${t.sym} ${t.side === "long" ? "多" : "空"}单，均价 ${fmt(jPos(t).E)}）`, t.sym === "BTCUSDT" && isFinite(S.price) ? Math.round(S.price * 10) / 10 : ""); if (v === null) return;
+    const px = +v; if (!px) return;
+    const pq = jPos(t).Q; (t.fills = jFills(t).slice()).push({ k: "close", at: Date.now(), px, q: pq });
+    t.exit = px; t.exitT = Date.now(); t.pnl = jPnl({ ...t, fills: t.fills.slice(0, -1) }, px); jTouch(t); attributeAll(); return;
+  }
+  if (a.jact === "stop") {
+    const v = prompt("新的止损价（清空 = 撤掉止损）", t.stop || ""); if (v === null) return;
+    const nv = +v || 0; if (nv === (t.stop || 0)) return;
+    const from = t.stop || "无"; t.stop = nv; t.stopOk = false; jChange(t, nv ? (from === "无" ? "补设止损" : "改止损") : "撤止损", from, nv || "无"); return;
+  }
+  if (a.jact === "tp") {
+    const v = prompt("新的止盈价（清空 = 不设止盈）", t.target || ""); if (v === null) return;
+    const nv = +v || 0; if (nv === (t.target || 0)) return;
+    const from = t.target || "无"; t.target = nv; jChange(t, nv ? (from === "无" ? "设止盈" : "改止盈") : "撤止盈", from, nv || "无"); return;
+  }
+  if (a.jact === "size") {
+    const v = prompt("加仓填正数、减仓填负数（按这次成交的名义金额，U）", ""); if (v === null || !+v) return;
+    const px = +prompt("这次的成交价", t.sym === "BTCUSDT" && isFinite(S.price) ? Math.round(S.price * 10) / 10 : t.entry); if (!px) return;
+    const p0 = jPos(t), q = Math.abs(+v) / px, kind = +v > 0 ? "加仓" : "减仓";
+    if (kind === "减仓" && q >= p0.Q - 1e-12) { alert("减仓数量超过或等于现有持仓，请用「平仓」。"); return; }
+    (t.fills = jFills(t).slice()).push({ k: kind === "加仓" ? "add" : "reduce", at: Date.now(), px, q });
+    const from = `${fmt(p0.notional)} U @ ${fmt(p0.E)}`; jSync(t);
+    const p1 = jPos(t), done = kind === "减仓" ? `，这次落袋 ${uTxt((t.side === "long" ? 1 : -1) * (px - p0.E) * q - q * px * FEE1)}` : "";
+    jChange(t, kind, from, `${fmt(p1.notional)} U @ ${fmt(p1.E)}（${kind} ${fmt(Math.abs(+v))} U @ ${fmt(px)}${done}）`); return;
+  }
+  if (a.jact === "hold") {
+    const cur = t.holdNow ?? (t.plan && t.plan.hold) ?? ""; const v = prompt("新的预计持有时间（小时）", cur); if (v === null || +v === +cur) return;
+    t.holdNow = +v || 0; jChange(t, "改持有时间", cur ? cur + " 小时" : "—", (+v || 0) + " 小时"); return;
+  }
+  if (a.jact === "ok") { t.stopOk = !t.stopOk; jChange(t, t.stopOk ? "确认交易所已挂止损" : "取消确认挂止损", t.stopOk ? "未确认" : "已确认", t.stopOk ? "已确认" : "未确认"); }
 }
 // 已平仓单的亏损归因：需要原止损在持有期间有没有被碰到、计划持有时间到期时的价格，从币安 K 线查（算一次存起来）
 let attBusy = false;
 async function attributeAll() {
   if (attBusy) return; attBusy = true;
+  let ch = false;
   try {
-    for (const t of J.trades.filter(x => x.exit && !x.att)) {
+    for (const t of RT().filter(x => x.exit && !x.att)) {
       const sgn = t.side === "long" ? 1 : -1, pos = jPos(t), fee = pos.fees, gross = pos.realized, tags = [];
+      ch = true;
       if (t.sym !== "BTCUSDT") { t.att = { nonbtc: t.pnl, tags: ["非 BTC"] }; continue; }
       const p = t.plan;
       if (!p) { t.att = { plan: gross, cost: -fee, tags: ["旧记录"] }; continue; }
@@ -2168,7 +2258,7 @@ async function attributeAll() {
       const fl = jFills(t); if (fl.some(f => f.k === "add")) tags.push("加过仓"); if (fl.some(f => f.k === "reduce")) tags.push("减过仓");
       const end = t.exitT || Date.now(), span = (end - t.t) / 6e4, iv = span <= 1440 ? ["1m", 6e4] : span <= 7200 ? ["5m", 3e5] : ["1h", 36e5];
       let k = [];
-      try { k = (await jfetch(`${FAPI}/fapi/v1/klines?symbol=BTCUSDT&interval=${iv[0]}&startTime=${Math.floor(t.t / iv[1]) * iv[1]}&endTime=${end}&limit=1500`)).map(toBar); } catch (e) { continue; }
+      try { k = (await jfetch(`${FAPI}/fapi/v1/klines?symbol=BTCUSDT&interval=${iv[0]}&startTime=${Math.floor(t.t / iv[1]) * iv[1]}&endTime=${end}&limit=1500`)).map(toBar); } catch (e) { delete t.att; continue; }
       const stopChanged = (t.changes || []).some(c => c.kind === "撤止损" || c.kind === "改止损");
       let stopEff = 0, lateEff = 0, plan = base;
       const touch = p.stop ? k.find(b => b.t >= Math.floor(t.t / iv[1]) * iv[1] && (sgn > 0 ? b.l <= p.stop : b.h >= p.stop)) : null;
@@ -2179,13 +2269,14 @@ async function attributeAll() {
       }
       t.att = { plan, size, stop: stopEff, late: lateEff, cost: -fee, tags };
     }
-    jsave(); renderAttribution();
+    if (ch) csave();
+    renderAttribution();
   } finally { attBusy = false; }
 }
 function renderAttribution() {
   if (!$("jatt")) return;
-  const closed = J.trades.filter(t => t.exit && t.att);
-  if (!closed.length) { $("jatt").innerHTML = `<tbody><tr><td class="t">还没有已平仓的单。</td></tr></tbody>`; return; }
+  const closed = RT().filter(t => t.exit && t.att);
+  if (!closed.length) { $("jatt").innerHTML = `<tbody><tr><td class="t">还没有已平仓的实盘单。</td></tr></tbody>`; return; }
   const sum = k => closed.reduce((s, t) => s + (t.att[k] || 0), 0), cnt = k => closed.filter(t => t.att[k]).length;
   const planSum = sum("plan"), rows = [
     [planSum < 0 ? "按计划执行的亏损" : "按计划执行的盈利", planSum, cnt("plan"), "原计划的仓位和止损下的结果：判断策略本身有没有优势"],
@@ -2200,12 +2291,24 @@ function renderAttribution() {
     rows.map(([n, v, c, d]) => `<tr><td class="t">${n}</td><td class="${c ? plCls(v) : ""}">${c ? uTxt(v) : "—"}</td><td>${c}</td><td class="t"><small>${d}</small></td></tr>`).join("") +
     `<tr><td class="t"><b>合计</b></td><td class="${plCls(total)}"><b>${uTxt(total)}</b></td><td>${closed.length}</td><td class="t"><small>等于这些单的实际盈亏合计 ${uTxt(real)}</small></td></tr></tbody>`;
 }
+// 记一笔实盘：表格里的方向、进场、止损止盈、投入 × 杠杆、最长持有，加上实盘计划那一组
+function addReal(t0) {
+  const ref = +$("cRef").value || (isFinite(S.price) ? Math.round(S.price * 10) / 10 : 0), lev = +$("cLev").value || J.defLev || 10, amt = +$("cAmt").value || J.defAmt || 100;
+  const sym = ($("jsym").value || "BTCUSDT").toUpperCase().trim();
+  if (!ref) { $("cParseMsg").textContent = "实盘要填进场价。"; return null; }
+  if (sym !== "BTCUSDT" && !+$("cRef").value) { $("cParseMsg").textContent = "非 BTC 的实盘要填进场价。"; return null; }
+  const notional = Math.round(amt * lev * 10) / 10, stop = +$("cStop").value || 0, target = +$("cTarget").value || 0, hzMin = +$("cHz").value;
+  const t = { id: Date.now().toString(36), t: t0, side: C.side, sym, entry: ref, stop, target, notional, lev, reason: $("jreason").value, note: $("cText").value.trim() };
+  t.plan = { at: t0, entry: ref, stop, target, notional, lev, hold: hzMin / 60, why: $("jwhy").value.trim(), inval: $("jinval").value.trim(),
+    maxLoss: stop ? Math.round((notional * Math.abs(ref - stop) / ref + notional * 0.0007) * 10) / 10 : null };
+  t.snap = marketSnap(); t.changes = []; t.fills = [{ k: "open", at: t0, px: ref, q: notional / ref }]; t.u = Date.now();
+  const c = { id: "j-" + t.id, who: acctName(), j: t }; jMirror(c); c.u = t.u;
+  ["jwhy", "jinval"].forEach(id => $(id).value = ""); $("jsym").value = "BTCUSDT";
+  return c;
+}
 function jInit() {
   if (J.balance) $("jbal").value = J.balance;
   if (J.riskPct) $("jrisk").value = J.riskPct;
-  jSetSide(J.side);
-  $("j-long").onclick = () => jSetSide("long"); $("j-short").onclick = () => jSetSide("short");
-  // 杠杆：滑块和数字框同步，0 = 自动
   // 此刻结论的买入金额和杠杆 = 喊单记录里「没写金额时按」的默认值，两处同步
   const setAmtLev = (amt, lev) => {
     J.defAmt = Math.max(1, +amt || 100); J.defLev = Math.max(1, Math.min(150, Math.round(+lev || 10))); J.u = Date.now();
@@ -2218,73 +2321,19 @@ function jInit() {
   $("slevr").addEventListener("input", e => setAmtLev(J.defAmt, e.target.value));
   $("slev").addEventListener("change", e => setAmtLev(J.defAmt, e.target.value));
   // 余额和每笔风险：顶部「此刻结论」和这里是同一份设置，任一处改动两边同步
-  [["jbal", "jrisk"]].forEach(([bal, risk]) => [bal, risk].forEach(id => $(id).addEventListener("input", () => {
-    if ((+$(bal).value || 0) !== (J.balance || 0)) J.balanceAt = Date.now();
-    J.balance = +$(bal).value || 0; J.riskPct = +$(risk).value || 2; J.u = Date.now(); jsave(); renderJournal(); everySecond();
-  })));
-  $("jfrom").onclick = () => { jSetSide(S.side); $("jentry").value = $("entry").value; $("jstop").value = $("stop").value; $("jnotional").value = Math.round(+$("margin").value * +$("lev").value); $("jlev").value = $("lev").value; };
+  ["jbal", "jrisk"].forEach(id => $(id).addEventListener("input", () => {
+    if ((+$("jbal").value || 0) !== (J.balance || 0)) J.balanceAt = Date.now();
+    J.balance = +$("jbal").value || 0; J.riskPct = +$("jrisk").value || 2; J.u = Date.now(); jsave(); renderJournal(); everySecond();
+  }));
+  $("jfrom").onclick = () => { cSetSide(S.side); $("cRef").value = $("entry").value; $("cStop").value = $("stop").value; $("cAmt").value = $("margin").value; $("cLev").value = $("lev").value; cPreview(); };
   $("jsize").onclick = () => {
-    const bal = +$("jbal").value, rp = +$("jrisk").value, e = +$("jentry").value || S.price, s = +$("jstop").value;
-    if (!bal || !s) { $("riskMsg").className = "verdict badv"; $("riskMsg").textContent = "先填账户余额和止损价，才能按风险算仓位。"; return; }
-    const dist = Math.abs(e - s) / e, notional = bal * rp / 100 / (dist + 0.0007);
-    $("jnotional").value = Math.round(notional);
-    const lev = Math.max(1, Math.ceil(notional / (bal / 3)));
-    $("jlev").value = lev;
-    $("riskMsg").className = "verdict goodv";
-    $("riskMsg").textContent = `止损距离 ${(dist * 100).toFixed(2)}%，每笔最多亏 ${rp}%（${(bal * rp / 100).toFixed(1)} U），名义仓位约 ${Math.round(notional)} U；保证金不超过余额 1/3 时，杠杆至少 ${lev} 倍。`;
+    const bal = J.balance || 0, rp = J.riskPct || 2, e = +$("cRef").value || S.price, s = +$("cStop").value;
+    if (!bal || !s) { $("cParseMsg").textContent = "先在「风控」里填账户余额，再填止损价，才能按风险算仓位。"; return; }
+    const dist = Math.abs(e - s) / e, notional = bal * rp / 100 / (dist + 0.0007), lev = Math.max(1, Math.ceil(notional / (bal / 3)));
+    $("cLev").value = lev; $("cAmt").value = Math.round(notional / lev * 100) / 100; cPreview();
+    $("cParseMsg").textContent = `止损距离 ${(dist * 100).toFixed(2)}%，每笔最多亏 ${rp}%（${(bal * rp / 100).toFixed(1)} U），名义仓位约 ${Math.round(notional)} U；保证金不超过余额 1/3 时，杠杆至少 ${lev} 倍。`;
   };
-  $("jadd").onclick = () => {
-    const t = { id: Date.now().toString(36), t: Date.now(), side: J.side, sym: ($("jsym").value || "BTCUSDT").toUpperCase().trim(), entry: +$("jentry").value, stop: +$("jstop").value || 0,
-      notional: +$("jnotional").value, lev: +$("jlev").value || 1, reason: $("jreason").value, note: $("jnote").value.trim() };
-    if (!t.entry || !t.notional) { $("riskMsg").className = "verdict badv"; $("riskMsg").textContent = "进场价和名义仓位必填。"; return; }
-    // 开仓计划：保存后不再修改；之后的改动都记在 changes 里
-    t.plan = { at: t.t, entry: t.entry, stop: t.stop, notional: t.notional, lev: t.lev, hold: +$("jhold").value || 0, why: $("jwhy").value.trim(), inval: $("jinval").value.trim(),
-      maxLoss: t.stop ? Math.round((t.notional * Math.abs(t.entry - t.stop) / t.entry + t.notional * 0.0007) * 10) / 10 : null };
-    t.snap = marketSnap(); t.changes = []; t.fills = [{ k: "open", at: t.t, px: t.entry, q: t.notional / t.entry }];
-    t.u = Date.now(); J.trades.push(t); jsave(); ["jnote", "jwhy", "jinval", "jhold"].forEach(id => $(id).value = ""); renderJournal();
-  };
-  $("jtable").addEventListener("click", ev => {
-    const a = ev.target.dataset || {};
-    if (a.jact) {
-      const t = J.trades.find(x => x.id === a.id); if (!t) return;
-      if (a.jact === "plan") { t._open = !t._open; renderJournal(); return; }
-      if (a.jact === "stop") {
-        const v = prompt("新的止损价（清空 = 撤掉止损）", t.stop || ""); if (v === null) return;
-        const nv = +v || 0; if (nv === (t.stop || 0)) return;
-        const from = t.stop || "无"; t.stop = nv; t.stopOk = false; jChange(t, nv ? (from === "无" ? "补设止损" : "改止损") : "撤止损", from, nv || "无"); return;
-      }
-      if (a.jact === "size") {
-        const v = prompt("加仓填正数、减仓填负数（按这次成交的名义金额，U）", ""); if (v === null || !+v) return;
-        const px = +prompt("这次的成交价", isFinite(S.price) ? Math.round(S.price * 10) / 10 : t.entry); if (!px) return;
-        const p0 = jPos(t), q = Math.abs(+v) / px, kind = +v > 0 ? "加仓" : "减仓";
-        if (kind === "减仓" && q >= p0.Q - 1e-12) { alert("减仓数量超过或等于现有持仓，请用「平仓」。"); return; }
-        (t.fills = jFills(t).slice()).push({ k: kind === "加仓" ? "add" : "reduce", at: Date.now(), px, q });
-        const from = `${fmt(p0.notional)} U @ ${fmt(p0.E)}`; jSync(t);
-        const p1 = jPos(t), done = kind === "减仓" ? `，这次落袋 ${uTxt((t.side === "long" ? 1 : -1) * (px - p0.E) * q - q * px * FEE1)}` : "";
-        jChange(t, kind, from, `${fmt(p1.notional)} U @ ${fmt(p1.E)}（${kind} ${fmt(Math.abs(+v))} U @ ${fmt(px)}${done}）`); return;
-      }
-      if (a.jact === "hold") {
-        const cur = t.holdNow ?? (t.plan && t.plan.hold) ?? ""; const v = prompt("新的预计持有时间（小时）", cur); if (v === null || +v === +cur) return;
-        t.holdNow = +v || 0; jChange(t, "改持有时间", cur ? cur + " 小时" : "—", (+v || 0) + " 小时"); return;
-      }
-      if (a.jact === "ok") { t.stopOk = !t.stopOk; jChange(t, t.stopOk ? "确认交易所已挂止损" : "取消确认挂止损", t.stopOk ? "未确认" : "已确认", t.stopOk ? "已确认" : "未确认"); return; }
-      return;
-    }
-    const id = a.close; if (!id) return;
-    const t = J.trades.find(x => x.id === id), px = +$("x_" + id).value;
-    if (!t || !px) return;
-    const pq = jPos(t).Q; (t.fills = jFills(t).slice()).push({ k: "close", at: Date.now(), px, q: pq });
-    t.exit = px; t.exitT = Date.now(); t.pnl = jPnl(t, px); t.u = Date.now(); jsave(); renderJournal(); attributeAll();
-  });
-  $("jexport").onclick = () => {
-    const blob = new Blob([JSON.stringify(J, null, 1)], { type: "application/json" }), a = document.createElement("a");
-    a.href = URL.createObjectURL(blob); a.download = `btc-journal-${todayKey(Date.now())}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  };
-  $("jimport").onchange = async ev => {
-    const f = ev.target.files[0]; if (!f) return;
-    try { const d = JSON.parse(await f.text()); if (Array.isArray(d.trades)) { Object.assign(J, d); jsave(); jInit(); renderJournal(); } }
-    catch (e) { $("riskMsg").className = "verdict badv"; $("riskMsg").textContent = "导入失败：文件格式不对。"; }
-  };
+  document.addEventListener("click", jActClick);
 }
 // 时区切换：重画所有带时间的地方；喊单时间输入框保持同一时刻
 function tzApply() {
@@ -2331,7 +2380,7 @@ async function ghPut(path, obj, sha) {
   return (await r.json()).content.sha;
 }
 // 只同步人填写的内容；核对结果（res / exit / hzRes / flip）每台设备自己算
-const CALL_FIELDS = ["id", "t", "who", "side", "text", "entry", "ref", "refGiven", "validMin", "target", "stop", "hz", "amt", "lev", "manualExit", "cancel", "orig", "mods", "sim", "u"];
+const CALL_FIELDS = ["id", "t", "who", "side", "text", "entry", "ref", "refGiven", "validMin", "target", "stop", "hz", "amt", "lev", "manualExit", "cancel", "orig", "mods", "sim", "real", "sym", "j", "u"];
 const pickCall = c => Object.fromEntries(CALL_FIELDS.filter(k => c[k] !== undefined).map(k => [k, c[k]]));
 const callsDoc = () => ({ calls: C.calls.map(pickCall).sort((a, b) => a.t - b.t || (a.id < b.id ? -1 : 1)), deleted: [...new Set(C.deleted || [])].sort() });
 const journalDoc = () => ({ balance: J.balance || 0, balanceAt: J.balanceAt || 0, riskPct: J.riskPct || 2, lev: J.lev || 0, defAmt: J.defAmt || 100, defLev: J.defLev || 10, u: J.u || 0, trades: J.trades.map(({ _open, ...t }) => t).sort((a, b) => a.t - b.t), deleted: [...new Set(J.deleted || [])].sort() });
@@ -2358,7 +2407,7 @@ function renderSyncLog() {
 async function cloudSync(manual = false) {
   if (!CLOUD.token || CLOUD.busy) return;
   CLOUD.busy = true;
-  const before = new Set(C.calls.map(c => c.id)), beforeT = new Set(J.trades.map(t => t.id));
+  const before = new Set(C.calls.map(c => c.id));
   let upC = false, upJ = false, newC = 0, newT = 0;
   try {
     await (typeof UI !== "undefined" ? UI.checkToken : async () => {})(CLOUD.token);
@@ -2373,20 +2422,21 @@ async function cloudSync(manual = false) {
       const delJ = new Set([...(J.deleted || []), ...((rj.obj && rj.obj.deleted) || [])]);
       J.trades = mergeById(J.trades, (rj.obj && rj.obj.trades) || [], delJ); J.deleted = [...delJ];
       if (rj.obj && (rj.obj.u || 0) > (J.u || 0)) { J.balance = rj.obj.balance; J.balanceAt = rj.obj.balanceAt || 0; J.riskPct = rj.obj.riskPct; J.lev = rj.obj.lev || 0; J.defAmt = rj.obj.defAmt || 100; J.defLev = rj.obj.defLev || 10; J.u = rj.obj.u; if ($("cDefAmt")) { $("cDefAmt").value = J.defAmt; $("cDefLev").value = J.defLev; } if ($("slev")) { $("samt").value = J.defAmt; $("slev").value = $("slevr").value = J.defLev; } if ($("jbal")) { $("jbal").value = J.balance || ""; $("jrisk").value = J.riskPct; } }
+      newT = migrateJournal();                // 别的设备（旧版面板）记进交易日志的交易，搬进喊单记录
       try { localStorage.setItem(CKEY, JSON.stringify(C)); localStorage.setItem(JKEY, JSON.stringify(J)); } catch (e) { /* 只是缓存 */ }
       syncSim(rs.obj, false); syncSim(simLocal(), false);
       markFlips();
       const cd = callsDoc(), jd = journalDoc();
       const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-      newC = C.calls.filter(c => !before.has(c.id) && !c.sim).length; newT = J.trades.filter(t => !beforeT.has(t.id)).length;
+      newC = C.calls.filter(c => !before.has(c.id) && !c.sim && !c.real).length;
       upC = !CLOUD.ro && !same(cd, rc.obj); upJ = !CLOUD.ro && !same(jd, rj.obj);
       const sc = !upC ? rc.sha : await ghPut(AF("calls.json"), cd, rc.sha);
       const sj = !upJ ? rj.sha : await ghPut(AF("journal.json"), jd, rj.sha);
       if (sc !== null && sj !== null) break;
     }
     CLOUD.last = Date.now(); CLOUD.err = "";
-    const parts = [newC ? `下载新喊单 ${newC} 条` : "", newT ? `下载新交易 ${newT} 笔` : "", upC ? "上传喊单记录" : "", upJ ? "上传交易日志" : ""].filter(Boolean);
-    const sum = `喊单 ${C.calls.filter(c => !c.sim).length} 条 · 交易 ${J.trades.length} 笔`;
+    const parts = [newC ? `下载新喊单 ${newC} 条` : "", newT ? `交易日志搬进实盘 ${newT} 笔` : "", upC ? "上传交易记录" : "", upJ ? "上传账户设置" : ""].filter(Boolean);
+    const sum = `喊单 ${C.calls.filter(c => !c.sim && !c.real).length} 条 · 实盘 ${RC().length} 笔`;
     if (parts.length) syncLog("作战面板", parts.join("、"), sum, "good"); else if (manual) syncLog("作战面板", "已是最新", sum);
     cNames(); renderCalls(); renderJournal(); verifyCalls();
   } catch (e) { CLOUD.err = e.message || String(e); syncLog("作战面板", "同步出错", CLOUD.err, "bad"); }
@@ -2418,7 +2468,7 @@ function cloudInit() {
   renderCloud();
 }
 
-// ---------------- 喊单记录与验证（本机缓存 + 云端同步） ----------------
+// ---------------- 交易记录：喊单、实盘、模型、模拟盘（本机缓存 + 云端同步） ----------------
 const CKEY = AK("btc_calls_v1");
 const C = (() => { try { return JSON.parse(localStorage.getItem(CKEY)) || {}; } catch (e) { return {}; } })();
 C.calls = C.calls || [];
@@ -2482,7 +2532,7 @@ function cPreview() {
     (e.sl && e.sl.liqHit ? ` 注意：${z.lev} 倍杠杆在碰到止损之前就会强平，最多亏掉整份保证金 ${fmt(z.amt)} U。` : "") +
     (e.tp && e.tp.pct < 0 ? " 注意：止盈价在进场价的亏损一侧，检查一下方向。" : "") + (e.sl && e.sl.pct > 0 ? " 注意：止损价在进场价的盈利一侧，检查一下方向。" : "");
 }
-function cEntryUI() { const lim = $("cEntry").value === "limit"; $("cValidL").hidden = !lim; $("cRefL").firstChild.textContent = lim ? "到这个价再进" : "进场价"; $("cRef").placeholder = lim ? "必填" : "空着 = 市价"; }
+function cEntryUI() { const lim = $("cEntry").value === "limit" && C.src !== "real"; $("cValidL").hidden = !lim; $("cRefL").firstChild.textContent = lim ? "到这个价再进" : "进场价"; $("cRef").placeholder = lim ? "必填" : "空着 = 市价"; }
 // 逐根 K 线核对一条喊单（到期前也会算，用来显示进行中的状态）
 // 某个时刻有效的止损 / 止盈：开仓时的值，再按修改记录依次覆盖（修改之前的 K 线仍按旧值判断）
 function lvAt(c, t) {
@@ -2532,6 +2582,13 @@ async function exactBar(c, b, filled, sgn, fillBy, exp) {
   return r;
 }
 async function verifyCall(c) {
+  // 非 BTC 的实盘：面板没有它的行情，不核对方向，只记你填的平仓
+  if (isNonBtc(c)) {
+    const sgn = c.side === "long" ? 1 : -1, me = c.manualExit;
+    c.res = { done: !!me, endPx: me ? me.px : NaN, chg: NaN, limit: false, filled: c.t, grade: "非 BTC 不核对", adv: NaN, fav: NaN, tHit: null, sHit: null, first: null, amb: false, at: Date.now() };
+    c.exit = me ? { ...me, pnl: sgn * (me.px / c.ref - 1) * 100 } : null;
+    return;
+  }
   const now = Date.now(), span = validMs(c) / 6e4 + c.hz, iv = span <= 1440 ? ["1m", 6e4] : span <= 7200 ? ["5m", 3e5] : ["1h", 36e5];
   const start = Math.floor(c.t / iv[1]) * iv[1], lastEnd = c.t + validMs(c) + c.hz * 6e4, end = Math.min(lastEnd, now);
   const k = (await jfetch(`${FAPI}/fapi/v1/klines?symbol=BTCUSDT&interval=${iv[0]}&startTime=${start}&endTime=${end}&limit=1500`)).map(toBar);
@@ -2584,7 +2641,7 @@ async function verifyCall(c) {
   if (filled && first === "stop") ex = { t: sHit, px: sPx, why: changed && sPx !== (c.orig || {}).stop ? "止损（改过）" : "止损" };
   else if (filled && first === "target") ex = { t: tHit, px: tPx, why: changed && tPx !== (c.orig || {}).target ? "止盈（改过）" : "止盈" };
   else if (filled && done) ex = { t: exp, px: last.c, why: "到时间" };
-  if (c.sim) ex = null;                       // 模拟盘的单：只认模拟盘里真实的平仓（止盈止损、强平、手动都在那边算）
+  if (c.sim || c.real) ex = null;            // 模拟盘和实盘：只认真实的平仓（模拟盘在那边算，实盘是你记的平仓价）
   if (filled && c.manualExit && (!ex || c.manualExit.t < ex.t)) ex = { ...c.manualExit, why: c.manualExit.why || "手动卖出" };
   if (ex) ex.pnl = sgn * (ex.px / c.ref - 1) * 100;
   c.exit = ex;
@@ -2593,7 +2650,7 @@ async function verifyCall(c) {
 // 不管这条喊单自己的验证周期，统一看进场后 1h / 4h / 24h 的方向，用来比较方向判断在多长时间内最准
 const HZ_CMP = [[60, "1 小时"], [240, "4 小时"], [1440, "24 小时"]];
 async function horizonCheck(c) {
-  const r = c.res, start = r && r.filled; if (!start) return;
+  const r = c.res, start = r && r.filled; if (!start || isNonBtc(c)) return;
   c.hzRes = c.hzRes || {};
   for (const [m] of HZ_CMP) {
     const at = Math.floor(start / 6e4) * 6e4 + m * 6e4;
@@ -2619,6 +2676,7 @@ async function verifyCalls() {
 // 实时判断：已进场、还没卖出的单，现价碰到止损 / 止盈或到了最长持有时间就是「该卖了」
 function posState(c, now, P) {
   if (!c.res || !c.res.filled || c.exit) return null;
+  if (isNonBtc(c)) return { why: null, exp: callExp(c), pnl: NaN, toStop: NaN, toTgt: NaN };
   const sgn = c.side === "long" ? 1 : -1, exp = callExp(c);
   let why = null;
   if (c.stop && (sgn > 0 ? P <= c.stop : P >= c.stop)) why = "触及止损";
@@ -2663,7 +2721,7 @@ function renderPositions() {
   const open = C.calls.filter(c => c.res && c.res.filled && !c.exit).map(c => ({ c, s: posState(c, now, P) })).filter(x => x.s && !x.s.stale).sort((a, b) => b.c.t - a.c.t);
   const sell = open.filter(x => x.s && x.s.why);
   sell.forEach(x => notifySell(x.c, x.s.why));
-  open.forEach(x => { x.w = x.s.why ? [] : watchAlerts(x.c, now, P); x.w.forEach(al => notifyWatch(x.c, al)); });
+  open.forEach(x => { x.w = x.s.why || isNonBtc(x.c) ? [] : watchAlerts(x.c, now, P); x.w.forEach(al => notifyWatch(x.c, al)); });
   const watching = open.filter(x => x.w.length);
   S.sellCount = sell.length;
   $("pAlert").className = "verdict " + (sell.length ? "badv" : open.length ? "" : "goodv");
@@ -2673,9 +2731,9 @@ function renderPositions() {
   if (!sell.length && watching.length) $("pAlert").className = "verdict " + (watching.some(x => x.w.some(a => a.lv === "bad")) ? "badv" : "");
   setHTML($("pOpen"), open.length ? `<thead><tr><th>方向</th><th>进场价</th><th>进场</th><th>谁</th><th>投入 × 杠杆</th><th>止损</th><th>止盈</th><th>到止盈预计赚</th><th>到止损预计亏</th><th>最长到</th><th>现在盈亏<br>未扣手续费</th><th>现在盈亏<br>扣手续费后</th><th>离止损</th><th>离止盈</th><th>状态 / 盘面提醒</th><th></th></tr></thead><tbody>` +
     open.map(x => { const { c, s } = x; return `<tr class="${s && s.why ? "sell" : ""}"><td class="${c.side === "long" ? "good" : "bad"}">${c.side === "long" ? "多" : "空"}</td><td>${fmt(c.ref)}</td><td>${fmtDTs(c.res.filled)}</td><td class="txt">${esc(c.who)}</td>
-      <td>${sizeTxt(c)}<small>名义 ${fmt(sizeOf(c).amt * sizeOf(c).lev)} U</small></td><td>${c.stop ? fmt(c.stop) : "—"}</td><td>${c.target ? fmt(c.target) : "—"}</td><td>${plCell(expectPL(c).tp)}</td><td>${plCell(expectPL(c).sl)}</td><td>${c.sim ? "按模拟盘平仓" : `${fmtT(s.exp)}（剩 ${dur(s.exp - now)}）`}</td><td>${moneyCell(c, s.pnl, false)}</td><td>${moneyCell(c, s.pnl, true)}</td>
+      <td>${sizeTxt(c)}<small>名义 ${fmt(sizeOf(c).amt * sizeOf(c).lev)} U</small></td><td>${c.stop ? fmt(c.stop) : "—"}</td><td>${c.target ? fmt(c.target) : "—"}</td><td>${plCell(expectPL(c).tp)}</td><td>${plCell(expectPL(c).sl)}</td><td>${c.sim ? "按模拟盘平仓" : c.real ? "手动平仓" : `${fmtT(s.exp)}（剩 ${dur(s.exp - now)}）`}</td><td>${moneyCell(c, s.pnl, false)}</td><td>${moneyCell(c, s.pnl, true)}</td>
       <td>${isFinite(s.toStop) ? fmt(s.toStop) : "—"}</td><td>${isFinite(s.toTgt) ? fmt(s.toTgt) : "—"}</td><td class="txt">${s.why ? `<b class="bad">该卖了：${s.why}</b>` : x.w && x.w.length ? x.w.map(a => `<span class="${a.lv}">⚠ ${esc(a.text.split("。")[0])}</span>`).join("<br>") : "持有中 · 盘面正常"}</td>
-      <td class="txt">${c.sim ? `<a class="btn sm" href="sim.html">去模拟盘操作</a>` : `<button type="button" class="btn sm" data-psell="${c.id}">手动卖出</button>${!isBot(c) ? `<button type="button" class="btn sm" data-cedit="${c.id}">改止盈止损</button>` : ""}`}</td></tr>`; }).join("") + "</tbody>" : "");
+      <td class="txt">${c.real ? jActs(c) : c.sim ? `<a class="btn sm" href="sim.html">去模拟盘操作</a>` : `<button type="button" class="btn sm" data-psell="${c.id}">手动卖出</button>${!isBot(c) ? `<button type="button" class="btn sm" data-cedit="${c.id}">改止盈止损</button>` : ""}`}</td></tr>`; }).join("") + "</tbody>" : "");
   // 模拟盘还没成交的挂单（限价 / 条件单）：成交了就变成上面的持仓，撤了就消失
   const pend = ((SIM_DOC && SIM_DOC.orders) || []).filter(o => !o.ro && !o.close), TY = { limit: "限价", stop: "条件市价" }, TN = typeof RV !== "undefined" ? RV.TAG_NAME : {};
   setHTML($("pSimOrd"), pend.length ? `<h3 class="sub-h">模拟盘挂单 · 等成交</h3><div class="tablewrap"><table class="jt"><thead><tr><th>方向</th><th>类型</th><th>价格 / 触发价</th><th>数量</th><th>止盈 / 止损</th><th>下单时间</th><th>理由</th><th></th></tr></thead><tbody>` +
@@ -2713,9 +2771,10 @@ function renderAGroups(grouped, who) {
 function renderCalls() {
   if (!$("cTable")) return;
   const grouped = groupAExperiments(C.calls);
-  renderAGroups(grouped, $("cFilter").value);
+  renderAGroups(grouped, $("cFilter").value.startsWith("@") ? "" : $("cFilter").value);
   // 「全部人」的统计只算人喊的和模型的，模拟盘真下的单在下拉里单独选「模拟盘」看；表格照样全列出来
-  const who = $("cFilter").value, all = C.calls.slice().sort((a, b) => b.t - a.t), shown = all.filter(c => !who || c.who === who), list = who ? shown : shown.filter(c => !c.sim);
+  const who = $("cFilter").value, all = C.calls.slice().sort((a, b) => b.t - a.t), inScope = c => !who || (who === "@real" ? c.real : who === "@sim" ? c.sim : c.who === who && !c.real);
+  const shown = all.filter(inScope), list = who ? shown : shown.filter(c => !c.sim);
   const done = list.filter(c => c.res && c.res.done), good = done.filter(c => c.res.grade === "对"), bad = done.filter(c => c.res.grade === "错");
   const correlated = list.some(c => grouped.byId.has(c.id));
   const dec = good.length + bad.length, acc = dec ? good.length / dec * 100 : NaN, err = dec && !correlated ? 98 / Math.sqrt(dec) : NaN;
@@ -2757,7 +2816,7 @@ function renderCalls() {
   const best = hzRows.filter(r => r.n >= 5).sort((x, y) => y.a - x.a)[0];
   if (done.length) {
     $("cSum").className = "verdict";
-    $("cSum").textContent = `${who || "所有人"}已到期 ${done.length} 条：方向对 ${good.length} 条、错 ${bad.length} 条${dec >= 20 && !correlated ? `，准确率 ${acc.toFixed(0)}% ±${err.toFixed(0)}%${acc - err > 50 ? "，明显好于抛硬币" : "，还看不出比抛硬币好"}` : correlated ? "，含重复相关信号；准确率仅作描述，不作独立样本显著性判断" : "，样本还少（至少 20 条才看得出准确率）"}。` +
+    $("cSum").textContent = `${who === "@real" ? "实盘" : who === "@sim" ? "模拟盘" : who || "所有人"}已到期 ${done.length} 条：方向对 ${good.length} 条、错 ${bad.length} 条${dec >= 20 && !correlated ? `，准确率 ${acc.toFixed(0)}% ±${err.toFixed(0)}%${acc - err > 50 ? "，明显好于抛硬币" : "，还看不出比抛硬币好"}` : correlated ? "，含重复相关信号；准确率仅作描述，不作独立样本显著性判断" : "，样本还少（至少 20 条才看得出准确率）"}。` +
       (!correlated && best && hzRows.filter(r => r.n >= 5).length > 1 ? ` 按进场后的时间看，${best.name}的方向准确率最高（${best.a.toFixed(0)}%）${best.a - best.e > 50 ? (best.name === "1 小时" ? "，说明判断的优势很短，止盈应该放在 1 小时以内" : "") : `，但还在误差范围内${best.name === "1 小时" ? "；样本多了如果仍是 1 小时最准，止盈就应该放在 1 小时以内" : ""}`}。` : "") +
       (good.length ? ` 方向对的 ${good.length} 条里，有 ${swept} 条到期前曾逆向 ${fmt(fixed)} 美元以上——用 ${fmt(fixed)} 美元的止损，这些对的单会先被扫掉（止损对照值在「波动与扛单」里改）。` : "");
   }
@@ -2771,20 +2830,21 @@ function renderCalls() {
       : !r.filled ? `等成交 · 剩 ${dur(c.t + validMs(c) - now)}` : `持有中 · 剩 ${dur(callExp(c) - now)}`;
     const ag = grouped.byId.get(c.id);
     const groupTag = ag ? `<abbr title="A 实验组 ${fmtDTs(ag.group.start)} · 第 ${ag.nth} 次；此前退出亏损 ${ag.losses} 条；触发时此前仍在计划持有期且无退出记录 ${ag.open} 条。重复触发不代表确认增强">A 实验组第 ${ag.nth} 次</abbr>` : "";
-    const tags = [groupTag, r && r.first === "target" ? "止盈先到" : "", r && r.first === "stop" ? "止损先到" : "", c.flip ? `改口 ${fmtT(c.flip)}` : "", (c.mods || []).length ? `改过 ${c.mods.length} 次止盈止损` : "", r && r.amb ? "同一分钟先后不确定" : ""].filter(Boolean).map(x => `<span class="tag">${x}</span>`).join("");
+    const tags = [c.real ? "实盘" + (isNonBtc(c) ? " · " + esc(c.sym) : "") : "", ...(c.real ? jTags(c.j) : []), groupTag, r && r.first === "target" ? "止盈先到" : "", r && r.first === "stop" ? "止损先到" : "", c.flip ? `改口 ${fmtT(c.flip)}` : "", (c.mods || []).length ? `改过 ${c.mods.length} 次止盈止损` : "", r && r.amb ? "同一分钟先后不确定" : ""].filter(Boolean).map(x => `<span class="tag">${x}</span>`).join("");
     const entryTxt = c.entry === "limit" || (r && r.limit) ? `到 ${fmt(c.ref)} 再进${c.validMin ? `<small>${c.validMin} 分钟内 · ${r && r.filled ? fmtT(r.filled).slice(-5) + " 成交" : "未成交"}</small>` : `<small>${r && r.filled ? fmtT(r.filled).slice(-5) + " 成交" : "未成交"}</small>`}`
       : `现价 ${c.ref ? fmt(c.ref) : "—"}`;
     const open = r && r.filled && !c.exit, pend = r && !r.filled && !r.done;
-    const act = c.sim ? (open ? `<a class="btn sm" href="sim.html">去模拟盘操作</a>` : "")
+    const act = c.real ? jActs(c) : c.sim ? (open ? `<a class="btn sm" href="sim.html">去模拟盘操作</a>` : "")
       : (open ? `<button type="button" class="btn sm" data-psell="${c.id}">卖出</button>${!isBot(c) ? `<button type="button" class="btn sm" data-cedit="${c.id}">改止盈止损</button>` : ""}` : pend ? `<button type="button" class="btn sm" data-ccancel="${c.id}">撤单</button>` : "") +
         `<a class="btn sm" href="sim.html?call=${encodeURIComponent(c.id)}">放进模拟盘</a>`;
     return `<tr><td class="${c.side === "long" ? "good" : "bad"}">${c.side === "long" ? "多" : "空"}</td><td>${entryTxt}</td><td>${fmtDTs(c.t)}</td><td class="txt">${esc(c.who)}</td>
-      <td class="txt"><div class="clamp" title="${esc(c.text || "")}">${esc(c.text || "—")}</div></td><td>${sizeTxt(c)}</td><td>${c.target ? fmt(c.target) : "—"}</td><td>${c.stop ? fmt(c.stop) : "—"}</td><td>${plCell(expectPL(c).tp)}</td><td>${plCell(expectPL(c).sl)}</td><td>${HZTXT[c.hz] || c.hz + " 分钟"}</td>
+      <td class="txt"><div class="clamp" title="${esc(c.text || "")}">${esc(c.text || "—")}</div></td><td>${sizeTxt(c)}</td><td>${c.target ? fmt(c.target) : "—"}</td><td>${c.real && open ? jStopTxt(c.j) : c.stop ? fmt(c.stop) : "—"}</td><td>${plCell(expectPL(c).tp)}</td><td>${plCell(expectPL(c).sl)}</td><td>${HZTXT[c.hz] || (c.real ? (c.j.exit ? dur(c.hz * 6e4) : "手动平仓") : c.hz + " 分钟")}</td>
       <td class="res">${st}${tags ? "<br>" + tags : ""}</td>
       <td>${c.exit ? `${fmtDTs(c.exit.t)}<small>${fmt(c.exit.px)} · ${c.exit.why}</small>` : open ? "持有中" : "—"}</td>
       <td>${moneyCell(c, cur, false)}</td><td>${moneyCell(c, cur, true)}</td>
       <td>${r && r.filled ? fmt(r.adv) : "—"}</td><td>${r && r.filled ? fmt(r.fav) : "—"}</td>
-      <td class="acts">${act}<button type="button" class="btn sm" data-cdel="${c.id}">删除</button></td></tr>`;
+      <td class="acts">${act}<button type="button" class="btn sm" data-cdel="${c.id}">删除</button></td></tr>` +
+      (c.real && JOPEN.has(c.j.id) ? `<tr class="planrow"><td colspan="18">${jPlanHtml(c.j)}</td></tr>` : "");
   }).join("");
   setHTML($("cTable"), shown.length ? `<thead><tr><th>方向</th><th>进场</th><th>喊单时间</th><th>谁</th><th>原话</th><th>投入 × 杠杆</th><th>止盈</th><th>止损</th><th>到止盈预计赚</th><th>到止损预计亏</th><th>最长持有</th><th>结果</th><th>卖出</th><th>盈亏 · 未扣手续费<br>金额 / 占投入 %</th><th>盈亏 · 扣手续费后<br>金额 / 占投入 %</th><th>最大逆向</th><th>最大顺向</th><th></th></tr></thead><tbody>${rows}</tbody>` : "");
 }
@@ -2843,11 +2903,13 @@ async function pollModelCalls() {
 function cNames() {
   const names = [...new Set(C.calls.map(c => c.who))], keep = $("cFilter").value;
   $("cWhoList").innerHTML = names.map(n => `<option value="${esc(n)}">`).join("");
-  $("cFilter").innerHTML = `<option value="">全部人（统计不含模拟盘）</option>` + names.map(n => `<option${n === keep ? " selected" : ""}>${esc(n)}</option>`).join("");
+  const opt = (v, t) => `<option value="${esc(v)}"${v === keep ? " selected" : ""}>${esc(t)}</option>`;
+  $("cFilter").innerHTML = opt("", "全部（统计不含模拟盘）") + opt("@real", "只看实盘") + opt("@sim", "只看模拟盘") + names.filter(n => n !== SIM_WHO).map(n => opt(n, n + (C.calls.some(c => c.who === n && c.real) ? "（喊单，不含实盘）" : ""))).join("");
 }
 // 卖出：按现价记一笔，喊单记录、持仓与卖出、云端同步一起更新
 function sellCall(id) {
   const c = C.calls.find(x => x.id === id);
+  if (c && c.real) return jActClick({ target: { dataset: { jact: "close", id: c.j.id } } });
   if (!c || !isFinite(S.price) || !c.res || !c.res.filled || c.exit) return;
   const pnl = (c.side === "long" ? 1 : -1) * (S.price / c.ref - 1) * 100, u = pnlU(c, pnl);   // 按喊单的投入和杠杆（没写就按默认）
   if (!confirm(`按现价 ${fmt(S.price)} 卖出？\n${c.who} ${c.side === "long" ? "多" : "空"}单，进场 ${fmt(c.ref)}，盈亏 ${pct(pnl)}${isFinite(u) ? `（${u >= 0 ? "+" : ""}${u.toFixed(1)} U）` : ""}`)) return;
@@ -2893,7 +2955,30 @@ function syncSim(sim, render = true) {
 }
 const simLocal = () => { try { return JSON.parse(localStorage.getItem(AK("btc_sim_v1"))); } catch (e) { return null; } };
 addEventListener("storage", e => { if (e.key === AK("btc_sim_v1")) syncSim(simLocal()); });
+// 记一笔：喊单 / 我的实盘
+function cSrcUI(src) {
+  C.src = src === "real" ? "real" : "call"; const real = C.src === "real";
+  document.querySelectorAll(".csrc button").forEach(b => b.setAttribute("aria-pressed", b.dataset.src === C.src));
+  $("realBox").hidden = !real; $("cWhoL").hidden = real; $("cEntryL").hidden = real;
+  if (real) { $("cEntry").value = "market"; cEntryUI(); }
+  $("cTimeT").textContent = real ? "开仓时间" : "喊单时间"; $("cWhoLg").textContent = real ? "什么时候 · 方向" : "谁 · 什么时候 · 方向";
+  $("cText").placeholder = real ? "备注（可选）。也可以贴一段原话，点「识别填入」把价位填进下面" : "粘贴喊单原话，例如：现价空 100U 20倍，止损 84800，目标 83000，今晚看 · 或：30 分钟内回踩 82500 再多，到 83300 卖";
+  $("cAdd").textContent = real ? "记一笔实盘" : "保存这条喊单";
+  $("cSrcHint").textContent = real ? "你在交易所真下的单：只认你记的平仓，风控和归因只算这些" : "别人或自己的判断，到期自动按行情核对对错";
+}
+function rTab(k) {
+  if (!document.querySelector(`[data-rpanel="${k}"]`)) k = "list";
+  document.querySelectorAll("[data-rtab]").forEach(b => b.setAttribute("aria-selected", b.dataset.rtab === k));
+  document.querySelectorAll("[data-rpanel]").forEach(p => p.hidden = p.dataset.rpanel !== k);
+  try { localStorage.setItem("btc_rtab", k); } catch (e) { /* 只在本次有效 */ }
+}
 function callsInit() {
+  if (migrateJournal()) { markFlips(); csave(); }
+  document.querySelectorAll(".csrc button").forEach(b => b.onclick = () => { cSrcUI(b.dataset.src); cPreview(); });
+  cSrcUI("call");
+  document.querySelectorAll("[data-rtab]").forEach(b => b.onclick = () => rTab(b.dataset.rtab));
+  let rt0 = "list"; try { rt0 = localStorage.getItem("btc_rtab") || "list"; } catch (e) { /* 默认记录页 */ }
+  rTab(rt0);
   $("cTime").value = localDT(Date.now());
   $("c-long").onclick = () => cSetSide("long"); $("c-short").onclick = () => cSetSide("short");
   $("cParse").onclick = () => {
@@ -2915,6 +3000,13 @@ function callsInit() {
     if (!C.side) { $("cParseMsg").textContent = "请先选方向（看多 / 看空）。"; return; }
     if (t > Date.now() + 6e4) { $("cParseMsg").textContent = "喊单时间不能在未来。"; return; }
     const entry = $("cEntry").value, px = +$("cRef").value;
+    if (C.src === "real") {
+      const c = addReal(t); if (!c) return;
+      C.calls.push(c); markFlips(); csave();
+      ["cText", "cRef", "cTarget", "cStop", "cAmt", "cLev"].forEach(id => $(id).value = ""); $("cTime").value = localDT(Date.now()); cSetSide(null);
+      $("cParseMsg").textContent = "已记一笔实盘，开仓计划已保存（之后不能改，改动会记在变更记录里）。"; cNames(); renderCalls(); renderPositions(); renderJournal(); verifyCalls();
+      return;
+    }
     if (entry === "limit" && !px) { $("cParseMsg").textContent = "到价再进要填进场价。"; return; }
     const c = { id: Date.now().toString(36), t, who: ($("cWho").value || "张主任").trim(), side: C.side, text: $("cText").value.trim(), entry,
       ref: px || (Date.now() - t < 6e4 && isFinite(S.price) ? S.price : 0), refGiven: !!px, target: +$("cTarget").value || 0, stop: +$("cStop").value || 0, hz: +$("cHz").value,
@@ -3023,7 +3115,7 @@ function renderRulesDoc() {
     sec("数据、计划与复盘", [
       "「当前状态」里的「实时行情」「后台数据」显示数据是否正常、多久前更新、来自哪里；超过 15 分钟没更新会标红，这时新闻和模型成绩可能是旧的。",
       "此刻结论把三件事分开：市场状态（涨跌、波动、各周期均线是否一致）、策略状态（规则有没有通过验证、模型严格执行成绩）、账户约束（还能承担多少亏损）。模型偏涨不等于适合做多，只有通过规则的才叫「参考信号」。",
-      "交易日志开仓时保存一份不可修改的计划和行情快照；之后加减仓、改止损、撤止损、改持有时间都追加到变更记录。平仓后自动做亏损归因：按计划执行的结果、超计划仓位、撤止损 / 改止损、超时持有、交易成本、非 BTC 交易，加起来等于实际盈亏。",
+      "记「我的实盘」时保存一份不可修改的计划和行情快照（交易日志已于 2026-11-14 合并进交易记录）；之后加减仓、改止损、撤止损、改持有时间都追加到变更记录。平仓后自动做亏损归因：按计划执行的结果、超计划仓位、撤止损 / 改止损、超时持有、交易成本、非 BTC 交易，加起来等于实际盈亏。",
       "喊单成绩分两套：方向成绩（到时间涨还是跌）和执行成绩（有没有成交、止盈止损谁先到、扣费后赚亏）。写了投入和杠杆的按实际金额算，没写的按默认金额模拟，两者分开显示。",
     ], true),
     sec("此刻结论：做多 / 做空怎么判", [
@@ -3089,7 +3181,7 @@ function renderRulesDoc() {
       "模型自动记单：「此刻结论」每出现一次参考信号（规则 A 或 B）就记一条「模型·此刻结论」，同一规则同方向 60 分钟内只记一次；后台监控程序在跑时浏览器关着也会记，并在买入和该卖时发 Mac 通知。",
       "持有期间盯盘面：急动（5 或 15 分钟走 1 个 ATR 以上）、离止损不到 0.3 个 ATR、15 分钟内进入美股开盘或数据公布时段、红色新闻警报，都会提醒。回测里这些时候马上卖都没有比按计划拿着更好（平均差 0.05%–0.27%），所以提醒只说明发生了什么、该检查什么，卖出仍按计划。",
       "盈亏按价格百分比算，没扣手续费和资金费，也没乘杠杆。",
-      "存储：点「连接云端」并填一次 GitHub 令牌后，喊单记录和交易日志存在私有仓库 logitlong/btc-records（只有你能看），每分钟和每次改动后自动同步，换设备填同一个令牌就能读到；浏览器里只留一份缓存，断网时先存本机、恢复后自动补传。后台监控程序配置了 RECORDS_REPO 后，浏览器关着也会对人工喊单发 Mac 提醒。",
+      "存储：点「连接云端」并填一次 GitHub 令牌后，交易记录（calls.json，含喊单和实盘）和账户设置（journal.json，里面原来的交易日志保留作备份）存在私有仓库 logitlong/btc-records（只有你能看），每分钟和每次改动后自动同步，换设备填同一个令牌就能读到；浏览器里只留一份缓存，断网时先存本机、恢复后自动补传。后台监控程序配置了 RECORDS_REPO 后，浏览器关着也会对人工喊单发 Mac 提醒。",
       "时间：右上角可切换东京时间 / 北京时间，页面上所有时间同步切换（各设备分别保存）。",
     ]),
   ].join("");
@@ -3675,7 +3767,7 @@ syncSim(simLocal());
 })();
 cloudInit();
 typeof UI !== "undefined" && UI.onSync(async () => { if (!CLOUD.token) return { ok: false, msg: "这台设备没连云端：在「喊单记录」里点「连接云端」填令牌" }; clearTimeout(CLOUD.timer); await cloudSync(true);
-  return CLOUD.err ? { ok: false, msg: CLOUD.err } : { ok: true, msg: `喊单 ${C.calls.filter(c => !c.sim).length} 条 · 模拟盘 ${C.calls.filter(c => c.sim).length} 单 · 交易 ${J.trades.length} 笔` }; });
+  return CLOUD.err ? { ok: false, msg: CLOUD.err } : { ok: true, msg: `喊单 ${C.calls.filter(c => !c.sim).length} 条 · 模拟盘 ${C.calls.filter(c => c.sim).length} 单 · 实盘 ${RC().length} 笔` }; });
 tzInit();
 (() => {
   const apply = mode => {
