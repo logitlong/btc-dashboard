@@ -1,0 +1,515 @@
+{
+ "updated": "2026-11-21T15:41:20Z",
+ "refit_at": "2026-11-21T14:54:38Z",
+ "lookback_days": 90,
+ "alpha": 1.0,
+ "definition": "振幅% = ln(区间最高/最低) × 100，和 (最高−最低)/价格 几乎相同",
+ "with_dvol": true,
+ "used_dvol": true,
+ "price": 60339.99,
+ "h4": {
+  "asof": "2026-11-21 14:00:00+00:00",
+  "pred_log": -3.319758,
+  "pred_pct": 3.6162,
+  "quintile": 5,
+  "quintile_label": "很大",
+  "intercept": -4.664195,
+  "weights": {
+   "rv1": 0.12688179030800137,
+   "rv4": 0.16250759955314845,
+   "rv24": -0.021190503883629884,
+   "rv168": 0.05800793773834791,
+   "logvol_rel": 0.026184521710203756,
+   "us_session_next": -0.10866358052153739,
+   "weekend": -0.13012500811969982,
+   "hour_sin": -0.015197934836069934,
+   "hour_cos": -0.12978515771121912,
+   "dvol": 0.09027409753787902
+  },
+  "weights_rounded": {
+   "rv1": 0.127,
+   "rv4": 0.163,
+   "rv24": -0.021,
+   "rv168": 0.058,
+   "logvol_rel": 0.026,
+   "us_session_next": -0.109,
+   "weekend": -0.13,
+   "hour_sin": -0.015,
+   "hour_cos": -0.13,
+   "dvol": 0.09
+  },
+  "mu": {
+   "rv1": -5.427296529766601,
+   "rv4": -5.354762816918812,
+   "rv24": -5.291890453219789,
+   "rv168": -5.253376125934586,
+   "logvol_rel": 0.09071021911486761,
+   "us_session_next": 0.21116138763197587,
+   "weekend": 0.27601809954751133,
+   "hour_sin": -0.00038150781553673147,
+   "hour_cos": 0.0014238065510675702,
+   "dvol": 3.6459421445030387
+  },
+  "sd": {
+   "rv1": 0.6811348755025852,
+   "rv4": 0.5765537590452636,
+   "rv24": 0.43375149259845863,
+   "rv168": 0.18472778748753357,
+   "logvol_rel": 0.6555199385332042,
+   "us_session_next": 0.40823528126128933,
+   "weekend": 0.4471382643420726,
+   "hour_sin": 0.7077050517303916,
+   "hour_cos": 0.7068623656679447,
+   "dvol": 0.07319641323007907
+  },
+  "features": [
+   "rv1",
+   "rv4",
+   "rv24",
+   "rv168",
+   "logvol_rel",
+   "us_session_next",
+   "weekend",
+   "hour_sin",
+   "hour_cos",
+   "dvol"
+  ],
+  "equation": [
+   {
+    "key": "rv1",
+    "name": "过去 1 小时振幅",
+    "weight": 0.126882,
+    "now": -4.288489,
+    "now_text": "上一小时 1.37%",
+    "z": 1.6719,
+    "contrib": 0.212137,
+    "amp_mult_per_std": 1.1353
+   },
+   {
+    "key": "rv4",
+    "name": "过去 4 小时平均振幅",
+    "weight": 0.162508,
+    "now": -3.908964,
+    "now_text": "对数均值 -3.91",
+    "z": 2.5077,
+    "contrib": 0.407513,
+    "amp_mult_per_std": 1.1765
+   },
+   {
+    "key": "rv24",
+    "name": "过去 24 小时平均振幅",
+    "weight": -0.021191,
+    "now": -4.022636,
+    "now_text": "对数均值 -4.02",
+    "z": 2.9262,
+    "contrib": -0.062008,
+    "amp_mult_per_std": 0.979
+   },
+   {
+    "key": "rv168",
+    "name": "过去 7 天平均振幅",
+    "weight": 0.058008,
+    "now": -4.531434,
+    "now_text": "对数均值 -4.53",
+    "z": 3.9081,
+    "contrib": 0.226703,
+    "amp_mult_per_std": 1.0597
+   },
+   {
+    "key": "logvol_rel",
+    "name": "成交量相对近 7 天",
+    "weight": 0.026185,
+    "now": 0.756197,
+    "now_text": "成交量是近 7 天中位的 2.13 倍",
+    "z": 1.0152,
+    "contrib": 0.026583,
+    "amp_mult_per_std": 1.0265
+   },
+   {
+    "key": "us_session_next",
+    "name": "下一小时在美股交易时段",
+    "weight": -0.108664,
+    "now": 0.0,
+    "now_text": "不是",
+    "z": -0.5173,
+    "contrib": 0.056207,
+    "amp_mult_per_std": 0.897
+   },
+   {
+    "key": "weekend",
+    "name": "周末",
+    "weight": -0.130125,
+    "now": 1.0,
+    "now_text": "是",
+    "z": 1.6191,
+    "contrib": -0.210691,
+    "amp_mult_per_std": 0.878
+   },
+   {
+    "key": "hour_sin",
+    "name": "钟点（正弦）",
+    "weight": -0.015198,
+    "now": -0.5,
+    "now_text": "-0.50",
+    "z": -0.706,
+    "contrib": 0.010729,
+    "amp_mult_per_std": 0.9849
+   },
+   {
+    "key": "hour_cos",
+    "name": "钟点（余弦）",
+    "weight": -0.129785,
+    "now": -0.866025,
+    "now_text": "-0.87",
+    "z": -1.2272,
+    "contrib": 0.15927,
+    "amp_mult_per_std": 0.8783
+   },
+   {
+    "key": "dvol",
+    "name": "Deribit 波动率指数",
+    "weight": 0.090274,
+    "now": 4.065945,
+    "now_text": "此刻 58.3",
+    "z": 5.738,
+    "contrib": 0.517995,
+    "amp_mult_per_std": 1.0945
+   }
+  ],
+  "pred_check": -3.319758,
+  "n_train": 1989,
+  "train_start": "2026-08-30 13:00:00+00:00",
+  "train_end": "2026-11-21 09:00:00+00:00",
+  "context": {
+   "dvol": 58.32,
+   "last_hour_range_pct": 1.3726,
+   "close": 60339.99,
+   "us_session_next": false,
+   "weekend": true
+  },
+  "oos": {
+   "oos_start": "2026-09-29 13:00:00+00:00",
+   "oos_end": "2026-11-21 09:00:00+00:00",
+   "n": 1269,
+   "r2": {
+    "naive": -0.021,
+    "har": 0.357,
+    "full": 0.37,
+    "full_dvol": 0.387
+   },
+   "quintiles": [
+    {
+     "q": 1,
+     "label": "很安静",
+     "n": 254,
+     "pred_med_pct": 0.545,
+     "actual_med_pct": 0.466
+    },
+    {
+     "q": 2,
+     "label": "偏静",
+     "n": 254,
+     "pred_med_pct": 0.783,
+     "actual_med_pct": 0.713
+    },
+    {
+     "q": 3,
+     "label": "中等",
+     "n": 253,
+     "pred_med_pct": 0.989,
+     "actual_med_pct": 0.963
+    },
+    {
+     "q": 4,
+     "label": "偏大",
+     "n": 254,
+     "pred_med_pct": 1.2,
+     "actual_med_pct": 1.146
+    },
+    {
+     "q": 5,
+     "label": "很大",
+     "n": 254,
+     "pred_med_pct": 1.668,
+     "actual_med_pct": 1.617
+    }
+   ],
+   "median_actual_pct": 0.979,
+   "pred_col": "full_dvol"
+  },
+  "used_dvol": true
+ },
+ "h1": {
+  "asof": "2026-11-21 14:00:00+00:00",
+  "pred_log": -4.197877,
+  "pred_pct": 1.5027,
+  "quintile": 5,
+  "quintile_label": "很大",
+  "intercept": -5.424828,
+  "weights": {
+   "rv1": 0.15280125820428092,
+   "rv4": 0.11329055200134297,
+   "rv24": 0.009440620358836367,
+   "rv168": 0.06774266030012471,
+   "logvol_rel": 0.11861635300908725,
+   "us_session_next": 0.04814214365173013,
+   "weekend": -0.06663591314209097,
+   "hour_sin": 0.015598369486885632,
+   "hour_cos": -0.019911530447904318,
+   "dvol": 0.07130125316656352
+  },
+  "weights_rounded": {
+   "rv1": 0.153,
+   "rv4": 0.113,
+   "rv24": 0.009,
+   "rv168": 0.068,
+   "logvol_rel": 0.119,
+   "us_session_next": 0.048,
+   "weekend": -0.067,
+   "hour_sin": 0.016,
+   "hour_cos": -0.02,
+   "dvol": 0.071
+  },
+  "mu": {
+   "rv1": -5.4258347314330075,
+   "rv4": -5.353571516026226,
+   "rv24": -5.2900969104163265,
+   "rv168": -5.252319838724487,
+   "logvol_rel": 0.09149107953677899,
+   "us_session_next": 0.21084337349397592,
+   "weekend": 0.27710843373493976,
+   "hour_sin": -2.00642715293703e-17,
+   "hour_cos": -5.4842342180278815e-17,
+   "dvol": 3.6466065618323964
+  },
+  "sd": {
+   "rv1": 0.6818491171457151,
+   "rv4": 0.5769382463254168,
+   "rv24": 0.4358795965051701,
+   "rv168": 0.18658264317880904,
+   "logvol_rel": 0.6553679529297751,
+   "us_session_next": 0.40800982296585697,
+   "weekend": 0.4476828811990589,
+   "hour_sin": 0.7072843346811692,
+   "hour_cos": 0.7072843346811692,
+   "dvol": 0.07511711919563187
+  },
+  "features": [
+   "rv1",
+   "rv4",
+   "rv24",
+   "rv168",
+   "logvol_rel",
+   "us_session_next",
+   "weekend",
+   "hour_sin",
+   "hour_cos",
+   "dvol"
+  ],
+  "equation": [
+   {
+    "key": "rv1",
+    "name": "过去 1 小时振幅",
+    "weight": 0.152801,
+    "now": -4.288489,
+    "now_text": "上一小时 1.37%",
+    "z": 1.668,
+    "contrib": 0.254877,
+    "amp_mult_per_std": 1.1651
+   },
+   {
+    "key": "rv4",
+    "name": "过去 4 小时平均振幅",
+    "weight": 0.113291,
+    "now": -3.908964,
+    "now_text": "对数均值 -3.91",
+    "z": 2.5039,
+    "contrib": 0.283671,
+    "amp_mult_per_std": 1.12
+   },
+   {
+    "key": "rv24",
+    "name": "过去 24 小时平均振幅",
+    "weight": 0.009441,
+    "now": -4.022636,
+    "now_text": "对数均值 -4.02",
+    "z": 2.9078,
+    "contrib": 0.027452,
+    "amp_mult_per_std": 1.0095
+   },
+   {
+    "key": "rv168",
+    "name": "过去 7 天平均振幅",
+    "weight": 0.067743,
+    "now": -4.531434,
+    "now_text": "对数均值 -4.53",
+    "z": 3.8636,
+    "contrib": 0.261732,
+    "amp_mult_per_std": 1.0701
+   },
+   {
+    "key": "logvol_rel",
+    "name": "成交量相对近 7 天",
+    "weight": 0.118616,
+    "now": 0.756197,
+    "now_text": "成交量是近 7 天中位的 2.13 倍",
+    "z": 1.0142,
+    "contrib": 0.120306,
+    "amp_mult_per_std": 1.1259
+   },
+   {
+    "key": "us_session_next",
+    "name": "下一小时在美股交易时段",
+    "weight": 0.048142,
+    "now": 0.0,
+    "now_text": "不是",
+    "z": -0.5168,
+    "contrib": -0.024878,
+    "amp_mult_per_std": 1.0493
+   },
+   {
+    "key": "weekend",
+    "name": "周末",
+    "weight": -0.066636,
+    "now": 1.0,
+    "now_text": "是",
+    "z": 1.6147,
+    "contrib": -0.1076,
+    "amp_mult_per_std": 0.9355
+   },
+   {
+    "key": "hour_sin",
+    "name": "钟点（正弦）",
+    "weight": 0.015598,
+    "now": -0.5,
+    "now_text": "-0.50",
+    "z": -0.7069,
+    "contrib": -0.011027,
+    "amp_mult_per_std": 1.0157
+   },
+   {
+    "key": "hour_cos",
+    "name": "钟点（余弦）",
+    "weight": -0.019912,
+    "now": -0.866025,
+    "now_text": "-0.87",
+    "z": -1.2244,
+    "contrib": 0.02438,
+    "amp_mult_per_std": 0.9803
+   },
+   {
+    "key": "dvol",
+    "name": "Deribit 波动率指数",
+    "weight": 0.071301,
+    "now": 4.065945,
+    "now_text": "此刻 58.3",
+    "z": 5.5825,
+    "contrib": 0.398037,
+    "amp_mult_per_std": 1.0739
+   }
+  ],
+  "pred_check": -4.197877,
+  "n_train": 1992,
+  "train_start": "2026-08-30 13:00:00+00:00",
+  "train_end": "2026-11-21 12:00:00+00:00",
+  "context": {
+   "dvol": 58.32,
+   "last_hour_range_pct": 1.3726,
+   "close": 60339.99,
+   "us_session_next": false,
+   "weekend": true
+  },
+  "oos": {
+   "oos_start": "2026-09-29 13:00:00+00:00",
+   "oos_end": "2026-11-21 12:00:00+00:00",
+   "n": 1272,
+   "r2": {
+    "naive": -0.02,
+    "har": 0.477,
+    "full": 0.494,
+    "full_dvol": 0.502
+   },
+   "quintiles": [
+    {
+     "q": 1,
+     "label": "很安静",
+     "n": 255,
+     "pred_med_pct": 0.232,
+     "actual_med_pct": 0.213
+    },
+    {
+     "q": 2,
+     "label": "偏静",
+     "n": 254,
+     "pred_med_pct": 0.348,
+     "actual_med_pct": 0.346
+    },
+    {
+     "q": 3,
+     "label": "中等",
+     "n": 254,
+     "pred_med_pct": 0.45,
+     "actual_med_pct": 0.431
+    },
+    {
+     "q": 4,
+     "label": "偏大",
+     "n": 254,
+     "pred_med_pct": 0.589,
+     "actual_med_pct": 0.585
+    },
+    {
+     "q": 5,
+     "label": "很大",
+     "n": 255,
+     "pred_med_pct": 0.86,
+     "actual_med_pct": 0.855
+    }
+   ],
+   "median_actual_pct": 0.439,
+   "pred_col": "full_dvol"
+  },
+  "used_dvol": true
+ },
+ "practical": {
+  "stop_pct": 3.6162,
+  "stop_usd": 2182.01,
+  "price": 60339.99,
+  "basis": "参考止损距离 = 未来 4 小时预计振幅。这是正常波动大概会走出的高低跨度，用来对照强平距离，不是下单指令。",
+  "maintenance_margin_pct": 0.4,
+  "half_fraction": 0.5,
+  "max_leverage_stop_below_half_liq": 13,
+  "leverage": [
+   {
+    "lev": 20,
+    "liq_distance_pct": 4.6,
+    "half_liq_pct": 2.3,
+    "stop_below_half_liq": false,
+    "normal_move_reaches_liq": false
+   },
+   {
+    "lev": 40,
+    "liq_distance_pct": 2.1,
+    "half_liq_pct": 1.05,
+    "stop_below_half_liq": false,
+    "normal_move_reaches_liq": true
+   },
+   {
+    "lev": 50,
+    "liq_distance_pct": 1.6,
+    "half_liq_pct": 0.8,
+    "stop_below_half_liq": false,
+    "normal_move_reaches_liq": true
+   },
+   {
+    "lev": 100,
+    "liq_distance_pct": 0.6,
+    "half_liq_pct": 0.3,
+    "stop_below_half_liq": false,
+    "normal_move_reaches_liq": true
+   }
+  ]
+ },
+ "summary_zh": "4 小时样本外 R² 0.387，只看过去振幅 0.357，加时段和成交量 0.370，再加 DVOL 0.387（1269 个小时）。1 小时样本外 R² 0.502，只看过去振幅 0.477，加时段和成交量 0.494，再加 DVOL 0.502（1272 个小时）。权重是这次拟合得到的，不是手填的。",
+ "info_only": "只提供信息，不下单，也不是投资建议。"
+}
