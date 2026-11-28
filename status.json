@@ -1,0 +1,986 @@
+{
+ "updated": "11-29 04:03",
+ "tz": "Asia/Tokyo",
+ "price": 59495.14,
+ "market": {
+  "price": 59495.14,
+  "range5": 0.08749050532996207,
+  "base5": 0.10923008269230121,
+  "move15": 0.02922100630553537,
+  "prev24": 2.220303019792213,
+  "vol_ratio": 0.6061483519135177,
+  "oi": 32307.838900000126,
+  "funding": 0.0050962439090599995,
+  "ls": 3.12,
+  "ls_chg15": 0.0,
+  "ma7_slope": 0.014048019961965252,
+  "ma7_mode": "idle",
+  "cross": {
+   "原油期货": null,
+   "美债10年收益率": null,
+   "美元兑日元": null,
+   "黄金期货": null,
+   "纳指期货": null,
+   "美元指数": null
+  },
+  "stocks": {
+   "updated_ms": 1795892612348,
+   "data": {
+    "QQQ": {
+     "regular": 650.99,
+     "regular_at_ms": 1795802400000,
+     "prev_close": 633.93,
+     "ext": {
+      "price": 650.62,
+      "at_ms": 1795816789000,
+      "session": "盘后"
+     },
+     "fullday": 650.99
+    },
+    "SPY": {
+     "regular": 728.32,
+     "regular_at_ms": 1795802400000,
+     "prev_close": 716.7,
+     "ext": {
+      "price": 731.3,
+      "at_ms": 1795816798000,
+      "session": "盘后"
+     },
+     "fullday": 728.32
+    },
+    "IWM": {
+     "regular": 273.79,
+     "regular_at_ms": 1795802400000,
+     "prev_close": 268.87,
+     "ext": {
+      "price": 275.049,
+      "at_ms": 1795816794000,
+      "session": "盘后"
+     },
+     "fullday": 273.79
+    },
+    "NVDA": {
+     "regular": 150.49,
+     "regular_at_ms": 1795802400000,
+     "prev_close": 149.3,
+     "ext": {
+      "price": 149.8,
+      "at_ms": 1795816799000,
+      "session": "盘后"
+     },
+     "fullday": 150.49
+    },
+    "MSTR": {
+     "regular": 81.62,
+     "regular_at_ms": 1795802401000,
+     "prev_close": 79.96,
+     "ext": {
+      "price": 81.7798,
+      "at_ms": 1795816746000,
+      "session": "盘后"
+     },
+     "fullday": 81.62
+    },
+    "COIN": {
+     "regular": 107.04,
+     "regular_at_ms": 1795802400000,
+     "prev_close": 103.72,
+     "ext": {
+      "price": 107.64,
+      "at_ms": 1795816646000,
+      "session": "盘后"
+     },
+     "fullday": 107.04
+    },
+    "BMNR": {
+     "regular": 13.88,
+     "regular_at_ms": 1795802402000,
+     "prev_close": 13.44,
+     "ext": {
+      "price": 13.88,
+      "at_ms": 1795816757000,
+      "session": "盘后"
+     },
+     "fullday": 13.88
+    },
+    "CRCL": {
+     "regular": 49.29,
+     "regular_at_ms": 1795802402000,
+     "prev_close": 48.27,
+     "ext": {
+      "price": 49.53,
+      "at_ms": 1795816764000,
+      "session": "盘后"
+     },
+     "fullday": 49.29
+    },
+    "HOOD": {
+     "regular": 67.92,
+     "regular_at_ms": 1795802401000,
+     "prev_close": 65.78,
+     "ext": {
+      "price": 68.1861,
+      "at_ms": 1795816786000,
+      "session": "盘后"
+     },
+     "fullday": 67.92
+    },
+    "MARA": {
+     "regular": 5.59,
+     "regular_at_ms": 1795802401000,
+     "prev_close": 5.42,
+     "ext": {
+      "price": 5.5685,
+      "at_ms": 1795816663000,
+      "session": "盘后"
+     },
+     "fullday": 5.59
+    },
+    "IREN": {
+     "regular": 13.61,
+     "regular_at_ms": 1795802401000,
+     "prev_close": 12.85,
+     "ext": {
+      "price": 13.61,
+      "at_ms": 1795816791000,
+      "session": "盘后"
+     },
+     "fullday": 13.61
+    },
+    "BITO": {
+     "regular": 15.9,
+     "regular_at_ms": 1795802400000,
+     "prev_close": 16.0,
+     "ext": {
+      "price": 15.9049,
+      "at_ms": 1795816744000,
+      "session": "盘后"
+     },
+     "fullday": 15.9
+    }
+   }
+  },
+  "taker": {
+   "sell": 80504698.9801,
+   "buy": 49696251.6431
+  },
+  "oi_coin": 11492.722727892062,
+  "oi_chg1h": -0.20062841840658985,
+  "px_chg1h": 0.1163703232613722,
+  "ls_1h": 3.12,
+  "ls_chg1h": 0.03000000000000025,
+  "liq_1h": [
+   {
+    "long": 8494.0,
+    "short": 1784.0,
+    "source": "全网（Coinalyze）"
+   },
+   {
+    "long": 0.0,
+    "short": 0.0,
+    "source": "OKX"
+   }
+  ],
+  "oi_chg15": -0.06125686532446606
+ },
+ "ruler": {
+  "session": "周末",
+  "activity": "平静",
+  "h1_median_pct": 0.28,
+  "h4_p80_pct": 1.14,
+  "h1_median_pts": 167,
+  "h4_p80_pts": 678
+ },
+ "upcoming": [
+  {
+   "title": "美股开盘",
+   "at": "11-30 23:30",
+   "at_ms": 1796049000000,
+   "in_min": 2606
+  }
+ ],
+ "alerts": [
+  {
+   "time": "2026-11-28T19:03:41.797653+00:00",
+   "time_local": "11-29 04:03",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做空六维 1/6",
+   "body": "刚满足「J>100后拐头向下」。现在满足的是：J>100后拐头向下。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做空六维 1/6"
+  },
+  {
+   "time": "2026-11-28T19:02:30.059663+00:00",
+   "time_local": "11-29 04:02",
+   "level": "yellow",
+   "kind": "盘面异动",
+   "title": "1 分钟成交量是前 2 小时中位数的 10.2 倍",
+   "body": "这一分钟涨跌 +0.06%。量达到 6 倍就报，不要求同时大涨大跌。只是提醒，不会下单。",
+   "email": true,
+   "subject": "[BTC信号] 1 分钟成交量是前 2 小时中位数的 10.2 倍"
+  },
+  {
+   "time": "2026-11-28T18:55:42.638126+00:00",
+   "time_local": "11-29 03:55",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 3/6",
+   "body": "刚满足「近3根量连续递减」。现在满足的是：近6根收盘都在MA7上、MA7准备上穿或10根内刚上穿MA25、近3根量连续递减。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 3/6"
+  },
+  {
+   "time": "2026-11-28T18:55:42.637935+00:00",
+   "time_local": "11-29 03:55",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 3/6",
+   "body": "刚满足「近6根收盘都在MA7上」。现在满足的是：近6根收盘都在MA7上、MA7准备上穿或10根内刚上穿MA25、近3根量连续递减。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 3/6"
+  },
+  {
+   "time": "2026-11-28T18:55:42.637664+00:00",
+   "time_local": "11-29 03:55",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做空六维 1/6",
+   "body": "刚满足「J>100后拐头向下」。现在满足的是：J>100后拐头向下。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做空六维 1/6"
+  },
+  {
+   "time": "2026-11-28T18:52:19.205418+00:00",
+   "time_local": "11-29 03:52",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 2/6",
+   "body": "刚满足「J>100」。现在满足的是：MA7准备上穿或10根内刚上穿MA25、J>100。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 2/6"
+  },
+  {
+   "time": "2026-11-28T18:52:11.482792+00:00",
+   "time_local": "11-29 03:52",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·地缘] Iran rial falls to near 3 million to US dollar as sanctions, blockade weigh - Investing.co",
+   "body": "间接相关 利空（弱） · 来源：Al Arabiya English、Investing.com · 发布 11-29 03:52（2 家来源报道）\nIran rial falls to near 3 million to US dollar as sanctions, blockade weigh - Investing.com\n\nhttps://news.google.com/rss/articles/CBMiwgFBVV95cUxOODdvLWJOV01leFQzQTRIN0VuWV9hNXRzbjJWc2dWWV9JNDY3M1N0aXJkLVJVLTJJYzJjd2RmYzR1aTkxTzllQ2pfbUFRSGQ4dWxaLTNocVNaQkFwZ0ZOVlZEblhvSkFPZTJ5NTNiLWUzZnNNajQzM0k3TnZWdjBydnJWRFdyQnFUYVozSV90WGFydTRna3hSbElHWXN3aU12QjZ5LTFZSFgzMFFxX0FEeW1TSlNUWkttRWJoTkFmSnRZZw?oc=5\nBTC 当时 59,505",
+   "email": false,
+   "subject": "[Google新闻·地缘] Iran rial falls to near 3 million to US dollar as sanctions, blockade weigh - Investing.co"
+  },
+  {
+   "time": "2026-11-28T18:48:19.939067+00:00",
+   "time_local": "11-29 03:48",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 2/6",
+   "body": "刚满足「近3根量连续递减」。现在满足的是：MA7准备上穿或10根内刚上穿MA25、近3根量连续递减。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 2/6"
+  },
+  {
+   "time": "2026-11-28T18:44:19.510798+00:00",
+   "time_local": "11-29 03:44",
+   "level": "gray",
+   "kind": "共振",
+   "title": "共振档位失效",
+   "body": "共振档位失效：共振观察 已经不成立。之后重新满足会再报。现价 59,487。日线MA99偏空（斜率 -536.6，-0.69%）；4小时MA99偏空（斜率 -867.2，-1.36%）。 两层同向。1 小时下跌，30 分过渡震荡（都看价格和 MA25）。5 分 RSI 63.1 / J 108.8；15 分 RSI 57.0 / J 22.1；30 分 RSI 57.5 / J 53.9；1 小时 RSI 50.6 / J 80.9；4 小时 RSI 34.4 / J 7.4。只是提醒，不会下单。",
+   "email": false,
+   "subject": "共振档位失效"
+  },
+  {
+   "time": "2026-11-28T18:44:19.510466+00:00",
+   "time_local": "11-29 03:44",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做空六维 1/6",
+   "body": "刚满足「J>100后拐头向下」。现在满足的是：J>100后拐头向下。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做空六维 1/6"
+  },
+  {
+   "time": "2026-11-28T18:40:58.831090+00:00",
+   "time_local": "11-29 03:40",
+   "level": "yellow",
+   "kind": "共振",
+   "title": "共振观察 · 日线MA99偏空 · 4小时MA99偏空",
+   "body": "观察：5 分钟严格超买（KDJ）。只是观察，不是提示做空。现价 59,503。日线MA99偏空（斜率 -536.5，-0.69%）；4小时MA99偏空（斜率 -867.1，-1.36%）。 两层同向。1 小时下跌，30 分过渡震荡（都看价格和 MA25）。5 分 RSI 68.3 / J 116.6；15 分 RSI 58.5 / J 24.6；30 分 RSI 58.5 / J 55.7；1 小时 RSI 51.4 / J 82.1；4 小时 RSI 34.7 / J 7.6。只是提醒，不会下单。",
+   "email": true,
+   "subject": "[BTC信号] 共振观察 · 日线MA99偏空 · 4小时MA99偏空"
+  },
+  {
+   "time": "2026-11-28T18:40:58.830882+00:00",
+   "time_local": "11-29 03:40",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 2/6",
+   "body": "刚满足「J>100」。现在满足的是：MA7准备上穿或10根内刚上穿MA25、J>100。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 2/6"
+  },
+  {
+   "time": "2026-11-28T18:40:58.830599+00:00",
+   "time_local": "11-29 03:40",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 2/6",
+   "body": "刚满足「MA7准备上穿或10根内刚上穿MA25」。现在满足的是：MA7准备上穿或10根内刚上穿MA25、J>100。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 2/6"
+  },
+  {
+   "time": "2026-11-28T18:37:01.065588+00:00",
+   "time_local": "11-29 03:37",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做空六维 1/6",
+   "body": "刚满足「J>100后拐头向下」。现在满足的是：J>100后拐头向下。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做空六维 1/6"
+  },
+  {
+   "time": "2026-11-28T18:33:01.219229+00:00",
+   "time_local": "11-29 03:33",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做多六维 2/6",
+   "body": "刚满足「MA7下穿后拐头准备上穿」。现在满足的是：MACD负柱向零收敛、MA7下穿后拐头准备上穿。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做多六维 2/6"
+  },
+  {
+   "time": "2026-11-28T18:32:53.292352+00:00",
+   "time_local": "11-29 03:32",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Bitcoin Spot ETFs Bleed Record $5.78 Billion in November as IBIT Drives 83% of Outflows - ",
+   "body": "直接相关 利空 · 来源：BigGo Finance · 发布 11-29 03:32\nBitcoin Spot ETFs Bleed Record $5.78 Billion in November as IBIT Drives 83% of Outflows - BigGo Finance\n\nhttps://news.google.com/rss/articles/CBMidkFVX3lxTE56ZDhzRkh4OWFpQS0tQnY2U3l6elQ3SWZVaG4yVGtGNVJGaG1zRDU2VFVzMHRBU2dWclFjYXhfWjJhQXhDb0ZmYTlVSEQwS29ZY2phTHZSQ2dzbGdnalBPbWdmWXdPWE80UEJXd3ctYWVyaWp6M1E?oc=5\nBTC 当时 59,421",
+   "email": false,
+   "subject": "[Google新闻·比特币] Bitcoin Spot ETFs Bleed Record $5.78 Billion in November as IBIT Drives 83% of Outflows - "
+  },
+  {
+   "time": "2026-11-28T18:29:32.096948+00:00",
+   "time_local": "11-29 03:29",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Bitcoin drops 27% in 30 days as investors flee amid macro risks and whale sell-offs. - Plu",
+   "body": "直接相关 中性 · 来源：Pluang · 发布 11-29 03:29\nBitcoin drops 27% in 30 days as investors flee amid macro risks and whale sell-offs. - Pluang\n\nhttps://news.google.com/rss/articles/CBMioAFBVV95cUxOWUt2d3I2LTNIWnBBVjkxOXMtRWpUQnpJSXQyOENQY0VzLWZYT2l3SVBodmtxRzJYQkFmQndBMVhmZldrQXZDV2RUckEwTVM1ckMySVNTSnVUbld4cDY3NlM3RHM0MVNEbmZRTW5IcHpsUTVWRk1RaHZldEZOVFBNV09IMGFublBxWVVWVlJSVFNfUi0zbUQwZTZQLVBJZDNT?oc=5\nBTC 当时 59,420",
+   "email": false,
+   "subject": "[Google新闻·比特币] Bitcoin drops 27% in 30 days as investors flee amid macro risks and whale sell-offs. - Plu"
+  },
+  {
+   "time": "2026-11-28T18:25:39.758067+00:00",
+   "time_local": "11-29 03:25",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 1/6",
+   "body": "刚满足「近3根量连续递减」。现在满足的是：近3根量连续递减。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 1/6"
+  },
+  {
+   "time": "2026-11-28T18:22:30.979435+00:00",
+   "time_local": "11-29 03:22",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·地缘] ‘Go further on Iranian regime’, says diaspora leader after firebombing sanctions - The Dai",
+   "body": "间接相关 利空（弱） · 来源：Herald Sun、The Daily Telegraph · 发布 11-29 03:22（2 家来源报道）\n‘Go further on Iranian regime’, says diaspora leader after firebombing sanctions - The Daily Telegraph\n\nhttps://news.google.com/rss/articles/CBMi9wFBVV95cUxOTmI1QVN5eEltbHZaSnRZVUkwRGZ3MXNJVkdqV3N5Z1VZNTQybk5OcGxacVFQQjMwMWxIM1RaNFBvMWlIdVFjNkZZVHBYYTU1NklYcVA0SXJXcnAzRktHTm1FMmZHUDZGSlFLOFJRX29LR2FmOXNud0xsVjhQemdyRUtQRUl2SFZ5ZVJSVjQ1d0pVSHpKOUxQRlhQM1B5ZDM1b3Z4Q0xyajhxbTdhLWp2SWxDczNWaXFnQ0xqbUppN2dVQzZWZTN4Vmd0YnZMX1hycTIyQjZkcUNVcF91Z2VwaEVFU2JoaU5pWGk3OHBqczM3M0I3NnVV?oc=5\nBTC 当时 59,440",
+   "email": false,
+   "subject": "[Google新闻·地缘] ‘Go further on Iranian regime’, says diaspora leader after firebombing sanctions - The Dai"
+  },
+  {
+   "time": "2026-11-28T18:21:39.087214+00:00",
+   "time_local": "11-29 03:21",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 做多六维 2/6",
+   "body": "刚满足「MA7下穿后拐头准备上穿」。现在满足的是：MACD负柱向零收敛、MA7下穿后拐头准备上穿。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 做多六维 2/6"
+  },
+  {
+   "time": "2026-11-28T18:21:31.991854+00:00",
+   "time_local": "11-29 03:21",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Bitcoin pares losses near $59,000 as ETF outflows extend eight-day streak By Investing.com",
+   "body": "直接相关 利空 · 来源：Investing.com South Africa · 发布 11-29 03:21\nBitcoin pares losses near $59,000 as ETF outflows extend eight-day streak By Investing.com - Investing.com South Africa\n\nhttps://news.google.com/rss/articles/CBMiygFBVV95cUxPVzRpZlZfSXVuN0d0Zl9vbzlOb1Jya3pNRTRLUnFPM1E1M2ktTmxFUEZja25oWGZaMmEwYmxTWURwenFpYWFTUE5QX1RmNlJyZDExR1JpQjJMOUkzZVpUQzRVNXV5d0lBVXR6TjZoVWpISlZLaTE5RWotZjFfMG5nbGtUR3JOdXR4MW40cHNmbTF5bWlaRWVxZWp4YTlCeUZWWERfZmozYWRXS2xfYTNhRHE0SGpXUXJVTkJ5S1BtZzhYVWZFeVA4SzFR?oc=5\nBTC 当时 59,459",
+   "email": false,
+   "subject": "[Google新闻·比特币] Bitcoin pares losses near $59,000 as ETF outflows extend eight-day streak By Investing.com"
+  },
+  {
+   "time": "2026-11-28T18:13:18.200032+00:00",
+   "time_local": "11-29 03:13",
+   "level": "gray",
+   "kind": "背景",
+   "title": "背景参考 · 自定义 1/6",
+   "body": "刚满足「近3根量连续递减」。现在满足的是：近3根量连续递减。这一项只记背景。",
+   "email": false,
+   "subject": "背景参考 · 自定义 1/6"
+  },
+  {
+   "time": "2026-11-28T18:11:13.517206+00:00",
+   "time_local": "11-29 03:11",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Bitcoin Price Prediction: BTC Risks a Drop to $50K as Whales Capitulated in November - FXE",
+   "body": "直接相关 中性 · 来源：FXEmpire · 发布 11-29 03:11\nBitcoin Price Prediction: BTC Risks a Drop to $50K as Whales Capitulated in November - FXEmpire\n\nhttps://news.google.com/rss/articles/CBMizgFBVV95cUxNUGEwVk45eUpkQjdVeGNMOFpjV2JyRkxaQjg1d2ZtX0tWMUxRMnRENmRNR1ZPejlmUU9oWlhqclN5NXFHSWx5Q3Q4dEIzNXFmd3ZHUW43X1RIYXg3VVhUYkx6cmUxc0JQQzlzSnlNcjJiZFNVLUNfby16d3hIWHZwUWtNaEtsNjJtUG1uV1d1bml6M2l2WW9MbmZSczhkNmtXNXlILXgxR3ZYcTY5bDlseEFzTjVxeEtna2oyQlFnNndyWTY5NVVrV1pPYjRCQQ?oc=5\nBTC 当时 59,403",
+   "email": false,
+   "subject": "[Google新闻·比特币] Bitcoin Price Prediction: BTC Risks a Drop to $50K as Whales Capitulated in November - FXE"
+  },
+  {
+   "time": "2026-11-28T18:09:03.507634+00:00",
+   "time_local": "11-29 03:09",
+   "level": "red",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Coldcard Bitcoin Wallet Flaw Went Undetected Through 15 Security Reviews as $112.7 Million",
+   "body": "直接相关 中性 · 来源：Hokanews · 发布 11-29 03:09\nColdcard Bitcoin Wallet Flaw Went Undetected Through 15 Security Reviews as $112.7 Million Was Stolen - Hokanews\n\nhttps://news.google.com/rss/articles/CBMie0FVX3lxTE9RSjFwMmZqa0VRZEt5Q2FtQm5ZQWZpcEp6VHZBaUZWMVE2eTEteXV5RTVZRWhFRV9NSDhXTk1wTXRpNUFHQjRnMHFsWUNUX1VLZkRPaTFDVHdSUDljN1M0eE1MM1VDQXhvOFI0NTNiUVlMUDhmODUtUDBrQQ?oc=5\nBTC 当时 59,400",
+   "email": false,
+   "subject": "[Google新闻·比特币] Coldcard Bitcoin Wallet Flaw Went Undetected Through 15 Security Reviews as $112.7 Million"
+  },
+  {
+   "time": "2026-11-28T18:09:03.502189+00:00",
+   "time_local": "11-29 03:09",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Trump-backed World Liberty crypto token falls around 50% overnight - Hum News English",
+   "body": "直接相关 中性 · 来源：Firstpost、Hum News English、WE News English · 发布 11-29 03:09（3 家来源报道）\nTrump-backed World Liberty crypto token falls around 50% overnight - Hum News English\n\nhttps://news.google.com/rss/articles/CBMiqAFBVV95cUxNcS1PX0tOakt1Z3lxd29KaDNKNVpQMnQyOV8wamxaQ1FsYUZMaEZSWC1sLW90akM3S3BjNUJnY0x4a0M0d0daa0h4Nzd1SGI3bHJFMGVvQmh0eU5nQU1CLWw1bHA1M1dBZk4xLVRSR3lscGl3cUhhcVBiUkhrWmVXbWJuMy0wbUlOSWgwd0ROMWlDelA0SUtHZG9xTkJELU0yWm93RlotekI?oc=5\nBTC 当时 59,400",
+   "email": false,
+   "subject": "[Google新闻·比特币] Trump-backed World Liberty crypto token falls around 50% overnight - Hum News English"
+  },
+  {
+   "time": "2026-11-28T18:09:03.493229+00:00",
+   "time_local": "11-29 03:09",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Justin Sun Demands Regulators Probe Trump-Backed WLFI Project - Bitcoin News",
+   "body": "直接相关 中性 · 来源：Bitcoin News · 发布 11-29 03:09\nJustin Sun Demands Regulators Probe Trump-Backed WLFI Project - Bitcoin News\n\nhttps://news.google.com/rss/articles/CBMioAFBVV95cUxOLVRibk9DNXBPelJaNjltV19BaTV2YXU5cGs5MlJrX1hNWXNTb0luQWt1dlFzNzYyb3ItWEpCXzN2N1hQUG5LbkVUNEJ6OTJ1VldEMDlhYmVBYUNBWDZ4NDR6RVJmdHNOckY5eENBcnVTLUw2Q3lFc2pZUjZ6MVkxaUYxZzRrNEJmZ3BNQTJWQnpWa05HRDdJazQ4YVExWWFB?oc=5\nBTC 当时 59,400",
+   "email": false,
+   "subject": "[Google新闻·比特币] Justin Sun Demands Regulators Probe Trump-Backed WLFI Project - Bitcoin News"
+  },
+  {
+   "time": "2026-11-28T18:09:03.484315+00:00",
+   "time_local": "11-29 03:09",
+   "level": "red",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Why Is Tether Buying Bitcoin Mining Stocks After an 87% Price Collapse? - Coinpaper",
+   "body": "直接相关 中性 · 来源：Coinpaper · 发布 11-29 03:09\nWhy Is Tether Buying Bitcoin Mining Stocks After an 87% Price Collapse? - Coinpaper\n\nhttps://news.google.com/rss/articles/CBMingFBVV95cUxNczV4SlRpbkRhX2dTQk5uYjBIT1V4WnJwdVZ1MlBkT1F1SzNpSUVHU2JEaEp1dDZkeW9oOUdUdnRmSVV5bTJSaHUxMDBCTVV3cFk2QW5FdXFBN0Z6a01qaWhvbjM4aTM0SEdsQ0hld0VNUHpHTUVCdkNWMjR5SVg1cnhzM1BzYWdnNEJmNVg1MmNCRjdFRHhZRUl1cURpQQ?oc=5\nBTC 当时 59,400",
+   "email": false,
+   "subject": "[Google新闻·比特币] Why Is Tether Buying Bitcoin Mining Stocks After an 87% Price Collapse? - Coinpaper"
+  },
+  {
+   "time": "2026-11-28T18:09:03.480743+00:00",
+   "time_local": "11-29 03:09",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Google新闻·比特币] Bitcoin pares losses near $59,500 after volatile week as ETF outflows persist - Investing.",
+   "body": "直接相关 利空 · 来源：Investing.com · 发布 11-29 03:09\nBitcoin pares losses near $59,500 after volatile week as ETF outflows persist - Investing.com\n\nhttps://news.google.com/rss/articles/CBMiywFBVV95cUxOVG5RbV9WdldtMjdNQUg3YlpJeHNjYmEzeVFyLXVQV1NkSW84TFRKMXQ0LVM3cG42WkZsYWtpRHMxZ0lnQ2RnRFAwc0NuU01FZmdSZ2dhNklrQzNLMkFjM2dzTU94MGlOMnVXczl6SVBsU1hwZmpEZEJlVXk3ZzBDZXVkSFg4cXhLem9lNFBrRWtNR0x3Y3pTRzZGODdxQTFuWWZpVi1peEdGdGhQZy0zNVJOSmRtaGVhS21qNERFTlhESHNMc3lIZWowYw?oc=5\nBTC 当时 59,400",
+   "email": false,
+   "subject": "[Google新闻·比特币] Bitcoin pares losses near $59,500 after volatile week as ETF outflows persist - Investing."
+  },
+  {
+   "time": "2026-11-28T18:09:00.155355+00:00",
+   "time_local": "11-29 03:09",
+   "level": "red",
+   "kind": "新闻",
+   "title": "[Bitcoin Magazine] Binance Fully Lifts Withdrawal Suspension a Month After $6.3 Billion Hack",
+   "body": "直接相关 利空 · 来源：Bitcoin Magazine · 发布 11-29 03:09\nBinance Fully Lifts Withdrawal Suspension a Month After $6.3 Billion Hack\n\nhttps://bitcoinmagazine.com/news/binance-lifts-withdrawal-suspension-hack\nBTC 当时 59,400",
+   "email": false,
+   "subject": "[Bitcoin Magazine] Binance Fully Lifts Withdrawal Suspension a Month After $6.3 Billion Hack"
+  },
+  {
+   "time": "2026-11-28T18:08:59.874489+00:00",
+   "time_local": "11-29 03:08",
+   "level": "yellow",
+   "kind": "新闻",
+   "title": "[Decrypt] Bitcoin Falls Further as Inflation, Trump Tariffs and AI Selloff Rattle Markets",
+   "body": "直接相关 利空 · 来源：Decrypt · 发布 11-29 03:08\nBitcoin Falls Further as Inflation, Trump Tariffs and AI Selloff Rattle Markets\n\nhttps://decrypt.co/383967/bitcoin-sinks-inflation-trump-tariffs-ai-selloff\nBTC 当时 59,400",
+   "email": false,
+   "subject": "[Decrypt] Bitcoin Falls Further as Inflation, Trump Tariffs and AI Selloff Rattle Markets"
+  }
+ ],
+ "news": [
+  {
+   "time": "11-29 04:03",
+   "source": "Google新闻·地缘",
+   "title": "Russian men's life expectancy falls to 65.3 years as war deaths deepen labour shortage - Yahoo",
+   "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOVVdwdkd1Q1pIRE1nalZUbEJhRzVzdmcySHlWS3RwcGM0VGNFZXl4ZHRYWTlKZ3VYNGlaelNkR0d6Q3JrbldOTEVwTkdJLXhRVXJiTnFVSlVVcE9ZMTJBaFl6NE5JMThQWTE5alk0TTNhOS1XT1JRVkNFc3hXbTRDblZJMlJyUkNTVjIzM01XcFR0OGt4QWc?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 04:03",
+   "source": "Google新闻·地缘",
+   "title": "Belfast musician finds N.B. war roots through Lester B. Pearson letter - CBC",
+   "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQM0xNVGNVNjlqTkZqMUpMeEpseU1DSWg4blZHSzl1dm1zRzRqMmJVb0JVNXlMNUJjUTFUYjVDUnBzbGk4bk5sQW1MRkdwRTV6NDV2RnNVa00taFdtb2dxOElSN0IxNGVfLU9DaDJlX1BBTE1mNEFic25fU0NmNG9KeEhpWWdxZ3pwNUdyUHJvRmxqV0trY2VXQlZQMHdpX0pUMHh2UzVIYkdmcTdobUd0bnNuVVZlU3VCWEJRUU9kQQ?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 04:03",
+   "source": "Google新闻·地缘",
+   "title": "Iran braces for \"worst-case scenario\" as its war economy nears breaking point - Yahoo",
+   "link": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOS3hjdlFyeU82UzI2TEpvLTVEVXA1RWlfLXBnVEVtNTFOODZ2QTdmQ2h3NmJMejQtYWo5enczWHJEN1ZrRWJaX0FoYTcyTnIzbE9NMUxyT203clJRN0FESmpMeTFOVm5BaUlIRU95azNyMFBQLXBYRExfWDB2WFl4WU1rMmRnZlc5VERMcFlvTFlIQQ?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 04:03",
+   "source": "Google新闻·宏观",
+   "title": "India October CPI inflation rises to 6.09%, food inflation accelerates to 8.94% - investingLive",
+   "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPbUdWUXJITGJ5T2NsT2VyaElRUDRNSnF0X2pkQ2k1czRRYXllY0hwNk5hdmZuZnBtYUtDNnExSXdCd052OFoyNlRHTG1SLXB1M2hqRk5fcWNnLUs3OWpMUGl1YXZ4VnJVOG1Xc0FicTdwVndLZDhMWnphMnlYZmVxcjRuLU5Ha2t1TVpiNmlfdDFhb1o4aHJQN01WWlQxUTdRRk5lUFN1N3ppYjdY?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:59",
+   "source": "Google新闻·地缘",
+   "title": "Iran rial falls to near 3 million to US dollar as sanctions, blockade weigh - Investing.com Australia",
+   "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPM3pXcWhjSmN4aGFrY1p6eHpoSTAxWFlhNG9XOXBuVU9tZzllbmEzd0R2T2tVS0pRT3AyVWVON2Z6LVBMcUtoLTdNRUpvR2R5cUhTQXp6QUwyU1ROcjJfUFdBU2VoWmNYYkdQMDZYUWpCdnlwMUotVjFUUkdnLUJkN2RtVXc0V1JBWEZqeUJIaGdjdUtnZU1PT2J2Zklkei1fZ2hlajlIdkNlRDhXV0s1ckZ4X2FZRm1BZzljcWNBTm8?oc=5",
+   "level": "yellow",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:58",
+   "source": "Google新闻·比特币",
+   "title": "Investment advisors now hold the largest share of Bitcoin in spot ETFs, surpassing hedge funds by Sept 2024. - Pluang",
+   "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxNMGp1ejIwU1UwRFRILWFfNm0tUjF5RnA0YzdLN1VFYTYyeGtqYld3cVc4SkwyNkNrVjNiSk1fbHVJQUU2SXhxbWRwMTljUGlfcWhxcVRaSlpOZnR0T3F2Y3FwZ0VublJfYjQwd3c2WXVocFctQVdpSWtsTGlEeDRJWFNqc3kxbVVaWWNzVlg5ckVma0U3Zm84?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:58",
+   "source": "Google新闻·比特币",
+   "title": "Chamath Palihapitiya Warns AI Could Break Bitcoin's Cryptography - KuCoin",
+   "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQN1JzcDd6LTVXcWVsNTVnOGJCaW8tRUpGa2FSNlJvQ05pMFJHV2N4NU5qMjM4S0FvN1NfOWRpMldZbU5oMjhCOE5UUDBSWDVpX2t1amdfYXBkUVhib1drcktVaGxYVFZHVU9lNG0taFYtNGtsWThLY0VfVTNaci0xWGlvaDdscnhDVkY5THJBSksyeUpaTWN0UTVsOW45RGc?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:58",
+   "source": "Google新闻·比特币",
+   "title": "The World Liberty crypto token backed by Trump plunged by approximately 50% overnight - Українські Національні Новини (УНН)",
+   "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQSUFFWFZGX0ZoREx2SHd6NUlOd1JGMGZ1YW5nV0VBai1hQ202M29zeE9mcERIejB2QnptQ3FzSmZzaTZhM0tvcVp6OVVlc0NqVDE3a1k2aFV3NnF3NkhwUXVOZjFaQW5RSzdPektSdWlBSVlwRDN2MmI1MWR0QzFBc2NJX1JXenhFZFhEZGNXZmZTcFlLdFJ2Z3FGTE55SGpabmwzMldCZnRTZkduclNIOFlrdVfSAbMBQVVfeXFMTkliTzc1RlFhd0FMakl5dXRVS0l0MzhoMG9VRjNSUlhvMmlDVXYyODAxUjA1bWVjTE5JQ3FRRHU2aXZoQy11X3gwZkRZV2xxSjgtUnFobGJDbkF4bzJwdjVRbko5NGxnQXc4LUtPR0lHLS1nOHE2ZXZXWGE1bTJLZV9yTWJDZDBoYjQwWjJzMmVlZV9qV0RHa0MwSFdBLVRwSGhmZ1FOZmVVb0dXZ0NlRmQwZFE?oc=5",
+   "level": "yellow",
+   "relevance": "直接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:55",
+   "source": "Google新闻·地缘",
+   "title": "Iran rial falls to near 3 million to US dollar as sanctions, blockade weigh - Investing.com India",
+   "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNSk5KaGh5SVFGQTlMUGgyTXdOOEF3MlBDWWk5c1ctVVYzNlk1V1hkMzBLWXFqbVBuTjY1RkxyQlJwdXJGdHNXX2dFZXBZY3BmTmpOUFBjN2JmUXc2WEVkcHE0eUFlenZtSDdhQnRtT0kwRjdvcjBKWXpnamZVckwzdklCZGhmNTVMdVRJdF9ub05fcTlmU1V4cWFvcS1kcW90ZVlFMHNUZFkxZjFENDA1VlNuS0hEWkxmS2dtX0NCdzk?oc=5",
+   "level": "yellow",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:55",
+   "source": "Google新闻·地缘",
+   "title": "Saudi Arabia Announces Interception of Houthi Cruise Missile - Yemen Online",
+   "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE4zd211aHdLQ2xlcnJjRkNRWTNWRE1Oa3MyM3FzWVJfaFd5YmgxSURVc3pITXprQW1zVjZ5elJVNC1OdEFpUXdTYkZqbnRfUXpBM3c?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:55",
+   "source": "Google新闻·宏观",
+   "title": "AI stock sell-off complicates mortgage rates and 10-year yield - HousingWire",
+   "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBUY1RyT0gtY042a3ZrWmNqR1FrY0xENlI1QnFHcVBIYVVyWUpwVGVkWWloOHk1b0N4eUxiSU5iQmNtZWFqajhvSkVwOHl1THR0ekJCRUdpRFh3TU01aUxCT1lXSGJQb0tWZ0FiSzB1SVhZQzJTTUpR?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:55",
+   "source": "Google新闻·比特币",
+   "title": "Tether Buys $10 Million of Bitdeer Shares as Stake Falls to 17.9% - www.tokenpost.com",
+   "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE8xYncyRkQ3bFJlOGE4aUl3XzJ0aVl6MFdNR3FZeEhrUVI2blNBaGJnejhqb3dwTm9ZaUNOTVJ1UmlLNGtJWGJmcGx1ZGYtTDVlNXVOT09aY0o?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "利多（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:53",
+   "source": "Google新闻·比特币",
+   "title": "Investment Advisors Take Largest Share of Known Spot Bitcoin ETF Holdings - www.tokenpost.com",
+   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5PdFlGTXR0TWdldEhlUlYwQVprZFhJOGxKNzVHRGg1V2NlY2pxd1FiMTNwTGUzNllQUWxHWE1ZUHYwS1FXVzc5Sk5YSGRIM0xRb2wwWnZRdkV5Zw?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:53",
+   "source": "Google新闻·比特币",
+   "title": "Eric Balchunas Estimates 50 Million Americans Own Bitcoin - www.tokenpost.com",
+   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE11WU5hLUtuNEc3Rms0cTJuckJsbHJFVDJHT1ptLUJUbU44THdKSE9EOFBqT2dQc1d2X041c0Q0UzNUSFJ0bzhKQkFxcjlVN0VKYmpiWnhZQVphZw?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:53",
+   "source": "Google新闻·比特币",
+   "title": "Prediction Markets Put Bitcoin, Ether and Solana Under Year-End Pressure - www.tokenpost.com",
+   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE01LXczUG1RdTdMRG1ZQ3hvNHZDZ2tCODBqZGNlaU1BanBydzNyMHRqeGIzT0FKY1ZtSHNKN1R6VDd0ZExPT3dqNEVEXzZaMnF4ZnhRZGtFS0sydw?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:52",
+   "source": "Google新闻·中文",
+   "title": "比特币面临两大“死结”？Syncracy 联创：Pearl 才是未来答案 - PANews",
+   "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE0zSTAxNlgzMUgxNDJzeVlqYlFpZE4yR3hGY3NManh2aHpPQ3VuTFhsb0N4a1lIdEZWWExHU3AzWVptcnZiVmEzX20xLXNlZlotMDlsdlc0Mzh1anlUZHBoS0NxaGp5dzN5RzV1aUJSZ3YxZU5JUDZCZ293NUhKbnM?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:52",
+   "source": "Google新闻·地缘",
+   "title": "Britain tells reservists to prepare for possible war with Russia - Fox News",
+   "link": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5SaDRLZFJaaWdWcG5PNXR1QmZoTHpjVjZSWHA2aHluNEt1bUlmcTYtMnNTNm1nM2VrOW5TNjdtWExDMmZ6T3p5SXBnVm5pajJFRnhGSEp3?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:52",
+   "source": "Google新闻·地缘",
+   "title": "Iran rial falls to near 3 million to US dollar as sanctions, blockade weigh - Investing.com",
+   "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOODdvLWJOV01leFQzQTRIN0VuWV9hNXRzbjJWc2dWWV9JNDY3M1N0aXJkLVJVLTJJYzJjd2RmYzR1aTkxTzllQ2pfbUFRSGQ4dWxaLTNocVNaQkFwZ0ZOVlZEblhvSkFPZTJ5NTNiLWUzZnNNajQzM0k3TnZWdjBydnJWRFdyQnFUYVozSV90WGFydTRna3hSbElHWXN3aU12QjZ5LTFZSFgzMFFxX0FEeW1TSlNUWkttRWJoTkFmSnRZZw?oc=5",
+   "level": "yellow",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:52",
+   "source": "Google新闻·宏观",
+   "title": "The Fed Has Little Room to Maneuver as Foreign Holders cut $400B of Treasury Holdings in 6 months - SchiffGold.com",
+   "link": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNYWtRa25TZVkzNFRFLWZkR25BVTZvcjczVkg5cl9NTEZNYWhEaERMeENyRkNJY0dibGhNcWpIb2U0VnQwNGRqbkhwXzM3NmhlRXhmMU8yYkNWTkpsVE9NWVV0eHVkOWRxMUFLLWpocU9sRVdzN2lUQlJMbVByZ1NEWUJudnpibDNISmhUaGFqVGFXZmdiaURhTjhQZmo0T3dQX19lTnZXOEx3WExtU1k1Mmx6OFhLT0dZTjJHSFFiUVZ1ZFpyc3lsdlRJbzlweWdwV0phYndpNUo?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:50",
+   "source": "Google新闻·比特币",
+   "title": "Spain to Allow Crypto Account Freezes Without Court Approval From January 2027 - Analytics Insight",
+   "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPdEMxUHVNLUpDalcxN3NONHdzNC1wcTl1by1aNEMxQ2tWQms4TTdJQnpJVm9oY3c4b0NCbDBzVFYzdEt0Wi0ybGdlOUNsSW5rQTlKRFBEY21XMzNVY1ZZS0NTT1lHRkt6eGFXNlNfWEhiT2xId0RuZkYzSGp5SFMzeGZCT3B2ZjNhRW5YaTBXYWs1S05VLXowUG5uTWdnd0hxNndqTWxrb3VOSzVpUVFPVU9IZFIwQjjSAcQBQVVfeXFMTl9LNVdiV1BjTG9DS3QwR1pkTU9OUnA4c1p5WTZYQjl6d0haQUlFUFJVUEFzb2FsMnNJR1Rkb0F1QUR2cTZUMmpCaGoxaTFHRW44WDBPQXBURVJfb1gtbGJ3c2kteWJmTVFyVWhyd3BpZHh0X1A5QU9YSHFDSElvY1pwOVdRTlB5U0tsX1JFUkJFendmWFR5V2YyTnZfMUx2TXRHZlRpOW5BczR1WHZ3QmE5LTZtYnItSUhzekRCYTAwX2JyRA?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "利多（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:48",
+   "source": "Google新闻·地缘",
+   "title": "War Memorials To Pave Way For Elevated Corridor - Deccan Chronicle",
+   "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPUElSNmY2RVNLSmJ1MzlleGhSYUpudS12bjdkWThpd1VKSG41SmpTcUFILVNCMVd4TjA1N2F6djRob2JaZngzVEZITjhKZHItWlFidEswUnJvdTdFbGZBeC1iRFZoOWkyWFFlZzBZdG5ISmNLeGVVYXRCQS1vcXlYSWxCaWJHUmhobTRmclBmc3F6aUpkLXBGRks4aVlsS09wWEtoeVNyMHVzMG9Xb0d0YnpyZ9IBuAFBVV95cUxPdUVldTMxakRQZ1pjWlozcHJhVU9ZZGlacGE2WWhrYURXYUVOUWEwS3liQlZSZFctMWx4anJxaEM2M0hkOE0wUC1DVjJobFlQQXZUakRKWFJ2bE8tb0tvTEZhS2J6UkttbDBJaXRxMXcycFVrUGttYnVxT2gtWUhYUGp4UU9RUm1UQzFUQy00ZTF1MG1hbGxDMkw2OGhlVlBKZ3BTWnI1RFZYajNZMkVUaDdxdlhnclJV?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:48",
+   "source": "Google新闻·宏观",
+   "title": "Food inflation: winter relief may not last - The Financial Express",
+   "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOZW1TRjZHQTFnZXl1X0F5LWtnLW9HRDJ4b3oyZlhhZ2ZCTTdEQl8yWU4xS0JQSm5VV0VDTk80akZpcEZPWXZJNks4MEE1ZldLbXUxMl85ZzNrQWlOdEZ5cm1RZENSU1Y2bXhOTDRDT3huZ0p0R29JTVY2WFFoaUFZUDVzQ21RWHd2OHZNVm1TeldpS2lSWnczb3RGRDVPenVVSGpEMFQwU05Wa2c?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:47",
+   "source": "Google新闻·比特币",
+   "title": "Bitcoin, Ethereum and Solana Face Grim Year-End Prediction Market Odds - Bitcoin News",
+   "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPbjJTd2xJMlBIM1dVOGJHZDR3akJBWG9UOE80U0Uwd2p1eG5KU1ZKRFlKVnFwNE9feDMtVHpQcEozblJib2ItbTJQY3lvLWtRaWpQeWFVUVB2UnJXR2pTQ0NwR2lMSHE2cnJlUUpwWWFjWkJuajBkek9RS2Y0TVpBNzkzdG1rVFNMVmRPenRCOWlySUVXem1ndXEzRm9kTnphckVWTjRwSllTY0g1c3JLWV91WQ?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:47",
+   "source": "Google新闻·比特币",
+   "title": "About 50 million Americans own Bitcoin, surpassing ETF holders by more than double, per Bloomberg analyst. - Pluang",
+   "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPNHg0MVYxSUZkeWljV3hsNVF6NTNJQjE2VkdORzRiaDVmTjR5Y0hsR3BfY3JlSE1NbjgxVmlqeXM5RnhXUDNYeUltUGFsb3lHV3Q1UmtCT0pESTBRLWFOTTFfZXR5M2ZNSHM0TmNldkY4Z0Q1Y1Fvc09HMVIyaFVIcWlRMTZGcXJKNzBGcjN4RjVZODZyUTFPVFlwWkhjYjV6QTNoQTg5N0hFQQ?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:47",
+   "source": "Google新闻·比特币",
+   "title": "Trump-backed World Liberty crypto token plunges 50% amid Binance scrutiny - Investing.com",
+   "link": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQNFZGaHpoN2x6UGo0MDVnNnJIMTJUa1RnWlMtLXpYbFpiNEFjeTY0ZWlUV2FEZVJDeUU5Z0xpbV9oNnV0dWdReE9OcU8zaE1iZV80RjN1eGVqeWp6TGMxMUZLUkh4cWNzM1ZfUGZkS2ZqLTY1YlFfbW5mM29aUjhyZEtRajRoS0JCTHRMZG5CVF9zZ1hMaWFDT0UwUzZsbFpSSnVlVHNtZ01USEZKYU1URlpKSEwzZEhnWWM3WlQ4YnNGVEk0TnlCdFBn?oc=5",
+   "level": "yellow",
+   "relevance": "直接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:44",
+   "source": "Google新闻·地缘",
+   "title": "Cricket match squads | WAR vs LIONS, Final, CSA T20 Challenge 2026 - Cricbuzz",
+   "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPcnFrRmw2MU9wemJ3TngtZnR4aFZRSXRxNVVpOUlGU0VReTdyWVhKbFp3WmdYR2dvM0hBaFI5NVVkdUpVaVF0QWt2ZFZZMllRU0lEcWlNNGp4SW13V1dFQUtxY0FvY0VKVjZfa1JoQ0tmNXhjdUFEQ1FkWlZ5a3REakVCSXRIZUM0ejFrdWFWc09BZmpTYXFJblFn?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:44",
+   "source": "Google新闻·地缘",
+   "title": "abbas-araghchi-end-to-us-israeli-war-can-open-diplomacy-economic-growth Archives - TV ONE USA",
+   "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNZWI3QWd4OTBBU2pqajJWOXNpR25Hem1KUjZVdTM4NU13VGQzYlJENy00R0FocDlPSVhpVS0zU1ZzTlFFMjhDLTZsNmlTYkwxSFNEdGVXX0dYRVBoM1ZhcU1qOUsybDZzOWx4MGZENk9Fb2paWkc4d1JselpUTEs0a01LMGswdWpheTFhbWpmWjRNb09SZ25BSm50blpPQQ?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:44",
+   "source": "Google新闻·地缘",
+   "title": "Russian men's life expectancy falls to 65.3 years as war deaths deepen labour shortage - IntelliNews",
+   "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxOSFJHUnRSeGg4eloyUGFWOG5rSmtjaFU5a0FDYld4YXl2cWpHUHJzNjAyV2xsZzMwMTRHckdPenIwYlB1bHFLTFNGaThqRDZKcURTd280dTJnNEtORmpWN01DcWY2SEVHS085QkJQMS1MaGs1YUlzeTJTbElBYW12a3YzRXJZeUs0cU5PNnVNUVhtd0pKYno5ZnJXTGY1OS1IaFR1aVJwclYxb2sxRmhKMHJUcHNNb01uenNGN1ZmLWduMlUyWmpNTG94YXQ1SWhsZFE?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:44",
+   "source": "Odaily快讯",
+   "title": "预测市场押注比特币、以太坊和Solana年底前触及更低价位",
+   "link": "https://www.odaily.news/zh-CN/newsflash/539972",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:39",
+   "source": "Google新闻·地缘",
+   "title": "Manila warns Filipinos against fake Russia jobs luring workers to Ukraine war - The Standard (HK)",
+   "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNZzRKMExBNTBIcWNNZkRQODhtVk01YjQxaTRIY3BZaTVlWUI5QUxhR2VYRi1SV1VqeEdSRlNQN2k5SHhPeHEtUGZlQ0piTURoa21OUVZONVVEbWpGRkhiTDU3YmpCUjdFZURfby1aX0kxTTBOTi1RSVNfMXVkNDVRczA0RXl5dFJwSERjQV8yOFMxZW81TDl2ZGRTMHNuSnl2ZktPMzA1UmJxNUhkTWFoX2YxU2hkSDRRLUxna3EzbC0zT2I5b2p3QQ?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:39",
+   "source": "Google新闻·地缘",
+   "title": "Ukraine’s drone war never belonged to Fedorov, says defence entrepreneur - EU Perspectives",
+   "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQeW1kb2ZkbmczZTN5MEU5WDA0RUg2bUMzUldOM1ViRnhLVmxEQU1DbEVrU0xoMnE4a1gzeEdxQ0NhWm5lSjlkS013LWtPN2NoRXZGdGw5S3h0eEwyNG5aSzhwNjNLQzBLYTNJSVNMdHgySkxDNzUwamZtSzRGTk0ybW41UnM4SlN5YWt4RVZQZzVjMDJvME1zRmxidFNmY093THAzWWhVWng?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:39",
+   "source": "Google新闻·宏观",
+   "title": "US Dollar Technical Outlook: DXY Hits 2026 High—Major Trend Resistance Puts Rally to the Test - StoneX",
+   "link": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNRGVYWmExNnltN2M5bW9OVXM0cXl4RFAxVWlkYVFfZGFsQTZ4ckx1MEd3SDFvUnFTVERxMjU5MlluVlREQ0xSaFd3eGp2b24tQ1BSVGtzNkQyYkl0cTMzcHZFaWF3MGFKY05mdjgtYVp5cV9VZWVGS3F6ZjRqd1BEUTdXNlFEamZRQmozeXdQdWEta19FQWRneGo4S182XzNrN0taSTlDcEk1YzZqRExNY3RJUzJkTXY0QW9KQ1JXUWE1d3R5UGlKaHJ3ZFZEbWYxR1lFcEVGSQ?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利多（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:38",
+   "source": "Google新闻·比特币",
+   "title": "Three Altcoins Rally Amid Broader Crypto Market Decline - KuCoin",
+   "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOdEdnUElLMGl2dmpYb3JGWDJteVoyQjRCSlVXS2F0SHhuYWFNZFp0Rms3YmZmc3ZBZVN0T0FYcTl5bUwxNnZpdDBjU3EzVVBhdkdPeFVCME9ENE9tV1JkeVZUcENfMmZ5T1JOYWNjNWhlbWpRS2dVZFBJTzFXc1V3eHJlTFF6R3UwejVEN2RlX3lQMGM?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "利多（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:36",
+   "source": "Google新闻·地缘",
+   "title": "Find Civil War forts and a riverwalk trail in Fairlawn - The Washington Post",
+   "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPU0dQQnZUZW1fcUdpd0NGakM2YmxISGFkNDhQVVBkSEd2M3NPcnk0XzUxa2dpcmQtYU9SR3Jac1NOazVONGJaUU5NY19uV2cyOEItelAwMUhfM2Q0cTBKcVp1T1BNN3ZJVnhQaVA4bV9LUnhCVGtlbHgxQ1M5Y0dmbjU2WlUxLW4wbHZIMmVXRHF4QU9wN21jT1pJbG14Y0ZUOU1IckFZMmdMOHFRMjJr?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:36",
+   "source": "Google新闻·宏观",
+   "title": "US Tariffs of Up to 20% Draw Global Rejection - Wisevoter",
+   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQUkpfSU85VFRiNUluTE1WaFBxQUFPbE5iREtISHpJejZqZmNiZTRnWFlTb01kWnJJNW5PWWcybENfT1RxU2NOVW5yYW1VV3Y5YUdVaVU5M0ZXaUpxQzd5c2pQUUN6U3QyTGdxek9CZVZLcHpla29MRHlPR0QtZU5sd2JXcGFfejcyQWY0cg?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:35",
+   "source": "Google新闻·比特币",
+   "title": "Three Altcoins Rally as Crypto Market Weakens - Wisevoter",
+   "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNMldCZUN2ek5nR2pCZ0ZTVGdacF8xbzN1TEkwem84MmtsZzQ5RjRUQWVmTVBjQzhGUUQtUUVBb0dBNTAxVFdCYnBieUMyb3VkRVVqVE5pc3JnOUlBZnYxM3BMOTkycy1CUEhlNHRhclhrNVlOb1d2Rm1XOHg0WlUtTzc2SmxDaUxz?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "利多（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:35",
+   "source": "Google新闻·比特币",
+   "title": "Trump-backed World Liberty crypto token plunges 50% amid Binance scrutiny - Investing.com Nigeria",
+   "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxORzR0elVFRDY5bm8wMDk5X2Y4eE1mLWF6SERJZ1NwV2ltYVFYMy1NQXRMQWl4bkVoNnkxZGJuY0JBczFPTWVvWTlVdDVwVmJzeWdhMEc0SV85NXh6NlNrYnpLUTJpTk9lVHlRY0ZiTUl0V3lEWXRHTlBhSHdHSUNUZ0Eta01EVHFqcnMwMWdoWGxvaUlXZ1VNSkxzNlRUQmVzVGRVbkVpdGIzYjMySHRQYmZONlY0TXg0Z0RDeUotRWIxcE11MVNzXw?oc=5",
+   "level": "yellow",
+   "relevance": "直接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:35",
+   "source": "Google新闻·比特币",
+   "title": "Bitcoin lost $60,000 during a Nasdaq rally. Can it hold above that level Monday? - CryptoSlate",
+   "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQT1RwRmx5YXZOX2ZXYm05djk4clRuNGNfNkZqVjhBYzNQanY5T3dfNS0wVVNBWllYa0RlQXU4cmNSdm5vR0lnSkgtZS1WVXg1bnFMLTBTdUFnaG1KblU2MXNzeXJlOXNPMWRxTG1yNV93Q2ZyVDBsWW1YZnNhWVVCaHhOSHNtcW1pM19qLTBWMzhBdGNfTFBtWTBYQ2pQSHoyQVpF?oc=5",
+   "level": "gray",
+   "relevance": "直接",
+   "lean": "利多（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:32",
+   "source": "Google新闻·地缘",
+   "title": "Iran War Drives Shift to 'Just-in-Case' Supply Chains - Newsmax",
+   "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQRlVMbkFxdE1zeGNBdmxOUU5wVDExLXJaaWpnUWZVaG1BZDRXdUN2ajFUUGlXdmM1ZGRaUFBnMlE0dlZBQjZVWHBVa3MwQlY1ZUVzTjA3ZUxEU1VuWXN1Y29aTGpQNDRzSjM4bkFDakVvV0xxNHlNRUpIYTkyYVpFNUVnaEdlSjhSY1l0aGNFZEZrMXM?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "利空（弱）",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  },
+  {
+   "time": "11-29 03:32",
+   "source": "Google新闻·地缘",
+   "title": "\"Oil Supply Outlook Is Overly Optimistic,\" Warnings Mount - 파이낸셜뉴스",
+   "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBXVjlxYTVyMTJIQk83d0xjeVA3eC1vTms3amg4Wkk3b3lWdW9nQTl6V3lOYnQ2QlZ0WXRlMGVaTFJURVoybVVBRWdYM193TnFvN3B2RlVoNGI?oc=5",
+   "level": "gray",
+   "relevance": "间接",
+   "lean": "中性",
+   "title_zh": "",
+   "reason": "",
+   "lean_src": "规则"
+  }
+ ]
+}
